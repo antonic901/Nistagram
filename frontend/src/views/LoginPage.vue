@@ -1,34 +1,95 @@
 <template>
-<div class = "background">
-    <Home/>
- <div class="container">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card">
-                <form onsubmit="event.preventDefault()" class="box">
-                    <div class = "cls">
-                        <h1 class = "title" style="color:#4d4d4d ">Log in</h1>
-                        <p class="text-muted"> Please enter your email and password!</p>
+    <div class = "background">
+    <Navbar/>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <form onsubmit="event.preventDefault()" class="box">
+                            <div class = "cls">
+                                <h1 class = "title" style="color:#4d4d4d ">Log in</h1>
+                                <p class="text-muted"> Please enter your email and password!</p>
+                            </div>
+                            <input type="text" name="" placeholder="email" style="font-style:italic" required> 
+                            <input type="password" name="" placeholder="password" style="font-style:italic" required> 
+                            <a class="forgot text-muted" href="#">Forgot password?</a>
+                            <br/>
+                            <br/>
+                            <router-link to="/registrationPage" class="routerlink">Don't have an account? Create one!</router-link>
+                            <input type="submit"  style="color: white" name="" value="Log in" href="#">
+
+                        </form>
                     </div>
-                    <input type="text" name="" placeholder="email" style="font-style:italic" required> 
-                    <input type="password" name="" placeholder="password" style="font-style:italic" required> 
-                    <a class="forgot text-muted" href="#">Forgot password?</a>
-                    <input type="submit"  style="color: white" name="" value="Log in" href="#">
-                    
-                </form>
+                </div>
             </div>
         </div>
     </div>
- </div>
-</div>
 </template>
+
+<script>
+import axios from 'axios'
+import Home from './Home.vue'
+import Navbar from '../components/Navbar.vue'
+
+export default {
+  name: "LoginPage",
+  components: {
+      Home,
+      Navbar
+  },
+  data() {
+    return {
+      user: {
+       email: "",
+       password: "",
+       confirmPassword: "",
+       name: "",
+       surname: "",
+       usertype: "PATIENT",
+       address: {
+            state: "",
+            city: "",
+            postalCode: "",
+            street: "",
+            number: ""
+       },
+       isFirstTimeLogging: false
+      },
+  
+      show: true,
+    };
+  },
+  methods: {
+    onSubmit(event) {
+      event.preventDefault();
+      if(this.user.password !== this.user.confirmPassword)
+      {
+        alert("Passwords don't match!");
+        return;
+      }
+      axios.post("http://localhost:9005/api/user/register", this.user);
+
+    },
+    onReset(event) {
+      event.preventDefault();
+      console.log("reset");
+    }
+
+
+  },
+  computed: {
+      validation() {
+        return this.user.password.length > 7 ? true : false
+      }
+  }}
+</script>
 
 <style scoped>
 .cls{
   margin-bottom: 40px;
 }
  .background {
-  background-image: url("../assets/img/medicine.jpg");
+  background-color: #3498db;
   position: fixed; 
   top: 0; 
   left: 0; 
@@ -119,60 +180,9 @@
 .forgot {
     text-decoration: underline
 }
+
+.routerlink {
+  display: block;
+  color:#7e7e7e;
+}
 </style>
-
-<script>
-import axios from 'axios'
-import Home from './Home.vue'
-
-export default {
-  name: "LoginPage",
-  components: {
-      Home
-  },
-  data() {
-    return {
-      user: {
-       email: "",
-       password: "",
-       confirmPassword: "",
-       name: "",
-       surname: "",
-       usertype: "PATIENT",
-       address: {
-            state: "",
-            city: "",
-            postalCode: "",
-            street: "",
-            number: ""
-       },
-       isFirstTimeLogging: false
-      },
-  
-      show: true,
-    };
-  },
-  methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      if(this.user.password !== this.user.confirmPassword)
-      {
-        alert("Passwords don't match!");
-        return;
-      }
-      axios.post("http://localhost:9005/api/user/register", this.user);
-
-    },
-    onReset(event) {
-      event.preventDefault();
-      console.log("reset");
-    }
-
-
-  },
-  computed: {
-      validation() {
-        return this.user.password.length > 7 ? true : false
-      }
-  }}
-</script>
