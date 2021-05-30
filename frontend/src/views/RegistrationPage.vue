@@ -99,7 +99,8 @@ export default {
       axios.post("http://localhost:8081/api/userprofile/register-user", this.user)
         .then(r => {
             if(r.data == "ok") {
-              this.$router
+              alert("Welcome to Nistagram! Please, now log in to get best experience.");
+              this.$router.push({name: 'LoginPage'});
             }
             else {
               alert ("There was a problem trying to register you! Please try again in a few minutes!")

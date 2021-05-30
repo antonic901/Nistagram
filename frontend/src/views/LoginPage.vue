@@ -1,6 +1,6 @@
 <template>
     <div class = "background">
-    <Navbar v-bind:user="user" v-bind:isUserLogged="isUserLogged" v-bind:userFullname="userFullname"/>
+    <Navbar/>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -37,21 +37,6 @@ export default {
   },
   data() {
     return {
-      user: {
-            id: "",
-            name: "",
-            surname: "",
-            email: "",
-            phoneNumber: "",
-            gender: null,
-            birthdayDate: null,
-            website: "",
-            biography: "",
-            username: "",
-            password: ""
-      },
-      isUserLogged: false,
-      userFullname: "",
       show: false,
       error: "",
       Login: {
@@ -69,17 +54,14 @@ export default {
       }
       axios.post("http://localhost:8081/api/userprofile/login-user", this.Login)
         .then(r => {
-            this.user = JSON.parse(JSON.stringify(r.data))
-            console.log(this.user.id)
-            if(this.user.id != null) {
-              this.isUserLogged = true
-              this.userFullname = this.user.name + " " + this.user.surname
-              this.show = false
+            var user = JSON.parse(JSON.stringify(r.data))
+            if(user.id != null) {
+              this.show = false;
+              this.$store.commit('updateUser', {user});
+              this.$router.push({name: 'Home'})
             }
             else {
-              this.show = true
-              this.isUserLogged = false
-              this.userFullname = "" 
+              this.show = true;
             }
             
         })
