@@ -1,6 +1,6 @@
 <template>
     <div class = "background">
-    <Navbar/>
+    <Navbar v-bind:user="user" v-bind:isUserLogged="isUserLogged" v-bind:userFullname="userFullname"/>
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
@@ -8,16 +8,16 @@
                         <form onsubmit="event.preventDefault()" class="box">
                             <div class = "cls">
                                 <h1 class = "title" style="color:#4d4d4d ">Log in</h1>
-                                <p class="text-muted"> Please enter your email and password!</p>
+                                <p class="text-muted"> Please enter your username and password!</p>
+                                <p v-if="show" style="color:red;" >Your username or password isn't valid!</p>
                             </div>
-                            <input type="text" name="" placeholder="email" style="font-style:italic" required> 
-                            <input type="password" name="" placeholder="password" style="font-style:italic" required> 
+                            <input type="text" v-model="Login.username" name="" placeholder="username" style="font-style:italic" required> 
+                            <input type="password" v-model="Login.password" name="" placeholder="password" style="font-style:italic" required> 
                             <a class="forgot text-muted" href="#">Forgot password?</a>
                             <br/>
                             <br/>
                             <router-link to="/registrationPage" class="routerlink">Don't have an account? Create one!</router-link>
-                            <input type="submit"  style="color: white" name="" value="Log in" href="#">
-
+                            <input type="submit"  style="color: white" name="" value="Log in" href="#" v-on:click="login">
                         </form>
                     </div>
                 </div>
@@ -28,59 +28,72 @@
 
 <script>
 import axios from 'axios'
-import Home from './Home.vue'
 import Navbar from '../components/Navbar.vue'
 
 export default {
   name: "LoginPage",
   components: {
-      Home,
       Navbar
   },
   data() {
     return {
       user: {
-       email: "",
-       password: "",
-       confirmPassword: "",
-       name: "",
-       surname: "",
-       usertype: "PATIENT",
-       address: {
-            state: "",
-            city: "",
-            postalCode: "",
-            street: "",
-            number: ""
-       },
-       isFirstTimeLogging: false
+            id: "",
+            name: "",
+            surname: "",
+            email: "",
+            phoneNumber: "",
+            gender: null,
+            birthdayDate: null,
+            website: "",
+            biography: "",
+            username: "",
+            password: ""
       },
-  
-      show: true,
+      isUserLogged: false,
+      userFullname: "",
+      show: false,
+      error: "",
+      Login: {
+        username: "",
+        password: ""
+      }
     };
   },
   methods: {
+    login() {
+      if(this.Login.username == "" || this.Login.password == "") {
+        this.show = true
+        this.error = "Please fill all input fields!"
+        return
+      }
+      axios.post("http://localhost:8081/api/userprofile/login-user", this.Login)
+        .then(r => {
+            this.user = JSON.parse(JSON.stringify(r.data))
+            console.log(this.user.id)
+            if(this.user.id != null) {
+              this.isUserLogged = true
+              this.userFullname = this.user.name + " " + this.user.surname
+              this.show = false
+            }
+            else {
+              this.show = true
+              this.isUserLogged = false
+              this.userFullname = "" 
+            }
+            
+        })
+    },
     onSubmit(event) {
       event.preventDefault();
-      if(this.user.password !== this.user.confirmPassword)
-      {
-        alert("Passwords don't match!");
-        return;
-      }
-      axios.post("http://localhost:9005/api/user/register", this.user);
-
     },
     onReset(event) {
       event.preventDefault();
       console.log("reset");
     }
-
-
   },
   computed: {
-      validation() {
-        return this.user.password.length > 7 ? true : false
-      }
+      
   }}
 </script>
 

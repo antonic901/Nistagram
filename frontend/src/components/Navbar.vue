@@ -8,7 +8,8 @@
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
                         <b-nav-item> 
-                            <router-link to="/" class="routerlink">Profile</router-link>
+                            <router-link v-if="isUserLogged" to="/" class="routerlink">{{userFullname}}</router-link>
+                            <router-link v-else to="/loginPage" class="routerlink">Profile</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                     <b-navbar-nav class="ml-auto">
@@ -19,7 +20,12 @@
                             </router-link>
                         </b-nav-form>
                         <b-nav-item>
-                            <router-link to="/loginPage" class="routerlink">Login</router-link>
+                            <router-link to="/loginPage" v-if="!isUserLogged"  class="routerlink">
+                                <b-button style="background-color:green">Login</b-button>
+                            </router-link>
+                            <router-link to="/" v-else  class="routerlink">
+                                <b-button style="background-color:red">Logout</b-button>
+                            </router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                 </b-collapse>
@@ -29,7 +35,23 @@
 
 <script>
 export default {
-    name: "Navbar"
+
+    name: "Navbar",
+    props: [
+        'user',
+        'isUserLogged',
+        'userFullname'
+    ],
+    data() {
+        return {
+            
+        };
+    },
+    methods: {
+        logout() {
+            this.isUserLogged = false
+        }
+    }
 }
 </script>
 

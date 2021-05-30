@@ -9,8 +9,20 @@
                             <div class = "cls">
                                 <h1 class = "title" style="color:#4d4d4d ">Sign up with us</h1>
                             </div>
-                            <b-form-input type="text" v-model="user.email" placeholder="enter email" style="font-style:italic" required/>
-                            <b-form-input type="text" v-model="user.username" placeholder="enter username" style="font-style:italic" required/>
+                            <b-form-input type="text" v-model="user.email" placeholder="enter email" style="font-style:italic" v-on:input="checkIsEmailValid" required/>
+                            <b-form v-if="!emailValid" style="color:red">
+                                {{this.emailMessage}}
+                            </b-form >
+                            <b-form v-else style="color:green">
+                                Looks Good.
+                            </b-form>
+                            <b-form-input type="text" v-model="user.username" placeholder="enter username" style="font-style:italic" v-on:input="checkIsUsernameValid" required/>
+                            <b-form v-if="!usernameValid" style="color:red">
+                                {{this.usernameMessage}}
+                            </b-form >
+                            <b-form v-else style="color:green">
+                                Looks Good.
+                            </b-form>
                             <b-form-input type="password" v-model="user.password" placeholder="enter password" style="font-style:italic"  aria-describedby="input-live-help input-live-feedback" :state= validation trim required/> 
                               <b-form-invalid-feedback id="input-live-feedback" style="font-style:italic">
                                   Enter at least 7 characters. 
@@ -19,10 +31,19 @@
                             <b-form-input type="text" v-model="user.name" placeholder="enter name" style="font-style:italic" required/>
                             <b-form-input type="text" v-model="user.surname" placeholder="enter surname" style="font-style:italic" required/>
                             <b-form-input type="text" v-model="user.phoneNumber" placeholder="enter phone number" style="font-style:italic" required/>
-                            <b-form-input type="text" v-model="user.gender" placeholder="enter gender" style="font-style:italic" required/>
-                            <b-form-input type="text" v-model="user.birthdayDate" placeholder="enter birthday date" style="font-style:italic" required/>
+                            <b-form-group label="Select GENDER:">
+                              <b-form-radio-group v-model="user.gender" :aria-describedby="ariaDescribedby" aria-controls="ex-disabled-readonly">
+                                <b-form-radio value="MALE">MALE</b-form-radio>
+                                <b-form-radio value="FEMALE">FEMALE</b-form-radio>
+                              </b-form-radio-group>
+                            </b-form-group>
+                            <b-form-datepicker id="example-datepicker" v-model="user.birthdayDate" class="mb-2" placeholder="enter date of your birth"></b-form-datepicker>
                             <b-form-input type="text" v-model="user.website" placeholder="enter website" style="font-style:italic" required/>
                             <b-form-input type="text" v-model="user.biography" placeholder="enter biography" style="font-style:italic" required/>
+                            <b-form v-if="!formValid" style="color:red">
+                                {{this.formMessage}}
+                            </b-form >
+                            <br>
                             <b-button v-on:click="register">Register</b-button>
                         </form>
                     </div>
@@ -34,13 +55,11 @@
 
 <script>
 import axios from 'axios'
-import Home from './Home.vue'
 import Navbar from '../components/Navbar.vue'
 
 export default {
   name: "RegistrationPage",
   components: {
-      Home,
       Navbar
   },
   data() {
@@ -50,38 +69,102 @@ export default {
        surname: "",
        email: "",
        phoneNumber: "",
-       gender: "",
-       birthdayDate: "",
+       gender: null,
+       birthdayDate: null,
        website: "",
        biography: "",
        username: "",
        password: "",
        confirmPassword: ""
       },
-  
-      show: true,
-    };
+      show: false,
+      passwordValid: false,
+      usernameValid: false,
+      usernameMessage: "",
+      emailValid: false,
+      emailMessage: "",
+      formValid: false,
+      formMessage: ""
+    }
   },
   methods: {
     register() {
-      if(this.user.password !== this.user.confirmPassword)
-      {
-        alert("Passwords don't match!");
-        return;
+      if(this.user.name == "" || this.user.surname == "" || !this.emailValid || isNaN(this.user.phoneNumber) || this.user.gender == null ||
+        this.user.birthdayDate == null || !this.passwordValid || !this.usernameValid || !this.passwordValid) {
+          this.formValid = false;
+          this.formMessage = "Please check again all input fields!";
+          return;
       }
+      this.formValid = true;
       axios.post("http://localhost:8081/api/userprofile/register-user", this.user)
         .then(r => {
-          console.log(r);
+            if(r.data == "ok") {
+              this.$router
+            }
+            else {
+              alert ("There was a problem trying to register you! Please try again in a few minutes!")
+            }
         })
         .catch(r => {
           console.log(r);
         })
+    },
+    checkIsUsernameValid() {
+      if(this.user.username.length >= 5 && this.user.username.length <= 15) {
+        axios.get("http://localhost:8081/api/userprofile/check-username/" + this.user.username)
+        .then(r => {
+          if(r.data == "not_taken") {
+            this.usernameValid = true;
+          }
+          else {
+            this.usernameValid = false;
+            this.usernameMessage = "This username is already taken.";
+          }
+        })
+      }
+      else {
+        this.usernameMessage = "Your user ID must be 5-15 characters long.";
+        this.usernameValid = false;
+      }
+    },
+    checkIsEmailValid() {
+      console.log(this.user.email);
+      if(this.validEmail(this.user.email)) {
+        axios.get("http://localhost:8081/api/userprofile/check-email/" + this.user.email)
+        .then(r => {
+          if(r.data == "not_taken") {
+            this.emailValid = true;
+          }
+          else {
+            this.emailValid = false;
+            this.emailMessage = "This email is already taken.";
+          }
+        })
+      }
+      else {
+        this.emailValid = false;
+        this.emailMessage = "Email is not valid!";
+      }
+    },
+    validEmail (email) {
+      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     }
-
-
   },
   computed: {
       validation() {
+        if(this.user.password.length > 7) {
+          this.passwordValid = true;
+        }
+        else {
+          this.passwordValid = false;
+        }
+        if(this.user.password != this.user.confirmPassword) {
+          this.passwordValid = false;
+        }
+        else {
+          this.passwordValid = true;
+        }
         return this.user.password.length > 7 ? true : false
       }
   }}
