@@ -9,7 +9,7 @@
                     <b-navbar-nav>
                         <b-nav-item> 
                             <router-link v-if="!isUserLogged" to="/loginPage" class="routerlink">Profile</router-link>
-                            <router-link v-else to="/" class="routerlink">{{userFullname}}</router-link>
+                            <router-link v-else to="/profile" class="routerlink">{{userFullname}}</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                      <b-navbar-nav>
