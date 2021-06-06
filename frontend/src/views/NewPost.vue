@@ -18,7 +18,7 @@
                             <input type="text" placeholder="enter tags" style="font-style:italic"> 
                             <input type="text" placeholder="enter location" style="font-style:italic">
                             <br/>
-                            <input type="submit"  style="color: white" name="" value="Post">
+                            <input type="submit"  style="color: white" name="" value="Create">
                         </form>
                     </div>
                 </div>
