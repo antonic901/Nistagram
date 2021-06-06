@@ -12,6 +12,11 @@
                             <router-link v-else to="/" class="routerlink">{{userFullname}}</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
+                     <b-navbar-nav>
+                        <b-nav-item> 
+                            <router-link v-if="!isUserLogged" to="/new-post" class="routerlink">New post</router-link>
+                        </b-nav-item>
+                    </b-navbar-nav>
                     <b-navbar-nav class="ml-auto">
                         <b-nav-form>
                             <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
