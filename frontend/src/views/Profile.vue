@@ -113,20 +113,66 @@
               </div>
             </div>
           </div>
-
+ 
         </div>
+        
     </div>
+    <div>
+        <div class="container2">
+  <div class="card__container">
+    <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture1.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+    <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture2.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+    <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture1.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+     <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture1.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+     <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture2.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+     <div class="card2">
+      <div class="card__content">
+         <img src="../assets/picture2.jpg" width="100%">
+        <button class="card__button">Open</button>
+      </div>
+    </div>
+  </div>
 </div>
+</div>
+ </div>
+
 </template>
 
 <style>
  .background {
   background-color: #3498db;
-  position: fixed; 
+  background-repeat: repeat-y;
+  position:absolute;
   top: 0; 
   left: 0; 
   min-width: 100%;
   min-height: 100%;
+
 } 
 .body{
     margin-top:20px;
@@ -136,9 +182,6 @@
 }
 .main-body {
     padding: 15px;
-}
-.card {
-    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
 }
 
 .card {
@@ -182,6 +225,71 @@
 .shadow-none {
     box-shadow: none!important;
 }
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap");
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+.container2 {
+  position:absolute;
+  width: 100%;
+  height: 100vh;
+  background-color: #3498db;
+  margin-top: 10px;
+}
+
+.card2 {
+  width: 60%;
+  height: 100%;
+  max-height: 1000px;
+  padding: auto;
+  text-align: center;
+  margin-top: 10px;
+  border-radius: 10px;
+ 
+}
+.card__container {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  justify-items: center;
+  color: white;
+}
+.card__content {
+  width: 90%;
+  height: 95%;
+  background: #191a19;
+  margin: 10px auto;
+  border-radius: 5px;
+  padding: 20px;
+  cursor: pointer;
+  transition: 0.3s all ease-in-out;
+}
+.card__content:hover {
+  margin-top: -10px;
+}
+.card__header {
+  text-transform: uppercase;
+  font-size: 20px;
+  margin: 40px auto;
+}
+.card__button {
+  padding: 10px;
+  border-radius: 50px;
+  background: #1f75c4;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin: 50px auto;
+}
 </style>
 
 <script>
@@ -192,5 +300,6 @@ export default {
   components: {
       Navbar
   }
+  
 }
 </script>

@@ -39,11 +39,7 @@ export default {
   data() {
     return {
       show: false,
-      error: "",
-      Login: {
-        username: "",
-        password: ""
-      }
+      error: ""
     };
   },
   
