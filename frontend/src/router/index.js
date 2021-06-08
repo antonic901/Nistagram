@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import RegistrationPage from '../views/RegistrationPage.vue'
 import Home from '../views/Home.vue'
 import LoginPage from '../views/LoginPage.vue'
+import NewPost from '../views/NewPost.vue'
+import Profile from '../views/Profile.vue'
 
 Vue.use(VueRouter)
 
@@ -22,6 +24,16 @@ const routes = [
     path: '/loginPage',
     name: 'LoginPage',
     component: LoginPage
+  },
+  {
+    path: '/new-post',
+    name: 'NewPost',
+    component: NewPost
+  },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: Profile
   }
 ]
 

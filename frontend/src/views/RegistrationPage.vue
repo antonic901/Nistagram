@@ -212,7 +212,7 @@ export default {
     box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
     text-align: center;
     transition: 0.25s;
-    margin-top: 100px;
+    margin-top: 20px;
     border-radius: 20px; 
 }
 

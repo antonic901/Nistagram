@@ -1,18 +1,22 @@
 <template>
-  <div>  
+  <body>
+    <div>  
     <Navbar/>
-    <p>Welcome to most retarted instagram on planet!</p>
-  </div>
+    <Post/>
+    </div>
+  </body>
 </template>
 
 <script>
 
 import Navbar from '../components/Navbar.vue'
+import Post from '../components/Post.vue'
 
 export default {
   name: "Home",
   components: {
-    Navbar
+    Navbar,
+    Post
   }
 };
 </script>
