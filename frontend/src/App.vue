@@ -1,20 +1,17 @@
 <template>
   <div >
-    <!-- <router-view>
+    <router-view>
 
-    </router-view> -->
-    <Test/>
+    </router-view>
   </div>
 </template>
 
 <script>
 
-import Test from './views/Test.vue'
-
 export default {
   name: 'App',
   components: {
-    Test
+    
   }
 }
 </script>
