@@ -27,6 +27,9 @@ public class UserProfile extends User {
 	
 	@Column(nullable = false)
 	private boolean isPrivate;
+	
+	@Column
+	private boolean isDeleted;
 	 
 	 @ManyToMany
 	 @JoinTable (
@@ -59,6 +62,22 @@ public class UserProfile extends User {
 	            inverseJoinColumns = @JoinColumn(name = "closefriend__user_id", referencedColumnName = "id")
 	    )
 	 private Set<UserProfile> closedFriends = new HashSet<UserProfile>();
+	 
+	 @ManyToMany
+	 @JoinTable (
+	    		name = "muted_friends",
+	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+	            inverseJoinColumns = @JoinColumn(name = "mutedfriend__user_id", referencedColumnName = "id")
+	    )
+	 private Set<UserProfile> mutedUsers = new HashSet<UserProfile>();
+	 
+	 @ManyToMany
+	 @JoinTable (
+	    		name = "blocked_friends",
+	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+	            inverseJoinColumns = @JoinColumn(name = "blockedfriend__user_id", referencedColumnName = "id")
+	    )
+	 private Set<UserProfile> blockedUsers = new HashSet<UserProfile>();
 	 
 	 public UserProfile(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
 			String website, String biography, String username, String password, boolean isPrivate,
