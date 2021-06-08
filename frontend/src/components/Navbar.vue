@@ -8,18 +8,18 @@
                 <b-collapse id="nav-collapse" is-nav>
                     <b-navbar-nav>
                         <b-nav-item> 
-                            <router-link v-if="!isUserLogged" to="/profile" class="routerlink">Profile</router-link>
+                            <router-link v-if="!isUserLogged" to="/loginPage" class="routerlink">Profile</router-link>
                             <router-link v-else to="/profile" class="routerlink">{{userFullname}}</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                      <b-navbar-nav>
                         <b-nav-item> 
-                            <router-link v-if="!isUserLogged" to="/new-post" class="routerlink">New post</router-link>
+                            <router-link v-if="isUserLogged" to="/new-post" class="routerlink">New post</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                     <b-navbar-nav>
                         <b-nav-item> 
-                            <router-link v-if="!isUserLogged" to="/all-posts" class="routerlink">All posts</router-link>
+                            <router-link v-if="isUserLogged" to="/all-posts" class="routerlink">All posts</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                     <b-navbar-nav class="ml-auto">

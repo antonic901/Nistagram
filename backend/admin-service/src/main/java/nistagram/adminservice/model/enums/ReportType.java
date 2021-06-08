@@ -1,0 +1,14 @@
+package nistagram.adminservice.model.enums;
+
+public enum ReportType {
+	UNWANTED_CONTENT,
+	NUDETY_OR_SEXUAL_ACTIVITY,
+	HATE_SYMBOL,
+	VIOLENCE,
+	ILLEGAL_SALE,
+	HARASSMENT,
+	COPYRIGHT_INFRIGEMENT,
+	SUICIDE,
+	SCAM,
+	FALSE_INFORMATION
+}
