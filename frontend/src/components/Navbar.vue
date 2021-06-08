@@ -2,7 +2,7 @@
     <div class="background">
     <b-navbar toggleable="lg" type="dark" variant="dark">
                 <b-navbar-brand>
-                    <router-link to="/" class="routerlink">Nistagram</router-link>
+                    <router-link to="/" class="routerlink" style="font-family: Brush Script MT; font-size: 35px" >Ništagram</router-link>
                 </b-navbar-brand>
                 <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
                 <b-collapse id="nav-collapse" is-nav>

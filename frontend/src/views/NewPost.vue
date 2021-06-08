@@ -10,13 +10,14 @@
                                 <h1 class = "title" style="color:#4d4d4d ">New post</h1>
                             </div>
                             <div >
-                                <div style="font-style:italic" required>
-                                    <b-form-file v-model="file2" class="mt-3 cl1" plain></b-form-file>
+                               <input type="text" placeholder="enter location" style="font-style:italic">
+                                <div style="font-style:italic" required class="app">
+                                    <b-form-file type="file"  @change="onFileChange"/>
+                                    <img class="image" v-if="url" :src="url" />
                                 </div>
                             </div>
                             <input type="text" placeholder="enter description" style="font-style:italic"> 
                             <input type="text" placeholder="enter tags" style="font-style:italic"> 
-                            <input type="text" placeholder="enter location" style="font-style:italic">
                             <br/>
                             <input type="submit"  style="color: white" name="" value="Create">
                         </form>
@@ -39,17 +40,27 @@ export default {
   data() {
     return {
       show: false,
+      imgSource: '',
+      url: null,
       error: ""
     };
   },
-  
-    onSubmit(event) {
-      event.preventDefault();
+    methods:{
+        
+        onFileChange(e){
+            const file = e.target.files[0];
+            this.url = URL.createObjectURL(file);
+        },
+
+        onSubmit(event) {
+        event.preventDefault();
+        },
+        onReset(event) {
+        event.preventDefault();
+        console.log("reset");
+        }
     },
-    onReset(event) {
-      event.preventDefault();
-      console.log("reset");
-    },
+
   computed: {
       
   }}
@@ -71,7 +82,7 @@ export default {
 }
  .background {
   background-color: #3498db;
-  position: fixed; 
+  position:absolute; 
   top: 0; 
   left: 0; 
   min-width: 100%;
@@ -164,5 +175,28 @@ export default {
 .routerlink {
   display: block;
   color:#7e7e7e;
+}
+
+body {
+  background-color: #e2e2e2;
+}
+
+.app {
+  padding: 20px;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 500px;
+}
+.image{
+    max-width: 420px;
+    max-height: 500px;
 }
 </style>
