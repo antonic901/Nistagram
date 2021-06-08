@@ -57,7 +57,7 @@ export default {
             var user = JSON.parse(JSON.stringify(r.data))
             if(user.id != null) {
               this.show = false;
-              this.$store.commit('updateUser', {user});
+              this.$store.dispatch('updateUser', {user});
               this.$router.push({name: 'Home'})
             }
             else {
@@ -73,10 +73,8 @@ export default {
       event.preventDefault();
       console.log("reset");
     }
-  },
-  computed: {
-      
-  }}
+  }
+}
 </script>
 
 <style scoped>

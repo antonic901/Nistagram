@@ -4,10 +4,12 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
+  //states (data) can be edided only through mutations
+  strict: true,
   // this is like data:
   state: {
     user: {
-      id: "",
+      id: null,
       name: "",
       surname: "",
       email: "",
@@ -18,69 +20,32 @@ export const store = new Vuex.Store({
       biography: "",
       username: "",
       password: ""
-   },
-   isUserLogged: false
+   }
   },
   //methods that return data (state)
   getters: {
     getFullName(state) {
       return state.user.name + " " + state.user.surname
+    },
+    isUserLogged(state) {
+      if(state.user.id != null) {
+        return true
+      }
+      else {
+        return false
+      }
     }
   },
   //methods for changing date (state)
   mutations: {
     updateUser(state, {user}) {
       state.user = user;
-      if(user.id != null) {
-        state.isUserLogged = true;
-      }
-      else {
-        state.isUserLogged = false;
-      }
+    }
+  },
+  //always on components dispatch action which commit some mutations. Never commit mutations from component because of async
+  actions: {
+    updateUser(context, {user}) {
+      context.commit('updateUser', {user})
     }
   }
 })
-
-
-
-
-
-
-
-
-
-
-// export default new Vuex.Store({
-//   state: {
-//     user: {
-//       id: "",
-//       name: "",
-//       surname: "",
-//       email: "",
-//       phoneNumber: "",
-//       gender: null,
-//       birthdayDate: null,
-//       website: "",
-//       biography: "",
-//       username: "",
-//       password: "",
-//       confirmPassword: ""
-//     },
-//     isUserLogged: false,
-//     userFullname: ""
-//   },
-//   mutations: {
-//     // syncrous
-//   },
-//   actions: {
-//     // asyncronous
-//     setUser(state, payload) {
-      
-//     }
-//   },
-//   modules: {
-//     getUser(state) {
-//       return state.user;
-//     }
-//   }
-// })
