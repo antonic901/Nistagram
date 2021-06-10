@@ -1,0 +1,7 @@
+insert into postservice.locations(city, country, street) values ('Novi Sad', 'Serbia', 'Jovana Cvijica')
+insert into postservice.locations(city, country, street) values ('Belgrade', 'Serbia', 'Jovana Ducica')
+insert into postservice.locations(city, country, street) values ('Berlin', 'Germany', 'Strasse 9')
+insert into postservice.locations(city, country, street) values ('Sanski Most', 'BiH', 'Cvije Kukolja')
+insert into postservice.locations(city, country, street) values ('Vrbanja', 'BiH', 'Bogana Velicanstvenog')
+insert into postservice.locations(city, country, street) values ('Paris', 'France', 'Jovana Cvijica')
+insert into postservice.locations(city, country, street) values ('Milano', 'Italy', 'Jovana Cvijica')

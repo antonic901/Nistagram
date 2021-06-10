@@ -10,16 +10,18 @@
                                 <h1 class = "title" style="color:#4d4d4d ">New post</h1>
                             </div>
                             <div >
-                               <input type="text" placeholder="enter location" style="font-style:italic">
+                                <div>
+                                    <b-form-input v-model="enterLocation" type="text" v-on:input="searchLocation" placeholder="search in format: Country, City, Street" style="font-style:italic"></b-form-input>
+                                    <b-table striped hover :items="locations" :fields="fields"></b-table>
+                                </div>
                                 <div style="font-style:italic" required class="app">
-                                    <b-form-file type="file"  @change="onFileChange"/>
-                                    <img class="image" v-if="url" :src="url" />
+                                    <input type="file" @change="onFileSelected" multiple>
+                                    <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
                                 </div>
                             </div>
-                            <input type="text" placeholder="enter description" style="font-style:italic"> 
-                            <input type="text" placeholder="enter tags" style="font-style:italic"> 
+                            <b-form-textarea class="textarea" v-model="enterDescription" type="text" placeholder="enter description" style="font-style:italic"/> 
                             <br/>
-                            <input type="submit"  style="color: white" name="" value="Create">
+                            <b-button style="color: white" @click="onUpload">Create</b-button>
                         </form>
                     </div>
                 </div>
@@ -29,6 +31,7 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import Navbar from '../components/Navbar.vue'
 
@@ -37,21 +40,83 @@ export default {
   components: {
       Navbar
   },
+  computed: {
+      User() {
+          return this.$store.getters.getUser
+      }
+  },
   data() {
     return {
-      show: false,
-      imgSource: '',
-      url: null,
-      error: ""
+        fields: ['country', 'city', 'street'],
+        selectedFiles: [],
+        show: false,
+        url: [],
+        error: '',
+        enterLocation: '',
+        enterDescription: '',
+        locations: [],
+        location: null,
+        description: '',
+        hashTags: []
     };
   },
     methods:{
-        
-        onFileChange(e){
-            const file = e.target.files[0];
-            this.url = URL.createObjectURL(file);
+        searchLocation() {
+            if(this.enterLocation == '') {
+                this.locations = []
+                this.location = null 
+                return
+            }
+            
+            axios.get("http://localhost:8082/api/location/search-location/" + this.enterLocation)  
+                .then(r => {
+                    this.locations = JSON.parse(JSON.stringify(r.data))
+                    console.log(this.locations)
+                })  
         },
+        onFileSelected(event) {
+            this.url = []
+            this.selectedFiles = event.target.files
+            this.selectedFiles.forEach(selectedFile => {
+                this.url.push(URL.createObjectURL(selectedFile));
+                console.log(this.url[0])
+            })
+        },
+        onUpload() {
+            this.findHashtags(this.enterDescription)
+            console.log(this.description)
+            console.log(this.hashTags)
+            console.log(this.location)
+            // var i = 1
+            // var date = new Date();
+            // this.selectedFiles.forEach(selectedFile => {
+            //     const fileToUpload = new FormData();
+            //     fileToUpload.append('file', selectedFile, 'antonic901/post-' + date.getTime() + '-image-' + i)
 
+            //     axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload)
+            //         .then(r => {
+            //             console.log(r)
+            //         })
+
+            //     i++
+            // })
+            
+        },
+        findHashtags(searchText) {
+            // var regexp = /\B\#\w\w+\b/g
+            var regexp = /\#\w+\b/g
+            this.hashTags = searchText.match(regexp);
+            this.description = this.enterDescription;
+            try {
+                this.hashTags.forEach(hashTag => {
+                this.description = this.description.replace(hashTag, "");
+            })
+            } catch (error) {
+
+            }
+
+            this.description = this.description.trim()
+        },
         onSubmit(event) {
         event.preventDefault();
         },
@@ -199,4 +264,11 @@ body {
     max-width: 420px;
     max-height: 500px;
 }
+
+.textarea {
+    height: 20vh;
+    box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+
 </style>
