@@ -40,20 +40,20 @@ public class Post {
 	private Caption caption;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userprofile_id", nullable = true)
-	private User userProfile;
+    @JoinColumn(name = "user_id", nullable = true)
+	private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "location_id", nullable = true)
 	private Location location;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	private Set<Comment> comments;
+	private Set<Comment> comments = new HashSet<Comment>();
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "post")
+	@OneToMany(fetch = FetchType.LAZY)
 	private Set<LikeDislike> likesDislikes = new HashSet<LikeDislike>();
 	
-	//pitati asistenta
 	@ElementCollection
 	private List<String> imagesAndVideos = new ArrayList<String>();
+	
 }

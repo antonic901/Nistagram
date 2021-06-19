@@ -5,6 +5,7 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -20,11 +21,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
+	
+	@Id
+	private Long id;
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	private Set<Post> posts = new HashSet<Post>();
 	 
-	 @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile")
-	 private Set<Post> posts = new HashSet<Post>();
-	 
-	 @OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile")
-	 private Set<Collection> collections = new HashSet<Collection>();
+	@OneToMany(fetch = FetchType.LAZY)
+	private Set<Collection> collections = new HashSet<Collection>();
 	 
 }

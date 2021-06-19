@@ -24,6 +24,9 @@ export const store = new Vuex.Store({
   },
   //methods that return data (state)
   getters: {
+    getUser(state) {
+      return state.user
+    },
     getFullName(state) {
       return state.user.name + " " + state.user.surname
     },

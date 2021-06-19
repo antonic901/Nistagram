@@ -10,16 +10,30 @@
                                 <h1 class = "title" style="color:#4d4d4d ">New post</h1>
                             </div>
                             <div >
-                               <input type="text" placeholder="enter location" style="font-style:italic">
+                                <div>
+                                    <b-form-input v-model="enterLocation" type="text" v-on:input="searchLocation" placeholder="search in format: Country, City, Street" style="font-style:italic"></b-form-input>
+                                    <b-table
+                                        class="table-light" 
+                                        selectable
+                                        select-mode="single"
+                                        sticky-header="60vh" 
+                                        hover 
+                                        :striped=true 
+                                        head-variant="dark"  
+                                        :items="locations" 
+                                        :fields="fields"
+                                        @row-clicked="locationSelect" 
+                                        >
+                                    </b-table>
+                                </div>
                                 <div style="font-style:italic" required class="app">
-                                    <b-form-file type="file"  @change="onFileChange"/>
-                                    <img class="image" v-if="url" :src="url" />
+                                    <input type="file" @change="onFileSelected" multiple>
+                                    <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
                                 </div>
                             </div>
-                            <input type="text" placeholder="enter description" style="font-style:italic"> 
-                            <input type="text" placeholder="enter tags" style="font-style:italic"> 
+                            <b-form-textarea class="textarea" v-model="enterDescription" type="text" placeholder="enter description" style="font-style:italic"/> 
                             <br/>
-                            <input type="submit"  style="color: white" name="" value="Create">
+                            <b-button style="color: white" @click="onUpload">Create</b-button>
                         </form>
                     </div>
                 </div>
@@ -29,6 +43,7 @@
 </template>
 
 <script>
+
 import axios from 'axios'
 import Navbar from '../components/Navbar.vue'
 
@@ -37,21 +52,108 @@ export default {
   components: {
       Navbar
   },
+  computed: {
+      User() {
+        return this.$store.getters.getUser
+      }
+  },
   data() {
     return {
-      show: false,
-      imgSource: '',
-      url: null,
-      error: ""
+        fields: ['country', 'city', 'street'],
+        selectedFiles: [],
+        show: false,
+        url: [],
+        error: '',
+        enterLocation: '',
+        enterDescription: '',
+        locations: [],
+        location: null,
+        description: '',
+        hashTags: []
     };
   },
     methods:{
-        
-        onFileChange(e){
-            const file = e.target.files[0];
-            this.url = URL.createObjectURL(file);
+        searchLocation() {
+            if(this.enterLocation == '') {
+                this.locations = []
+                this.location = null 
+                return
+            }
+            
+            axios.get("http://localhost:8082/api/location/search-location/" + this.enterLocation)  
+                .then(r => {
+                    this.locations = JSON.parse(JSON.stringify(r.data))
+                })  
         },
+        locationSelect(location ,index) {
+            this.location = location
+        },
+        onFileSelected(event) {
+            this.url = []
+            this.selectedFiles = event.target.files
+            this.selectedFiles.forEach(selectedFile => {
+                this.url.push(URL.createObjectURL(selectedFile));
+            })
+        },
+        async onUpload() {
+            this.findHashtags(this.enterDescription)
 
+            var tag = {
+                tags: this.hashTags
+            }
+            await axios.post("http://localhost:8082/api/tag/create-tag", tag)
+
+            var i = 1
+            var date = (new Date()).getTime();
+            var images = [];
+            this.selectedFiles.forEach(selectedFile => {
+                const fileToUpload = new FormData();
+                images.push(this.User.username + '/post-' + date + '-image-' + i + ".jpg")
+                fileToUpload.append('file', selectedFile, images[i-1])
+
+                axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload);
+
+                i++
+            })
+            var newPost;
+            try {
+                newPost = {
+                userId: this.User.id,
+                description: this.description,
+                hashTags: this.hashTags,
+                locationId: this.location.id,
+                imagesAndVideos: images
+                }
+            } catch {
+                newPost = {
+                userId: this.User.id,
+                description: this.description,
+                hashTags: this.hashTags,
+                locationId: null,
+                imagesAndVideos: images
+                }
+            }
+
+            await axios.post("http://localhost:8082/api/post/add-new-post", newPost)
+                .then(r => {
+                    console.log(r.data);
+                })
+        },
+        findHashtags(searchText) {
+            // var regexp = /\B\#\w\w+\b/g
+            var regexp = /\#\w+\b/g
+            this.hashTags = searchText.match(regexp);
+            this.description = this.enterDescription;
+            try {
+                this.hashTags.forEach(hashTag => {
+                this.description = this.description.replace(hashTag, "");
+            })
+            } catch (error) {
+
+            }
+
+            this.description = this.description.trim()
+        },
         onSubmit(event) {
         event.preventDefault();
         },
@@ -59,11 +161,8 @@ export default {
         event.preventDefault();
         console.log("reset");
         }
-    },
-
-  computed: {
-      
-  }}
+    }
+}
 </script>
 
 <style scoped>
@@ -199,4 +298,11 @@ body {
     max-width: 420px;
     max-height: 500px;
 }
+
+.textarea {
+    height: 20vh;
+    box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
+
 </style>

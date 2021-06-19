@@ -1,8 +1,8 @@
 <template>
   <body>
     <div>  
-    <Navbar/>
-    <Post/>
+      <Navbar/>
+      <Post/>
     </div>
   </body>
 </template>

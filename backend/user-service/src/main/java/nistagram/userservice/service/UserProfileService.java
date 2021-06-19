@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.UserDTO;
@@ -18,9 +19,12 @@ public class UserProfileService implements IUserProfileService {
 	
 	private UserProfileRepository userProfileRepository;
 	
+	private RestTemplate restTemplate;
+	
 	@Autowired
-	public UserProfileService(UserProfileRepository userProfileRepository) {
+	public UserProfileService(UserProfileRepository userProfileRepository, RestTemplate restTemplate) {
 		this.userProfileRepository = userProfileRepository;
+		this.restTemplate = restTemplate;
 	}
 
 	@Override
@@ -58,7 +62,9 @@ public class UserProfileService implements IUserProfileService {
 				userDTO.getGender(), userDTO.getBirthdayDate(), userDTO.getWebsite(), userDTO.getBiography(), userDTO.getUsername(), 
 				userDTO.getPassword(),false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>());
 		
-		userProfileRepository.save(newUserProfile);
+		newUserProfile = userProfileRepository.save(newUserProfile);
+		
+		restTemplate.getForEntity("http://localhost:8082/api/user/create-user/" + newUserProfile.getId(), String.class);
 		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}

@@ -1,0 +1,2 @@
+username/profile-picture.jpg
+username/post-{date_in_milliseconds}-image-{number_of_image}.jpg
