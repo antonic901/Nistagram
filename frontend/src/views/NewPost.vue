@@ -12,7 +12,19 @@
                             <div >
                                 <div>
                                     <b-form-input v-model="enterLocation" type="text" v-on:input="searchLocation" placeholder="search in format: Country, City, Street" style="font-style:italic"></b-form-input>
-                                    <b-table striped hover :items="locations" :fields="fields"></b-table>
+                                    <b-table
+                                        class="table-light" 
+                                        selectable
+                                        select-mode="single"
+                                        sticky-header="60vh" 
+                                        hover 
+                                        :striped=true 
+                                        head-variant="dark"  
+                                        :items="locations" 
+                                        :fields="fields"
+                                        @row-clicked="locationSelect" 
+                                        >
+                                    </b-table>
                                 </div>
                                 <div style="font-style:italic" required class="app">
                                     <input type="file" @change="onFileSelected" multiple>
@@ -42,7 +54,7 @@ export default {
   },
   computed: {
       User() {
-          return this.$store.getters.getUser
+        return this.$store.getters.getUser
       }
   },
   data() {
@@ -71,36 +83,61 @@ export default {
             axios.get("http://localhost:8082/api/location/search-location/" + this.enterLocation)  
                 .then(r => {
                     this.locations = JSON.parse(JSON.stringify(r.data))
-                    console.log(this.locations)
                 })  
+        },
+        locationSelect(location ,index) {
+            this.location = location
         },
         onFileSelected(event) {
             this.url = []
             this.selectedFiles = event.target.files
             this.selectedFiles.forEach(selectedFile => {
                 this.url.push(URL.createObjectURL(selectedFile));
-                console.log(this.url[0])
             })
         },
-        onUpload() {
+        async onUpload() {
             this.findHashtags(this.enterDescription)
-            console.log(this.description)
-            console.log(this.hashTags)
-            console.log(this.location)
-            // var i = 1
-            // var date = new Date();
-            // this.selectedFiles.forEach(selectedFile => {
-            //     const fileToUpload = new FormData();
-            //     fileToUpload.append('file', selectedFile, 'antonic901/post-' + date.getTime() + '-image-' + i)
 
-            //     axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload)
-            //         .then(r => {
-            //             console.log(r)
-            //         })
+            var tag = {
+                tags: this.hashTags
+            }
+            await axios.post("http://localhost:8082/api/tag/create-tag", tag)
 
-            //     i++
-            // })
-            
+            var i = 1
+            var date = (new Date()).getTime();
+            var images = [];
+            this.selectedFiles.forEach(selectedFile => {
+                const fileToUpload = new FormData();
+                images.push(this.User.username + '/post-' + date + '-image-' + i + ".jpg")
+                fileToUpload.append('file', selectedFile, images[i-1])
+
+                axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload);
+
+                i++
+            })
+            var newPost;
+            try {
+                newPost = {
+                userId: this.User.id,
+                description: this.description,
+                hashTags: this.hashTags,
+                locationId: this.location.id,
+                imagesAndVideos: images
+                }
+            } catch {
+                newPost = {
+                userId: this.User.id,
+                description: this.description,
+                hashTags: this.hashTags,
+                locationId: null,
+                imagesAndVideos: images
+                }
+            }
+
+            await axios.post("http://localhost:8082/api/post/add-new-post", newPost)
+                .then(r => {
+                    console.log(r.data);
+                })
         },
         findHashtags(searchText) {
             // var regexp = /\B\#\w\w+\b/g
@@ -124,11 +161,8 @@ export default {
         event.preventDefault();
         console.log("reset");
         }
-    },
-
-  computed: {
-      
-  }}
+    }
+}
 </script>
 
 <style scoped>

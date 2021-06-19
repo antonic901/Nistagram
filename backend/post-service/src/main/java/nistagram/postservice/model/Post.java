@@ -48,12 +48,12 @@ public class Post {
 	private Location location;
 	
 	@OneToMany(fetch = FetchType.LAZY)
-	private Set<Comment> comments;
+	private Set<Comment> comments = new HashSet<Comment>();
 	
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<LikeDislike> likesDislikes = new HashSet<LikeDislike>();
 	
-	//pitati asistenta
 	@ElementCollection
 	private List<String> imagesAndVideos = new ArrayList<String>();
+	
 }

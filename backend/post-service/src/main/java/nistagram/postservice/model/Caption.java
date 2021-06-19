@@ -1,5 +1,6 @@
 package nistagram.postservice.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -39,7 +40,7 @@ public class Caption {
         joinColumns = @JoinColumn(name = "caption_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 	
 	@OneToOne(mappedBy = "caption")
 	private Post post;

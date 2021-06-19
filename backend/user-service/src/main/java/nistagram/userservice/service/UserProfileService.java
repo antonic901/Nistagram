@@ -10,7 +10,6 @@ import org.springframework.web.client.RestTemplate;
 
 import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.UserDTO;
-import nistagram.userservice.model.User;
 import nistagram.userservice.model.UserProfile;
 import nistagram.userservice.repository.UserProfileRepository;
 import nistagram.userservice.service.interfaces.IUserProfileService;

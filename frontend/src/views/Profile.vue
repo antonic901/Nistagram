@@ -299,6 +299,11 @@ export default {
   name: "Profile",
   components: {
       Navbar
+  },
+  computed: {
+    User() {
+      return this.$store.getters.getUser;
+    }
   }
   
 }
