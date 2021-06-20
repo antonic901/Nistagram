@@ -54,11 +54,9 @@ public class PostService implements IPostService {
 		newPost.setUser(user);
 		newPost.setLocation(location);
 		for(String s : newPostDTO.getImagesAndVideos()) {
-			newPost.getImagesAndVideos().add("../assets/" + s);
+			newPost.getImagesAndVideos().add(s);
 		}
 		postRepository.save(newPost);
-		
-		user = userRepository.findById(newPostDTO.getUserId()).get();
 		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}

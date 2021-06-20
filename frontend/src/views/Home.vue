@@ -1,10 +1,8 @@
 <template>
-  <body>
-    <div>  
-      <Navbar/>
-      <Post/>
-    </div>
-  </body>
+  <div class="background">  
+    <Navbar/>
+    <Post/>
+  </div>
 </template>
 
 <script>
@@ -20,3 +18,9 @@ export default {
   }
 };
 </script>
+
+<style>
+ .background {
+    background-color: #3498db;
+  }
+</style> 

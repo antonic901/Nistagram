@@ -1,6 +1,13 @@
 <template>
-    <div class="container-1">
-        <div class="container-2">
+    <div class="container-2">
+        <div v-on:click="change"> 
+            <b-img-lazy class="item-5" :src="'https://nistagramstorage.s3.eu-central-1.amazonaws.com/antonic901-post-1624186906718-image-1.jpg'"></b-img-lazy>
+        </div>
+        <div v-on:click="change"> 
+            <b-img-lazy class="item-5" :src="'https://nistagramstorage.s3.eu-central-1.amazonaws.com/antonic901-post-1624186906718-image-1.jpg'"></b-img-lazy>
+        </div>
+        
+        <!-- <div class="container-2">
             <b-button class="item-1 button">Dugme3</b-button>
         </div>
         <div class="container-2">
@@ -19,13 +26,18 @@
                 <b-button class="button">Dugme5</b-button>
             </div>
             <b-button class="button item-4">Dugme6</b-button>
-        </div>
+        </div> -->
     </div>
 </template>
 
 <script>
 export default {
-    name: 'Test'
+    name: 'Test',
+    methods: {
+        change() {
+            alert("hello")
+        }
+    }
 }
 </script>
 
@@ -60,6 +72,12 @@ export default {
 
 .item-4 {
     align-self: center;
+}
+
+.item-5 {
+    width: 292px;
+    height: 292px;
+    margin: 10px;
 }
 
 .button {

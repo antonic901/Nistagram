@@ -108,13 +108,14 @@ export default {
             var images = [];
             this.selectedFiles.forEach(selectedFile => {
                 const fileToUpload = new FormData();
-                images.push(this.User.username + '/post-' + date + '-image-' + i + ".jpg")
+                images.push(this.User.username + '-post-' + date + '-image-' + i + ".jpg")
                 fileToUpload.append('file', selectedFile, images[i-1])
-
+                images[i-1] = "https://nistagramstorage.s3.eu-central-1.amazonaws.com/" + images[i-1]
                 axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload);
 
                 i++
             })
+
             var newPost;
             try {
                 newPost = {
@@ -142,7 +143,9 @@ export default {
         findHashtags(searchText) {
             // var regexp = /\B\#\w\w+\b/g
             var regexp = /\#\w+\b/g
-            this.hashTags = searchText.match(regexp);
+            var tags = searchText.match(regexp);
+            if(tags == null ) this.hashTags = []
+            else this.hashTags = tags
             this.description = this.enterDescription;
             try {
                 this.hashTags.forEach(hashTag => {

@@ -1,5 +1,7 @@
 package nistagram.postservice.controller;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import nistagram.postservice.model.Post;
 import nistagram.postservice.service.UserService;
 
 @RestController
@@ -23,6 +26,11 @@ public class UserController {
 	@RequestMapping(value = "/create-user/{id}", method = RequestMethod.GET)
 	public ResponseEntity<String> createUser(@PathVariable("id") Long id) {
 		return userService.createUser(id);
+	}
+	
+	@RequestMapping(value = "/get-posts-for-user/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Post>> getPostsForUser(@PathVariable("id") Long id) {
+		return userService.getPostsForUser(id);
 	}
 
 }

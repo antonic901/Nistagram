@@ -18,6 +18,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,15 +38,14 @@ public class Post {
 	private Long id;
 	
 	@OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "caption_id", referencedColumnName = "id")
 	private Caption caption;
 	
+	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
 	private User user;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "location_id", nullable = true)
+	@OneToOne(cascade = CascadeType.ALL)
 	private Location location;
 	
 	@OneToMany(fetch = FetchType.LAZY)
