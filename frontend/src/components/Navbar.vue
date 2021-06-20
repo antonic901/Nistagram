@@ -1,5 +1,5 @@
 <template>
-    <div class="background">
+    <div>
     <b-navbar toggleable="lg" type="dark" variant="dark">
                 <b-navbar-brand>
                     <router-link to="/" class="routerlink" style="font-family: Brush Script MT; font-size: 35px" >Ništagram</router-link>

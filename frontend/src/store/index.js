@@ -20,7 +20,8 @@ export const store = new Vuex.Store({
       biography: "",
       username: "",
       password: ""
-   }
+   },
+   posts: []
   },
   //methods that return data (state)
   getters: {
@@ -37,18 +38,27 @@ export const store = new Vuex.Store({
       else {
         return false
       }
+    },
+    getPosts(state) {
+      return state.posts
     }
   },
   //methods for changing date (state)
   mutations: {
     updateUser(state, {user}) {
       state.user = user;
+    },
+    updatePosts(state, posts) {
+      state.posts = posts;
     }
   },
   //always on components dispatch action which commit some mutations. Never commit mutations from component because of async
   actions: {
     updateUser(context, {user}) {
       context.commit('updateUser', {user})
+    },
+    updatePosts(context, posts) {
+      context.commit('updatePosts', posts)
     }
   }
 })

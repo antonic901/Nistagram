@@ -2,7 +2,7 @@
  <div class = "background">
     <Navbar/>
     <div class="container">
-    <div class="main-body"> 
+      <div class="main-body"> 
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -113,57 +113,72 @@
               </div>
             </div>
           </div>
- 
         </div>
-        
     </div>
-    <div>
-        <div class="container2">
-  <div class="card__container">
-    <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture1.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
-    </div>
-    <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture2.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
-    </div>
-    <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture1.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
-    </div>
-     <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture1.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
-    </div>
-     <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture2.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
-    </div>
-     <div class="card2">
-      <div class="card__content">
-         <img src="../assets/picture2.jpg" width="100%">
-        <button class="card__button">Open</button>
-      </div>
+    <div class="container-1">
+        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change">
+          <b-img-lazy class="item-1" :src="post.imagesAndVideos[0]"></b-img-lazy>
+        </div>
     </div>
   </div>
-</div>
-</div>
- </div>
 
 </template>
 
+<script>
+
+import axios from 'axios'
+import Navbar from '../components/Navbar.vue'
+
+export default {
+  name: "Profile",
+  components: {
+      Navbar
+  },
+  computed: {
+    User() {
+      return this.$store.getters.getUser;
+    },
+    Posts() {
+      return this.$store.getters.getPosts;
+    }
+  },
+  methods: {
+    change() {
+      alert("TODO Nemanja")
+    }
+  },
+  created() {
+    axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
+      .then(r => {
+         var posts = JSON.parse(JSON.stringify(r.data))
+         this.$store.dispatch('updatePosts', posts)
+      })
+  }  
+}
+</script>
+
 <style>
+  .container-1 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .container-2 {
+    transition: 0.2s all ease-in-out;
+  }
+  .container-2:hover {
+    margin-top: -10px;
+  }
+
+  .item-1 {
+    width: 292px;
+    height: 292px;
+    margin: 10px;
+    border-radius: 15px;
+
+  }
+
  .background {
   background-color: #3498db;
   background-repeat: repeat-y;
@@ -291,20 +306,3 @@
   margin: 50px auto;
 }
 </style>
-
-<script>
-import Navbar from '../components/Navbar.vue'
-
-export default {
-  name: "Profile",
-  components: {
-      Navbar
-  },
-  computed: {
-    User() {
-      return this.$store.getters.getUser;
-    }
-  }
-  
-}
-</script>
