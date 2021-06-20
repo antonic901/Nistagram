@@ -116,7 +116,7 @@
         </div>
     </div>
     <div class="container-1">
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change">
+        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change(post.id)">
           <b-img-lazy class="item-1" :src="post.imagesAndVideos[0]"></b-img-lazy>
         </div>
     </div>
@@ -143,8 +143,8 @@ export default {
     }
   },
   methods: {
-    change() {
-      alert("TODO Nemanja")
+    change(postId) {
+      alert("TODO Nemanja" + postId)
     }
   },
   created() {
