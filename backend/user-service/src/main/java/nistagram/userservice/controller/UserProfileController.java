@@ -46,4 +46,10 @@ public class UserProfileController {
 		return userProfileService.login(loginDTO);
 	}
 	
+	@PostMapping(value = "/update-user", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> updateUser(@RequestBody UserDTO userDTO) throws Exception
+	{
+		return userProfileService.updateUser(userDTO);
+	}
+	
 }
