@@ -6,6 +6,7 @@ import LoginPage from '../views/LoginPage.vue'
 import NewPost from '../views/NewPost.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
+import UserProfile from '../views/UserProfile.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +41,11 @@ const routes = [
     path: '/search',
     name: 'Search',
     component: Search
+  },
+  {
+    path: '/userProfile',
+    name: 'UserProfile',
+    component: UserProfile
   }
 ]
 

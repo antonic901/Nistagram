@@ -73,6 +73,63 @@ public class UserProfileController {
 		return userProfileService.isPrivate(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
 	}
 	
+	@PostMapping(value = "/check-is-user-following", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkIsUserFollowing(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.checkIsUserFollowing(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
 	
+	@PostMapping(value = "/check-is-user-blocked", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkIsUserBlocked(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.checkIsUserBlocked(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
 	
+	@PostMapping(value = "/check-is-user-muted", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkIsUserMuted(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.checkIsUserMuted(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/check-is-user-closed-friend", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkIsUserClosedFriend(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.checkIsUserClosedFriend(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/follow", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> follow(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.follow(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/unfollow", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> unfollow(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.unfollow(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/block", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> block(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.block(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/unblock", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> unblock(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.unblock(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/mute", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> mute(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.mute(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/unmute", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> unmute(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.unmute(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/add-to-closed-friends", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> addToClosedFriends(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.addToClosedFriends(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/remove-from-closed-friends", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<UserProfile> removeFromoClosedFriends(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.removeFromClosedFriends(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
 }

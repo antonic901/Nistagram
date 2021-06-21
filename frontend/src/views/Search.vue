@@ -62,7 +62,8 @@ export default {
     },
     methods: {
         clickOpen(user) {
-            console.log(user)
+            this.$store.dispatch('updateUserProfile', user)
+            this.$router.push({name: 'UserProfile'})
         },
         change(postId) {
             alert("TODO Nemanja");
