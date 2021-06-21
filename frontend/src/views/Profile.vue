@@ -108,6 +108,24 @@
                     <div class="col-sm-12">
                       <button class="btn btn-primary">Edit</button>
                     </div>
+                    <div class="col-sm-12">
+                      <button class="btn btn-primary" v-b-modal.modal-scrollable>New story</button>
+                      <b-modal id="modal-scrollable" :hide-footer="true" size="lg" scrollable title="New story">
+                        <div class="cardStory">
+                          <form onsubmit="event.preventDefault()" class="box">
+                              <div class = "cls">
+                                  <h1 class = "title">New story</h1>
+                              </div>
+                              <div style="font-style:italic" required class="app">
+                                  <input type="file" @change="onFileSelected" multiple>
+                                  <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
+                              </div>
+                              <b-button variant="light" >Create</b-button>
+                          </form>
+                        </div>
+                        
+                      </b-modal>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -116,9 +134,40 @@
         </div>
     </div>
     <div class="container-1">
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change(post.id)">
+        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modal-xl v-on:click="change(post)">
           <b-img-lazy class="item-1" :src="post.imagesAndVideos[0]"></b-img-lazy>
         </div>
+    </div>
+    <div v-if="this.post != null">
+      <b-modal id="modal-xl" size="xl" :hide-footer="true" :title="'@' + this.User.username">
+        <b-card no-body class="overflow-hidden" style="max-width: 1100px; max-height: 550px; margin-top: 0px;">
+          <b-row no-gutters>
+            <b-col md="8">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                      <div class="carousel-inner">
+                          <b-card-img :src="this.post.imagesAndVideos[i]" alt="Image" class="rounded-0"></b-card-img>
+                      </div>
+                      <a class="carousel-control-prev" role="button" v-on:click="previus" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                      </a>
+                      <a class="carousel-control-next" role="button" v-on:click="next" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                      </a>
+                    </div>
+            </b-col>
+            <b-col md="4">
+		          <b-card-body>
+                  <b-card-text>
+                    <p>{{this.post.caption.description}}</p>
+                    <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
+                  </b-card-text>
+                 </b-card-body>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-modal>
     </div>
   </div>
 
@@ -142,10 +191,41 @@ export default {
       return this.$store.getters.getPosts;
     }
   },
-  methods: {
-    change(postId) {
-      alert("TODO Nemanja" + postId)
+  data() {
+    return {
+      showEdit: false,
+      post: null,
+      i: 0,
+      url: []
     }
+  },
+  methods: {
+    change(post) {
+      this.post = post
+    },
+    previus() {
+      var i = this.i - 1
+      if(i < 0) {
+        this.i = this.post.imagesAndVideos.length-1
+        return
+      }
+      this.i = i
+    },
+    next() {
+      var i = this.i + 1
+      if(i >= this.post.imagesAndVideos.length) {
+        this.i = 0
+        return
+      }
+      this.i = i
+    },
+    onFileSelected(event) {
+            this.url = []
+            this.selectedFiles = event.target.files
+            this.selectedFiles.forEach(selectedFile => {
+                this.url.push(URL.createObjectURL(selectedFile));
+            })
+        },
   },
   created() {
     axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
@@ -304,5 +384,40 @@ export default {
   cursor: pointer;
   border: none;
   margin: 50px auto;
+}
+
+.cardStory {
+    margin-bottom: 20px;
+    border: none;
+   
+}
+
+.box {
+    width: 550px;
+    padding: 40px;
+    position:relative;
+    background-color: #3498db;
+    box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
+    text-align: center;
+    transition: 0.25s;
+    margin-top: 20px;
+    margin-left: 75px;
+    margin-right: 75px;
+    border-radius: 20px; 
+}
+.cls{
+  margin-bottom: 40px;
+}
+.title {
+  font-family: fantasy;
+  font-size: 30px;
+  color: white;
+}
+.app {
+  padding: 20px;
+}
+.image{
+    max-width: 420px;
+    max-height: 500px;
 }
 </style>

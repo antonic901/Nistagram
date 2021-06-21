@@ -16,7 +16,7 @@
                                         class="table-light" 
                                         selectable
                                         select-mode="single"
-                                        sticky-header="60vh" 
+                                        sticky-header="50vh" 
                                         hover 
                                         :striped=true 
                                         head-variant="dark"  

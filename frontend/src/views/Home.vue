@@ -1,7 +1,10 @@
 <template>
   <div class="background">  
     <Navbar/>
-    <Post/>
+    <div style="max-width: 50rem;  margin: auto;">
+      <Post/>
+      <Post/>
+    </div>
   </div>
 </template>
 

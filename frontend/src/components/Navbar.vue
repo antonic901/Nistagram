@@ -19,7 +19,7 @@
                     </b-navbar-nav>
                     <b-navbar-nav>
                         <b-nav-item> 
-                            <router-link v-if="isUserLogged" to="/all-posts" class="routerlink">All posts</router-link>
+                            <router-link v-if="isUserLogged" to="/new-story" class="routerlink">New story</router-link>
                         </b-nav-item>
                     </b-navbar-nav>
                     <b-navbar-nav class="ml-auto">

@@ -1,28 +1,46 @@
 <template>
-    <div style="width: 750px; height: 700px; margin: auto; border: 3px solid #73AD21;"> 
-      <div class="card mb-3" style="flex-direction: column; padding-top: 25px; padding-bottom: 75px;">
-        <h3 class="card-header">@imenko_prezimenić</h3>
-        <div class="card-body">
-          <h6 class="card-subtitle text-muted">Lokacija</h6>
-        </div>
-        <svg xmlns="http://www.w3.org/2000/svg" class="d-block user-select-none" width="100%" height="70%" aria-label="Placeholder: Image cap" focusable="false" role="img" preserveAspectRatio="xMidYMid slice" viewBox="0 0 318 180" style="font-size:1.125rem;text-anchor:middle">
-          <rect width="100%" height="100%" fill="#868e96"></rect>
-          <text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text>
-        </svg>
-        <div class="card-body" style="height: 15px; padding-bottom: 0px;">
-          <p class="card-text">Ovdje ide opis slike</p>
-        </div>
-        <div class="card-body">
+  <b-card no-body style="flex-direction: column; max-width: 50rem; ">
+      <template #header>
+        <b-row no-gutters>
+            <b-col md="11">
+                    <h4 class="mb-0">@imenko_prezimenić</h4>
+            </b-col>
+            <b-col md="1" style="text-align:right">
+                 <b-icon icon="exclamation-triangle" scale="1.25"></b-icon>
+            </b-col>
+          </b-row>
+      </template>
+
+      <b-card-body style="padding-top: 10px; padding-bottom: 0px;">
+        <b-card-sub-title class="mb-2">Lokacija</b-card-sub-title>
+      </b-card-body>
+
+      <b-card-img src="https://placekitten.com/480/210" alt="Image"></b-card-img>
+
+      <b-card-body>
+        <b-row no-gutters>
+            <b-col md="11">
+                <b-card-text>
+                  Some quick example text to build on the card title and make up the bulk of the card's content.
+                </b-card-text>
+            </b-col>
+            <b-col md="1" style="text-align:right">
+                 <b-icon icon="bookmark" scale="1.5" ></b-icon>
+            </b-col>
+        </b-row>
+        <b-row no-gutters>
           <span class="likebtn-wrapper" data-theme="drop" data-ef_voting="push" data-white_label="true" data-identifier="LikeDislike" style="height: 15px; padding-top: 0px; padding-bottom: 0px;" ></span>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Komentari</li>
-        </ul>
-        <div class="card-footer text-muted">
-          2 days ago
-        </div>
-      </div>
-    </div>
+        </b-row>
+        
+      </b-card-body>
+
+      <b-list-group flush>
+        <b-list-group-item>Komentari</b-list-group-item>
+      </b-list-group>
+
+      <b-card-footer footer-text-variant="muted">3 days ago</b-card-footer>
+
+    </b-card>
 </template>
 
 <script>
