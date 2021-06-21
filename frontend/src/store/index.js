@@ -21,7 +21,9 @@ export const store = new Vuex.Store({
       username: "",
       password: ""
    },
-   posts: []
+   posts: [],
+   users: [],
+   searchType: ''
   },
   //methods that return data (state)
   getters: {
@@ -41,6 +43,16 @@ export const store = new Vuex.Store({
     },
     getPosts(state) {
       return state.posts
+    },
+    getUsers(state) {
+      return state.users
+    },
+    getSearchType(state) {
+      var check = state.searchType.includes("@")
+      return check
+    },
+    lookingFor(state) {
+      return state.searchType
     }
   },
   //methods for changing date (state)
@@ -50,7 +62,13 @@ export const store = new Vuex.Store({
     },
     updatePosts(state, posts) {
       state.posts = posts;
-    }
+    },
+    updateUsers(state, users) {
+      state.users = users;
+    },
+    updateSearchType(state, type) {
+      state.searchType = type
+    } 
   },
   //always on components dispatch action which commit some mutations. Never commit mutations from component because of async
   actions: {
@@ -59,6 +77,12 @@ export const store = new Vuex.Store({
     },
     updatePosts(context, posts) {
       context.commit('updatePosts', posts)
-    }
+    },
+    updateUsers(context, users) {
+      context.commit('updateUsers', users)
+    },
+    updateSearchType(context, type) {
+      context.commit('updateSearchType', type)
+    } 
   }
 })

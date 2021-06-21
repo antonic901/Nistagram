@@ -3,9 +3,9 @@
         <Navbar/>
         <div class="container-4" style="margin:10px;">
             <h4 class="item-3">Search result for:</h4>
-            <p class="item-3 mb-1" style="max-width:200px; color:white; margin-left:5px">#nikola</p>
+            <p class="item-3 mb-1" style="max-width:200px; color:white; margin-left:5px">{{this.LookingFor}}</p>
         </div>
-        <div v-if="true" class="container-2">
+        <div v-if="this.SearchType" class="container-2">
             <div v-for="u in this.Users" :key="u.id" class="container-3">
                 <b-card
                     :title="u.name + ' ' + u.surname"
@@ -47,6 +47,12 @@ export default {
         },
         Posts() {
             return this.$store.getters.getPosts
+        },
+        SearchType() {
+            return this.$store.getters.getSearchType
+        },
+        LookingFor() {
+            return this.$store.getters.lookingFor
         }
     },
     data() {
@@ -57,6 +63,9 @@ export default {
     methods: {
         clickOpen(user) {
             console.log(user)
+        },
+        change(postId) {
+            alert("TODO Nemanja");
         }
     }
 }
