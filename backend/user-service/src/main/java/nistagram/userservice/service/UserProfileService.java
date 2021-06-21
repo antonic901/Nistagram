@@ -1,6 +1,8 @@
 package nistagram.userservice.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import nistagram.userservice.dto.LoginDTO;
+import nistagram.userservice.dto.SearchDTO;
 import nistagram.userservice.dto.UserDTO;
 import nistagram.userservice.model.UserProfile;
 import nistagram.userservice.repository.UserProfileRepository;
@@ -110,5 +113,33 @@ public class UserProfileService implements IUserProfileService {
 		userProfile.setPassword(userDTO.getPassword());
 		userProfileRepository.save(userProfile);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<List<UserProfile>> searchByUsername(SearchDTO searchDTO) {
+		List<UserProfile> result = new ArrayList<UserProfile>();
+		for(UserProfile up : userProfileRepository.findAll()) {
+			if(up.getUsername().toLowerCase().contains(searchDTO.getInput().toLowerCase())) {
+				result.add(up);
+			}
+		}
+		return new ResponseEntity<List<UserProfile>>(result, HttpStatus.OK);
+	}
+
+	@Override
+	public Boolean isFollowedBy(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
+		for(UserProfile up : userProfile.getFollowers()) {
+			if(up.getId() == userViewId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean isPrivate(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
+		return userProfile.isPrivate();
 	}
 }
