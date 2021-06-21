@@ -6,6 +6,9 @@ import LoginPage from '../views/LoginPage.vue'
 import NewPost from '../views/NewPost.vue'
 import NewStory from '../views/NewStory.vue'
 import Profile from '../views/Profile.vue'
+import Search from '../views/Search.vue'
+import UserProfile from '../views/UserProfile.vue'
+import AllUsers from '../views/AllUsers.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +43,21 @@ const routes = [
     path: '/profile',
     name: 'Profile',
     component: Profile
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: Search
+  },
+  {
+    path: '/userProfile',
+    name: 'UserProfile',
+    component: UserProfile
+  },
+  {
+    path: '/allUsers',
+    name: 'AllUsers',
+    component: AllUsers
   }
 ]
 

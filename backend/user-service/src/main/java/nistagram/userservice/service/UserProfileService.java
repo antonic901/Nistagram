@@ -1,6 +1,9 @@
 package nistagram.userservice.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import nistagram.userservice.dto.LoginDTO;
+import nistagram.userservice.dto.SearchDTO;
 import nistagram.userservice.dto.UserDTO;
 import nistagram.userservice.model.UserProfile;
 import nistagram.userservice.repository.UserProfileRepository;
@@ -93,5 +97,225 @@ public class UserProfileService implements IUserProfileService {
 			}
 		}
 		return new ResponseEntity<UserDTO>(new UserDTO(), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<String> updateUser(UserDTO userDTO) {
+		UserProfile userProfile = userProfileRepository.findById(userDTO.getId()).get();
+		userProfile.setName(userDTO.getName());
+		userProfile.setSurname(userDTO.getSurname());
+		userProfile.setEmail(userDTO.getEmail());
+		userProfile.setPhoneNumber(userDTO.getPhoneNumber());
+		userProfile.setGender(userDTO.getGender());
+		userProfile.setBirthdayDate(userDTO.getBirthdayDate());
+		userProfile.setWebsite(userDTO.getWebsite());
+		userProfile.setBiography(userDTO.getBiography());
+		userProfile.setUsername(userDTO.getUsername());
+		userProfile.setPassword(userDTO.getPassword());
+		userProfileRepository.save(userProfile);
+		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<List<UserProfile>> searchByUsername(SearchDTO searchDTO) {
+		List<UserProfile> result = new ArrayList<UserProfile>();
+		for(UserProfile up : userProfileRepository.findAll()) {
+			if(up.getUsername().toLowerCase().contains(searchDTO.getInput().toLowerCase())) {
+				if(up.getId() != searchDTO.getUserId()) {
+					if(!isBlocked(up, searchDTO.getUserId())) {
+						result.add(up);	
+					}
+				}
+			}
+		}
+		return new ResponseEntity<List<UserProfile>>(result, HttpStatus.OK);
+	}
+	
+	private boolean isBlocked(UserProfile up, Long id) {
+		for(UserProfile u : up.getBlockedUsers()) {
+			if(u.getId() == id) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean isFollowedBy(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
+		for(UserProfile up : userProfile.getFollowers()) {
+			if(up.getId() == userViewId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public Boolean isPrivate(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
+		return userProfile.isPrivate();
+	}
+
+	@Override
+	public ResponseEntity<String> checkIsUserFollowing(Long userProfileId, Long userLoggedId) {
+		UserProfile userLogged = userProfileRepository.findById(userLoggedId).get();
+		for(UserProfile up : userLogged.getFollowing()) {
+			if(up.getId() == userProfileId) {
+				return new ResponseEntity<String>("following", HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<String>("not_following", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<String> checkIsUserBlocked(Long userProfileId, Long userLoggedId) {
+		UserProfile userLogged = userProfileRepository.findById(userLoggedId).get();
+		for(UserProfile up : userLogged.getBlockedUsers()) {
+			if(up.getId() == userProfileId) {
+				return new ResponseEntity<String>("blocked", HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<String>("not_blocked", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<String> checkIsUserMuted(Long userProfileId, Long userLoggedId) {
+		UserProfile userLogged = userProfileRepository.findById(userLoggedId).get();
+		for(UserProfile up : userLogged.getMutedUsers()) {
+			if(up.getId() == userProfileId) {
+				return new ResponseEntity<String>("muted", HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<String>("not_muted", HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<String> checkIsUserClosedFriend(Long userProfileId, Long userLoggedId) {
+		UserProfile userLogged = userProfileRepository.findById(userLoggedId).get();
+		for(UserProfile up : userLogged.getClosedFriends()) {
+			if(up.getId() == userProfileId) {
+				return new ResponseEntity<String>("closedfriend", HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<String>("not_closedfriend", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> follow(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getFollowing().add(userWhoReceive);
+		userWhoReceive.getFollowers().add(userWhoRequest);
+		userProfileRepository.save(userWhoRequest);
+		userProfileRepository.save(userWhoReceive);
+		return new ResponseEntity<UserProfile>(userWhoReceive, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> unfollow(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getFollowing().remove(userWhoReceive);
+		userWhoReceive.getFollowers().remove(userWhoRequest);
+		userWhoRequest.getClosedFriends().remove(userWhoReceive);
+		userWhoReceive.getClosedFriends().remove(userWhoRequest);
+		userProfileRepository.save(userWhoRequest);
+		userProfileRepository.save(userWhoReceive);
+		return new ResponseEntity<UserProfile>(userWhoReceive, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> block(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getBlockedUsers().add(userWhoReceive);
+		userWhoRequest.getFollowing().remove(userWhoReceive);
+		userWhoRequest.getFollowers().remove(userWhoReceive);
+		userWhoReceive.getFollowers().remove(userWhoRequest);
+		userWhoReceive.getFollowing().remove(userWhoRequest);
+		userProfileRepository.save(userWhoRequest);
+		userProfileRepository.save(userWhoReceive);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> unblock(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getBlockedUsers().remove(userWhoReceive);
+		userProfileRepository.save(userWhoRequest);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> mute(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getMutedUsers().add(userWhoReceive);
+		userProfileRepository.save(userWhoRequest);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> unmute(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getMutedUsers().remove(userWhoReceive);
+		userProfileRepository.save(userWhoRequest);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> addToClosedFriends(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getClosedFriends().add(userWhoReceive);
+		userProfileRepository.save(userWhoRequest);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<UserProfile> removeFromClosedFriends(Long userProfileId, Long userLoggedId) {
+		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
+		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
+		userWhoRequest.getClosedFriends().remove(userWhoReceive);
+		userProfileRepository.save(userWhoRequest);
+		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getFollowers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getFollowers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getFollowing(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getFollowing();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getClosedFriends(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getClosedFriends();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getMutedUsers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getMutedUsers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getBlockedUsers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getBlockedUsers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
 	}
 }

@@ -1,47 +1,46 @@
 <template>
     <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-                <b-navbar-brand>
-                    <router-link to="/" class="routerlink" style="font-family: Brush Script MT; font-size: 35px" >Ništagram</router-link>
-                </b-navbar-brand>
-                <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-                <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="!isUserLogged" to="/loginPage" class="routerlink">Profile</router-link>
-                            <router-link v-else to="/profile" class="routerlink">{{userFullname}}</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                     <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="isUserLogged" to="/new-post" class="routerlink">New post</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                    <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="isUserLogged" to="/new-story" class="routerlink">New story</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                    <b-navbar-nav class="ml-auto">
-                        <b-nav-form>
-                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                            <router-link to="/" class="routerlink">
-                                <button type="button" class="btn btn-primary">Search</button>
-                            </router-link>
-                        </b-nav-form>
-                        <b-nav-item>
-                            <router-link to="/loginPage" v-if="!isUserLogged"  class="routerlink">
-                                <b-button style="background-color:green">Login</b-button>
-                            </router-link>
-                            <b-button v-else style="background-color:red" v-on:click="logout">Logout</b-button>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                </b-collapse>
-     </b-navbar>     
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <router-link to="/" class="nav-link" style="color:#3498db;">Ništagram</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="!isUserLogged" to="/loginPage" class="nav-link">Profile</router-link>
+                        <router-link v-else to="/profile" class="nav-link">{{userFullname}}</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/new-post" class="nav-link">New post</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/allUsers" class="nav-link">Blocked, muted, followers...</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/new-story" class="nav-link">New story</router-link>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto order-0">
+                <b-form-input v-model="searchInput" style="text-align:center;width:300px;border-radius:10px;" size="sm" class="mr-sm-2" placeholder="Search" @keyup.enter="search"></b-form-input>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <router-link to="/loginPage" v-if="!isUserLogged" class="nav-link">
+                            <b-button variant="success">Login</b-button>
+                        </router-link>
+                        <b-button v-else variant="danger" style="border-radius:10px;" v-on:click="logout">Logout</b-button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
 </template>
 
 <script>
+
+import axios from 'axios'
 
 export default {
     name: "Navbar",
@@ -51,6 +50,14 @@ export default {
         },
         userFullname() {
             return this.$store.getters.getFullName
+        },
+        User() {
+            return this.$store.getters.getUser
+        }
+    },
+    data() {
+        return {
+            searchInput: ''
         }
     },
     methods: {
@@ -58,12 +65,80 @@ export default {
             var user = {id:null};
             this.$store.dispatch('updateUser', {user});
             this.$router.push({name: 'Home'})
+        },
+        search() {
+            var number = (this.searchInput.match(new RegExp("@", "g")) || []).length
+            if(number > 1) {
+                this.searchInput = 'Invalid search'
+                return
+            }
+
+            number = (this.searchInput.match(new RegExp("#", "g")) || []).length
+            if(number > 1) {
+                this.searchInput = 'Invalid search'
+                return
+            }
+
+            if(this.searchInput.includes("@") && this.searchInput.includes("#")) {
+                this.searchInput = 'Invalid search'
+                return
+            }
+
+            var search;
+
+            if(this.searchInput.includes("@")) {
+                search = {
+                userId: this.User.id,
+                input: this.searchInput.replace("@", "")
+                }
+                axios.post("http://localhost:8081/api/userprofile/search-by-username", search)
+                    .then(r => {
+                        var users = JSON.parse(JSON.stringify(r.data))
+                        this.$store.dispatch('updateUsers', users)
+                    })
+            }
+            else if(this.searchInput.includes("#")) {
+                search = {
+                    userId: this.User.id,
+                    input: this.searchInput.replace("#", "")
+                }
+                axios.post("http://localhost:8082/api/post/search-by-hashtag", search)
+                    .then(r => {
+                        var posts = JSON.parse(JSON.stringify(r.data))
+                        this.$store.dispatch('updatePosts', posts)
+                    })   
+            }
+            else {
+                
+                search = {
+                    userId: this.User.id,
+                    input: this.searchInput
+                }
+                axios.post("http://localhost:8082/api/post/search-by-location", search)
+                    .then(r => {
+                        var posts = JSON.parse(JSON.stringify(r.data))
+                        this.$store.dispatch('updatePosts', posts)
+                    }) 
+            }
+
+            this.$store.dispatch('updateSearchType', this.searchInput)
+            this.$router.push({name: 'Search'})
         }
     }
 }
 </script>
 
 <style scoped>
+
+.navbar-brand {
+    font-size: 25px;
+}
+
+.nav-link:hover {
+    /* text-decoration: underline; */
+    font-weight: bold;
+}
+
 .routerlink {
   display: block;
   color: rgb(255, 255, 255);
