@@ -1,5 +1,5 @@
 <template>
-  <b-card no-body style="flex-direction: column; max-width: 50rem; ">
+  <b-card no-body style="flex-direction: column; max-width: 50rem; margin-top: 50px;">
       <template #header>
         <b-row no-gutters>
             <b-col md="11">

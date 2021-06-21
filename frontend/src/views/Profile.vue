@@ -131,27 +131,6 @@ export default {
         return
       }
       this.i = i
-    }
-  },
-  methods: {
-    change(post) {
-      this.post = post
-    },
-    previus() {
-      var i = this.i - 1
-      if(i < 0) {
-        this.i = this.post.imagesAndVideos.length-1
-        return
-      }
-      this.i = i
-    },
-    next() {
-      var i = this.i + 1
-      if(i >= this.post.imagesAndVideos.length) {
-        this.i = 0
-        return
-      }
-      this.i = i
     },
     onFileSelected(event) {
             this.url = []
@@ -159,7 +138,7 @@ export default {
             this.selectedFiles.forEach(selectedFile => {
                 this.url.push(URL.createObjectURL(selectedFile));
             })
-        },
+    },
   },
   created() {
     axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
