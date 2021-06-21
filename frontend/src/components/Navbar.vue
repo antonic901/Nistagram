@@ -16,6 +16,9 @@
                     <li class="nav-item">
                         <router-link v-if="isUserLogged" to="/allUsers" class="nav-link">Blocked, muted, followers...</router-link>
                     </li>
+                    <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/new-story" class="nav-link">New story</router-link>
+                    </li>
                 </ul>
             </div>
             <div class="mx-auto order-0">
