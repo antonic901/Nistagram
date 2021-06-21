@@ -1,43 +1,34 @@
 <template>
     <div>
-    <b-navbar toggleable="lg" type="dark" variant="dark">
-                <b-navbar-brand>
-                    <router-link to="/" class="routerlink" style="font-family: Brush Script MT; font-size: 35px" >Ništagram</router-link>
-                </b-navbar-brand>
-                <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
-                <b-collapse id="nav-collapse" is-nav>
-                    <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="!isUserLogged" to="/loginPage" class="routerlink">Profile</router-link>
-                            <router-link v-else to="/profile" class="routerlink">{{userFullname}}</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                     <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="isUserLogged" to="/new-post" class="routerlink">New post</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                    <b-navbar-nav>
-                        <b-nav-item> 
-                            <router-link v-if="isUserLogged" to="/all-posts" class="routerlink">All posts</router-link>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                    <b-navbar-nav class="ml-auto">
-                        <b-nav-form>
-                            <b-form-input size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
-                            <router-link to="/" class="routerlink">
-                                <button type="button" class="btn btn-primary">Search</button>
-                            </router-link>
-                        </b-nav-form>
-                        <b-nav-item>
-                            <router-link to="/loginPage" v-if="!isUserLogged"  class="routerlink">
-                                <b-button style="background-color:green">Login</b-button>
-                            </router-link>
-                            <b-button v-else style="background-color:red" v-on:click="logout">Logout</b-button>
-                        </b-nav-item>
-                    </b-navbar-nav>
-                </b-collapse>
-     </b-navbar>     
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <router-link to="/" class="nav-link" style="color:#3498db;">Ništagram</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="!isUserLogged" to="/loginPage" class="nav-link">Profile</router-link>
+                        <router-link v-else to="/profile" class="nav-link">{{userFullname}}</router-link>
+                    </li>
+                    <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/new-post" class="nav-link">New post</router-link>
+                    </li>
+                </ul>
+            </div>
+            <div class="mx-auto order-0">
+                <b-form-input style="text-align:center;width:300px;border-radius:10px;" size="sm" class="mr-sm-2" placeholder="Search"></b-form-input>
+            </div>
+            <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <router-link to="/loginPage" v-if="!isUserLogged" class="nav-link">
+                            <b-button variant="success">Login</b-button>
+                        </router-link>
+                        <b-button v-else variant="danger" style="border-radius:10px;" v-on:click="logout">Logout</b-button>
+                    </li>
+                </ul>
+            </div>
+        </nav>
     </div>
 </template>
 
@@ -64,6 +55,16 @@ export default {
 </script>
 
 <style scoped>
+
+.navbar-brand {
+    font-size: 25px;
+}
+
+.nav-link:hover {
+    /* text-decoration: underline; */
+    font-weight: bold;
+}
+
 .routerlink {
   display: block;
   color: rgb(255, 255, 255);
