@@ -1,6 +1,7 @@
 package nistagram.userservice.service.interfaces;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 
@@ -31,4 +32,9 @@ public interface IUserProfileService {
 	ResponseEntity<UserProfile> unmute(Long userProfileId, Long userLoggedId);
 	ResponseEntity<UserProfile>	addToClosedFriends(Long userProfileId, Long userLoggedId);
 	ResponseEntity<UserProfile> removeFromClosedFriends(Long userProfileId, Long userLoggedId);
+	ResponseEntity<Set<UserProfile>> getFollowers(Long id);
+	ResponseEntity<Set<UserProfile>> getFollowing(Long id);
+	ResponseEntity<Set<UserProfile>> getClosedFriends(Long id);
+	ResponseEntity<Set<UserProfile>> getMutedUsers(Long id);
+	ResponseEntity<Set<UserProfile>> getBlockedUsers(Long id);
 }

@@ -7,6 +7,7 @@ import NewPost from '../views/NewPost.vue'
 import Profile from '../views/Profile.vue'
 import Search from '../views/Search.vue'
 import UserProfile from '../views/UserProfile.vue'
+import AllUsers from '../views/AllUsers.vue'
 
 Vue.use(VueRouter)
 
@@ -46,6 +47,11 @@ const routes = [
     path: '/userProfile',
     name: 'UserProfile',
     component: UserProfile
+  },
+  {
+    path: '/allUsers',
+    name: 'AllUsers',
+    component: AllUsers
   }
 ]
 
