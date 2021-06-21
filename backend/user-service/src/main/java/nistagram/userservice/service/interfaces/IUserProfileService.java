@@ -11,4 +11,5 @@ public interface IUserProfileService {
 	ResponseEntity<String> checkIsUsernameTaken(String username);
 	ResponseEntity<String> checkIsEmailTaken(String email);
 	ResponseEntity<UserDTO> login(LoginDTO loginDTO);
+	ResponseEntity<String> updateUser(UserDTO userDTO);
 }

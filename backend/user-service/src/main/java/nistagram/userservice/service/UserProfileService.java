@@ -94,4 +94,21 @@ public class UserProfileService implements IUserProfileService {
 		}
 		return new ResponseEntity<UserDTO>(new UserDTO(), HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<String> updateUser(UserDTO userDTO) {
+		UserProfile userProfile = userProfileRepository.findById(userDTO.getId()).get();
+		userProfile.setName(userDTO.getName());
+		userProfile.setSurname(userDTO.getSurname());
+		userProfile.setEmail(userDTO.getEmail());
+		userProfile.setPhoneNumber(userDTO.getPhoneNumber());
+		userProfile.setGender(userDTO.getGender());
+		userProfile.setBirthdayDate(userDTO.getBirthdayDate());
+		userProfile.setWebsite(userDTO.getWebsite());
+		userProfile.setBiography(userDTO.getBiography());
+		userProfile.setUsername(userDTO.getUsername());
+		userProfile.setPassword(userDTO.getPassword());
+		userProfileRepository.save(userProfile);
+		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
 }
