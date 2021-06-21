@@ -3,6 +3,7 @@ package nistagram.userservice.service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -281,5 +282,40 @@ public class UserProfileService implements IUserProfileService {
 		userWhoRequest.getClosedFriends().remove(userWhoReceive);
 		userProfileRepository.save(userWhoRequest);
 		return new ResponseEntity<UserProfile>(userWhoRequest, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getFollowers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getFollowers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getFollowing(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getFollowing();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getClosedFriends(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getClosedFriends();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getMutedUsers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getMutedUsers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<UserProfile>> getBlockedUsers(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		Set<UserProfile> response = userProfile.getBlockedUsers();
+		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
 	}
 }

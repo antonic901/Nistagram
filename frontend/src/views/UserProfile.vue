@@ -239,6 +239,7 @@ export default {
         this.message1 = 'Follow'
         this.message2 = 'Block'
         this.message3 = 'Mute'
+        this.message4 = 'Add to closed friends'
         return
     }
     

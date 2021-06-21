@@ -41,7 +41,6 @@ public class Story {
     @JoinColumn(name = "userprofile_id", nullable = true)
 	private User user;
 	
-	//pitati asistenta
 	@ElementCollection
 	private List<String> imagesAndVideos;
 

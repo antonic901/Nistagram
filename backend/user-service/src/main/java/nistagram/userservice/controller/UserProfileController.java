@@ -1,6 +1,7 @@
 package nistagram.userservice.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -131,5 +132,30 @@ public class UserProfileController {
 	@PostMapping(value = "/remove-from-closed-friends", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<UserProfile> removeFromoClosedFriends(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
 		return userProfileService.removeFromClosedFriends(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@RequestMapping(value = "/get-followers/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<UserProfile>> getFollowers(@PathVariable("id") Long id) {
+		return userProfileService.getFollowers(id);
+	}
+	
+	@RequestMapping(value = "/get-following/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<UserProfile>> getFollowing(@PathVariable("id") Long id) {
+		return userProfileService.getFollowing(id);
+	}
+	
+	@RequestMapping(value = "/get-closed-friends/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<UserProfile>> getClosedFriends(@PathVariable("id") Long id) {
+		return userProfileService.getClosedFriends(id);
+	}
+	
+	@RequestMapping(value = "/get-muted-users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<UserProfile>> getMutedUsers(@PathVariable("id") Long id) {
+		return userProfileService.getMutedUsers(id);
+	}
+	
+	@RequestMapping(value = "/get-blocked-users/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<UserProfile>> getBlockedUsers(@PathVariable("id") Long id) {
+		return userProfileService.getBlockedUsers(id);
 	}
 }
