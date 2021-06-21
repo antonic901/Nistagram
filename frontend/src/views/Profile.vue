@@ -11,6 +11,23 @@
             <button class="btn btn-primary" style="margin:5px; margin-right:20px; border-radius:20px;">Follow</button>
             <button class="btn btn-outline-primary" style="margin:5px; margin-right:20px; margin-bottom:20px; border-radius:20px;" v-on:click="clickEdit">Edit</button>
           </div>
+          <div class="col-sm-12">
+                      <button class="btn btn-primary" v-b-modal.modal-scrollable>New story</button>
+                      <b-modal id="modal-scrollable" :hide-footer="true" size="lg" scrollable title="New story">
+                        <div class="cardStory">
+                          <form onsubmit="event.preventDefault()" class="box">
+                              <div class = "cls">
+                                  <h1 class = "title">New story</h1>
+                              </div>
+                              <div style="font-style:italic" required class="app">
+                                  <input type="file" @change="onFileSelected" multiple>
+                                  <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
+                              </div>
+                              <b-button variant="light" >Create</b-button>
+                          </form>
+                        </div>
+                      </b-modal>
+            </div>
       </div>
       <div v-if="showEdit" style="margin:15px">
           <EditProfile v-bind:showEdit="showEdit"/>
@@ -28,7 +45,8 @@
     </div>
     <div v-if="this.post != null">
       <b-modal id="modal-xl" size="xl" :hide-footer="true" :title="'@' + this.User.username">
-        <b-card no-body class="overflow-hidden" style="max-width: 1200px; max-height: 600px; margin-top: 0px;">
+
+        <b-card no-body class="overflow-hidden" style="max-width: 1100px; max-height: 550px; margin-top: 0px;">
           <b-row no-gutters>
             <b-col md="8">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -46,6 +64,12 @@
                     </div>
             </b-col>
             <b-col md="4">
+		          <b-card-body>
+                  <b-card-text>
+                    <p>{{this.post.caption.description}}</p>
+                    <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
+                  </b-card-text>
+                 </b-card-body>
 
             </b-col>
           </b-row>
@@ -80,6 +104,7 @@ export default {
     return {
       showEdit: false,
       post: null,
+      url: [],
       i: 0
     }
   },
@@ -106,7 +131,14 @@ export default {
         return
       }
       this.i = i
-    }
+    },
+    onFileSelected(event) {
+            this.url = []
+            this.selectedFiles = event.target.files
+            this.selectedFiles.forEach(selectedFile => {
+                this.url.push(URL.createObjectURL(selectedFile));
+            })
+    },
   },
   created() {
     axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
@@ -178,5 +210,40 @@ export default {
     background: white;
     margin: 15px;
     border-radius: 20px;
+}
+
+.cardStory {
+    margin-bottom: 20px;
+    border: none;
+   
+}
+
+.box {
+    width: 550px;
+    padding: 40px;
+    position:relative;
+    background-color: #3498db;
+    box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
+    text-align: center;
+    transition: 0.25s;
+    margin-top: 20px;
+    margin-left: 75px;
+    margin-right: 75px;
+    border-radius: 20px; 
+}
+.cls{
+  margin-bottom: 40px;
+}
+.title {
+  font-family: fantasy;
+  font-size: 30px;
+  color: white;
+}
+.app {
+  padding: 20px;
+}
+.image{
+    max-width: 420px;
+    max-height: 500px;
 }
 </style>

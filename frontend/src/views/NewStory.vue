@@ -7,17 +7,13 @@
                     <div class="card">
                         <form onsubmit="event.preventDefault()" class="box">
                             <div class = "cls">
-                                <h1 class = "title" style="color:#4d4d4d ">Log in</h1>
-                                <p class="text-muted"> Please enter your username and password!</p>
-                                <p v-if="show" style="color:red;" >Your username or password isn't valid!</p>
+                                <h1 class = "title" style="color:#4d4d4d ">New story</h1>
                             </div>
-                            <input type="text" v-model="Login.username" name="" placeholder="username" style="font-style:italic" required> 
-                            <input type="password" v-model="Login.password" name="" placeholder="password" style="font-style:italic" required> 
-                            <a class="forgot text-muted" href="#">Forgot password?</a>
-                            <br/>
-                            <br/>
-                            <router-link to="/registrationPage" class="routerlink">Don't have an account? Create one!</router-link>
-                            <input type="submit"  style="color: white" name="" value="Log in" href="#" v-on:click="login">
+                            <div style="font-style:italic" required class="app">
+                                <input type="file" @change="onFileSelected" multiple>
+                                <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
+                            </div>
+                            <b-button style="color: white" >Create</b-button>
                         </form>
                     </div>
                 </div>
@@ -27,63 +23,48 @@
 </template>
 
 <script>
-import axios from 'axios'
+
 import Navbar from '../components/Navbar.vue'
 
 export default {
-  name: "LoginPage",
+  name: "New story",
   components: {
-      Navbar
+    Navbar,
   },
   data() {
     return {
-      show: false,
-      error: "",
-      Login: {
-        username: "",
-        password: ""
-      }
+        url: []
     };
   },
   methods: {
-    login() {
-      if(this.Login.username == "" || this.Login.password == "") {
-        this.show = true
-        this.error = "Please fill all input fields!"
-        return
-      }
-      axios.post("http://localhost:8081/api/userprofile/login-user", this.Login)
-        .then(r => {
-            var user = JSON.parse(JSON.stringify(r.data))
-            if(user.id != null) {
-              this.show = false;
-              this.$store.dispatch('updateUser', {user});
-              this.$router.push({name: 'Home'})
-            }
-            else {
-              this.show = true;
-            }
-            
-        })
-    },
-    onSubmit(event) {
-      event.preventDefault();
-    },
-    onReset(event) {
-      event.preventDefault();
-      console.log("reset");
+      onFileSelected(event) {
+            this.url = []
+            this.selectedFiles = event.target.files
+            this.selectedFiles.forEach(selectedFile => {
+                this.url.push(URL.createObjectURL(selectedFile));
+            })
+        },
     }
-  }
-}
+};
 </script>
 
 <style scoped>
+.cl1 {
+    display: block;
+    margin: 20px auto;
+    text-align: center;
+    border: 2px solid #3498db;
+    padding: 10px 10px;
+    width: 450px;
+    border-radius: 24px;
+    transition: 0.25s
+}
 .cls{
   margin-bottom: 40px;
 }
  .background {
   background-color: #3498db;
-  position: absolute; 
+  position:absolute; 
   top: 0; 
   left: 0; 
   min-width: 100%;
@@ -108,7 +89,7 @@ export default {
 }
 
 .box {
-    width: 450px;
+    width: 550px;
     padding: 40px;
     position:absolute;
     top: 50%;
@@ -117,12 +98,11 @@ export default {
     box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
     text-align: center;
     transition: 0.25s;
-    margin-top: 100px;
+    margin-top: 20px;
     border-radius: 20px; 
 }
 
-.box input[type="text"],
-.box input[type="password"] {
+.box input[type="text"]{
     border: 0;
     background: none;
     display: block;
@@ -130,7 +110,7 @@ export default {
     text-align: center;
     border: 2px solid #3498db;
     padding: 10px 10px;
-    width: 250px;
+    width: 450px;
     outline: none;
     color: rgb(0, 0, 0);
     border-radius: 24px;
@@ -179,7 +159,33 @@ export default {
   color:#7e7e7e;
 }
 
-</style>
-<style>
+body {
+  background-color: #e2e2e2;
+}
+
+.app {
+  padding: 20px;
+}
+
+.preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview img {
+  max-width: 100%;
+  max-height: 500px;
+}
+.image{
+    max-width: 420px;
+    max-height: 500px;
+}
+
+.textarea {
+    height: 20vh;
+    box-shadow: 10px 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 20px;
+}
 
 </style>
