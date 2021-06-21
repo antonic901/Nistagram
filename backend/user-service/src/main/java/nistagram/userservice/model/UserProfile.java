@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,6 +33,7 @@ public class UserProfile extends User {
 	@Column
 	private boolean isDeleted;
 	 
+	@JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "followers",
@@ -39,6 +42,7 @@ public class UserProfile extends User {
 	    )
 	 private Set<UserProfile> followers = new HashSet<UserProfile>();
 	 
+	@JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "following",
@@ -47,6 +51,7 @@ public class UserProfile extends User {
 	    )
 	 private Set<UserProfile> following = new HashSet<UserProfile>();
 	 
+	@JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "follow_requests",
@@ -63,6 +68,7 @@ public class UserProfile extends User {
 	    )
 	 private Set<UserProfile> closedFriends = new HashSet<UserProfile>();
 	 
+	 @JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "muted_friends",
@@ -71,6 +77,7 @@ public class UserProfile extends User {
 	    )
 	 private Set<UserProfile> mutedUsers = new HashSet<UserProfile>();
 	 
+	 @JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "blocked_friends",

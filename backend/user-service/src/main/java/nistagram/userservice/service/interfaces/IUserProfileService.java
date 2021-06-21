@@ -3,7 +3,6 @@ package nistagram.userservice.service.interfaces;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.SearchDTO;
@@ -20,4 +19,16 @@ public interface IUserProfileService {
 	ResponseEntity<List<UserProfile>> searchByUsername(SearchDTO searchDTO);
 	Boolean isFollowedBy(Long userPostId, Long userViewId);
 	Boolean isPrivate(Long userPostId, Long userViewId);
+	ResponseEntity<String> checkIsUserFollowing(Long userProfileId, Long userLoggedId);
+	ResponseEntity<String> checkIsUserBlocked(Long userProfileId, Long userLoggedId);
+	ResponseEntity<String> checkIsUserMuted(Long userProfileId, Long userLoggedId);
+	ResponseEntity<String> checkIsUserClosedFriend(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> follow(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> unfollow(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> block(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> unblock(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> mute(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> unmute(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile>	addToClosedFriends(Long userProfileId, Long userLoggedId);
+	ResponseEntity<UserProfile> removeFromClosedFriends(Long userProfileId, Long userLoggedId);
 }
