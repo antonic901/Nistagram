@@ -60,6 +60,7 @@ public class UserProfile extends User {
 	    )
 	 private Set<UserProfile> followRequests = new HashSet<UserProfile>();
 	 
+	@JsonIgnore
 	 @ManyToMany
 	 @JoinTable (
 	    		name = "closed_friends",

@@ -3,6 +3,7 @@ package nistagram.storyservice.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -31,7 +32,8 @@ public class User {
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Story> stories = new HashSet<Story>();
 	 
-	@OneToMany(fetch = FetchType.LAZY)
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<HighLight> highLights = new HashSet<HighLight>();
 	 
 }

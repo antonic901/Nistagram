@@ -1,38 +1,21 @@
 <template>
     <div class="container-1">
         <Navbar/>
-        <div class="container-2">
-            <b-form-group label ="Select which users you want to show:" style="color:white;font-size:20px;text-align:center;">
-                <b-form-radio-group
-                    id="btn-radios-2"
-                    v-model="selected"
-                    :options="options"
-                    button-variant="primary"
-                    size="lg"
-                    name="radio-btn-outline"
-                    buttons
-                    @change="buttonPress"
-                ></b-form-radio-group>
-            </b-form-group>
-        </div>
-        <div class="table-responsive">
-            <b-table
-                class="table-light" 
-                style="margin:20px"
-                head-variant="dark"
-                selectable sticky-header="100%"
-                select-mode="single"
-                striped
-                hover
-                :items="users"
-                :fields="fields"
-                :filter="filter"
-                :filter-included-fields="filterOn">
-
-                <template #cell(show_details)="row">
-                    <b-button size="sm" @click="row.toggleDetails" class="mr-2">Details</b-button>
-                </template>
-            </b-table>
+        <div class="container-6">
+            <div class="container-4">
+                <div class="container-3" style="width:500px;" v-on:click="openCollection('ja')">
+                    <b-card style="margin:20px;" :img-src="'https://placekitten.com/1000/300'" img-top>
+                        <b-card-text style="text-align:center;">
+                            Some quick example text to build on the card and make up the bulk of the card's content.
+                        </b-card-text>
+                    </b-card>
+                </div>
+            </div>
+            <div class="container-2">
+                <div class="container-5" style="height:292px;">
+                    <b-img-lazy class="item-1" rounded :src="'https://picsum.photos/600/300'"></b-img-lazy>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -57,35 +40,12 @@ export default {
     },
     data() {
         return {
-            selected: '',
-            options: [
-                { text: 'Followers', value: 'followers' },
-                { text: 'Following', value: 'following' },
-                { text: 'Closed friends', value: 'closedfriends' },
-                { text: 'Muted users', value: 'mutedusers' },
-                { text: 'Blocked users', value: 'blockedusers' }
-            ],
-            fields: [
-                {key: 'username', sortable: true},
-                {key: 'name', sortable: true}, 
-                {key: 'surname', sortable:true}, 
-                {key: 'email', sortable: true}, 
-                {key: 'gender', sortable: true}
-            ],
-            users: [],
-            filter: null,
-            filterOn: []
+            
         }
     },
     methods: {
-        buttonPress() {
-            if(this.selected == 'followers') {
-                axios.get("http://localhost:8081/api/userprofile/get-followers/" + this.User.id)
-                    .then(r => {
-                        this.users = JSON.parse(JSON.stringify(r.data));
-                    })
-
-            }
+        openCollection(collection) {
+            alert("Hello")
         }
     }
 }
@@ -106,7 +66,7 @@ export default {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
-        justify-content: center;
+        margin: 20px;
     }
 
     .container-3 {
@@ -114,7 +74,7 @@ export default {
     }
 
     .container-3:hover {
-        margin-top: -10px;
+        margin-left: -10px;
     }
 
     .container-4 {
@@ -122,11 +82,24 @@ export default {
         flex-direction: column;
     }
 
-    .item-1 {
+    .container-5 {
+        transition: 0.2s all ease-in-out;
+    }
+
+    .container-5:hover {
+        margin-top: -10px;
+    }
+
+    .container-6 {
+        display: flex;
+        flex-direction: row;
+    }
+
+   .item-1 {
         width: 292px;
         height: 292px;
         margin: 10px;
-        border-radius: 15px;
+        flex: 1 0 21%;
     }
 
 </style>

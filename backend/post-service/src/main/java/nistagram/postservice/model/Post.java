@@ -40,7 +40,6 @@ public class Post {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Caption caption;
 	
-	@JsonIgnore
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = true)
 	private User user;

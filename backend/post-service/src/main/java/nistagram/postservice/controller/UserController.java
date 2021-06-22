@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import nistagram.postservice.model.Collection;
 import nistagram.postservice.model.Post;
 import nistagram.postservice.service.UserService;
 
@@ -32,5 +33,10 @@ public class UserController {
 	public ResponseEntity<Set<Post>> getPostsForUser(@PathVariable("id") Long id) {
 		return userService.getPostsForUser(id);
 	}
-
+	
+	@RequestMapping(value = "/get-collections/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Collection>> getCollections(@PathVariable("id") Long id) {
+		return userService.getCollections(id);
+	}
+	
 }
