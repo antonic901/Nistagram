@@ -8,26 +8,24 @@
             <h4 class="item-3">{{User.name}} {{User.surname}}</h4>
             <p class="item-3 text-secondary mb-1" style="max-width:200px;">{{User.biography}}</p>
             <b-link class="item-3" style="text-decoration: underline;" :href="User.website">Website</b-link>
-            <button class="btn btn-primary" style="margin:5px; margin-right:20px; border-radius:20px;">Follow</button>
+            <button class="btn btn-primary" style="margin:5px; margin-right:20px; margin-bottom:20px; border-radius:20px;" v-b-modal.modal-scrollable>New story</button>
+            <b-modal id="modal-scrollable" :hide-footer="true" size="lg" scrollable title="New story">
+              <div class="cardStory">
+                <form onsubmit="event.preventDefault()" class="box">
+                  <div class = "cls">
+                    <h1 class = "title">New story</h1>
+                  </div>
+                  <div style="font-style:italic" required class="app">
+                      <input type="file" @change="onFileSelected" multiple>
+                       <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
+                  </div>
+                  <b-button variant="light" >Create</b-button>
+                </form>
+              </div>
+            </b-modal>
             <button class="btn btn-outline-primary" style="margin:5px; margin-right:20px; margin-bottom:20px; border-radius:20px;" v-on:click="clickEdit">Edit</button>
           </div>
-          <div class="col-sm-12">
-                      <button class="btn btn-primary" v-b-modal.modal-scrollable>New story</button>
-                      <b-modal id="modal-scrollable" :hide-footer="true" size="lg" scrollable title="New story">
-                        <div class="cardStory">
-                          <form onsubmit="event.preventDefault()" class="box">
-                              <div class = "cls">
-                                  <h1 class = "title">New story</h1>
-                              </div>
-                              <div style="font-style:italic" required class="app">
-                                  <input type="file" @change="onFileSelected" multiple>
-                                  <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
-                              </div>
-                              <b-button variant="light" >Create</b-button>
-                          </form>
-                        </div>
-                      </b-modal>
-            </div>
+
       </div>
       <div v-if="showEdit" style="margin:15px">
           <EditProfile v-bind:showEdit="showEdit"/>
@@ -235,7 +233,7 @@ export default {
   margin-bottom: 40px;
 }
 .title {
-  font-family: fantasy;
+  font-family: arial;
   font-size: 30px;
   color: white;
 }

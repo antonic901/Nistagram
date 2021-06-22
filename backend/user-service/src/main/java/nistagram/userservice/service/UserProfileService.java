@@ -70,6 +70,8 @@ public class UserProfileService implements IUserProfileService {
 		
 		restTemplate.getForEntity("http://localhost:8082/api/user/create-user/" + newUserProfile.getId(), String.class);
 		
+		restTemplate.getForEntity("http://localhost:8083/api/user/create-user/" + newUserProfile.getId(), String.class);
+		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 

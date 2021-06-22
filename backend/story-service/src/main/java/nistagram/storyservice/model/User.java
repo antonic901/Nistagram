@@ -3,11 +3,13 @@ package nistagram.storyservice.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@DiscriminatorValue("UserProfile")
+@Table(name = "users")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -25,7 +27,8 @@ public class User {
 	@Id
 	private Long id;
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "userProfile")
+	@JsonIgnore
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Story> stories = new HashSet<Story>();
 	 
 	@OneToMany(fetch = FetchType.LAZY)
