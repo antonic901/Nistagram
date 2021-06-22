@@ -35,11 +35,33 @@
 
      <div class="container-1" style="height:84px;margin-bottom:40px;">
        <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
-        <div class="container-5" v-for="highLight in this.highLights" :key="highLight.id" v-on:click="changeStory(highLight)">
+        <div class="container-5" v-for="highLight in this.highLights" :key="highLight.id" v-b-modal.modal-lg v-on:click="changeStory(highLight)">
           <b-img-lazy class="item-2" rounded="circle" :src="highLight.stories[0].imagesAndVideos[0]"></b-img-lazy>
           <label class="item-5" style="color:white;text-aling:center;"><b>{{highLight.name}}</b></label>
-
         </div>
+    </div>
+    <div v-if="this.highLight != null">
+      <b-modal id="modal-lg" size="lg" :hide-footer="true" :title="this.highLight.name">
+          <b-card no-body class="overflow-hidden" style="max-width: auto; max-height: auto; margin-top: 0px;">
+            <b-row no-gutters>
+              <b-col md="12">
+                      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <b-card-img :src="highLight.stories[i].imagesAndVideos[j]" alt="Image" class="rounded-0"></b-card-img>
+                        </div>
+                        <a class="carousel-control-prev" role="button" v-on:click="previusHighlightStory" data-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" role="button" v-on:click="nextHighlightStory" data-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
+              </b-col>
+            </b-row>
+          </b-card>
+        </b-modal>
     </div>
     <div class="container-1">
         <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modal-xl v-on:click="change(post)">
@@ -111,6 +133,7 @@ export default {
       highLight: null,
       url: [],
       i: 0,
+      j: 0,
       highLights: []
     }
   },
@@ -140,6 +163,24 @@ export default {
         return
       }
       this.i = i
+    },
+    previusHighlightStory() {
+      var i = this.i
+      var j = this.j - 1
+      if(j < 0) {
+        this.j = this.post.imagesAndVideos.length-1
+        return
+      }
+      this.j = j
+    },
+    nextHighlightStory() {
+      var i = this.i
+      var j = this.j + 1
+      if(j >= this.post.imagesAndVideos.length) {
+        this.j = 0
+        return
+      }
+      this.j = j
     },
     onFileSelected(event) {
             this.url = []
