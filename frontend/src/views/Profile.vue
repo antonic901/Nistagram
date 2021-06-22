@@ -49,7 +49,7 @@
     <div v-if="this.post != null">
       <b-modal id="modal-xl" size="xl" :hide-footer="true" :title="'@' + this.User.username">
 
-        <b-card no-body class="overflow-hidden" style="max-width: 1100px; max-height: 550px; margin-top: 0px;">
+        <b-card no-body class="overflow-hidden" style="max-width: auto; max-height: auto; margin-top: 0px;">
           <b-row no-gutters>
             <b-col md="8">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
@@ -69,7 +69,7 @@
             <b-col md="4">
 		          <b-card-body>
                   <b-card-text>
-                    <p>{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</p>
+                    <p v-if="this.post.location != null">{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</p>
                     <p>{{this.post.caption.description}}</p>
                     <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
                   </b-card-text>
