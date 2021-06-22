@@ -11,7 +11,7 @@ import nistagram.userservice.dto.UserDTO;
 import nistagram.userservice.model.UserProfile;
 
 public interface IUserProfileService {
-	
+	UserProfile getById(Long id);
 	ResponseEntity<String> registerUser(UserDTO userDTO);
 	ResponseEntity<String> checkIsUsernameTaken(String username);
 	ResponseEntity<String> checkIsEmailTaken(String email);

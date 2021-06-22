@@ -30,7 +30,12 @@ public class UserProfileService implements IUserProfileService {
 		this.userProfileRepository = userProfileRepository;
 		this.restTemplate = restTemplate;
 	}
-
+	
+	@Override
+	public UserProfile getById(Long id) {
+		return userProfileRepository.findById(id).get();
+	}
+	
 	@Override
 	public ResponseEntity<String> checkIsUsernameTaken(String username) {
 		for(UserProfile userProfile : userProfileRepository.findAll()) {

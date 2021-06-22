@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,11 @@ public class UserProfileController {
 	@Autowired
 	public UserProfileController(UserProfileService userProfileService) {
 		this.userProfileService = userProfileService;
+	}
+	
+	@RequestMapping(value = "/get-by-id/{id}", method = RequestMethod.GET)
+	public ResponseEntity<UserProfile> getById(@PathVariable("id") Long id) {
+		return new ResponseEntity<UserProfile>(userProfileService.getById(id),HttpStatus.OK);
 	}
 	
 	@RequestMapping(value = "/check-username/{username}", method = RequestMethod.GET)
