@@ -89,6 +89,11 @@ export default {
                     })
             })
       })
+
+    axios.get("http://localhost:8083/api/story/get-story-for-feed/" + id)
+      .then(r => {
+        console.log(r.data)
+      })
   }
 };
 </script>

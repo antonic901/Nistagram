@@ -32,7 +32,7 @@
             <b-card-sub-title class="mb-2">{{post.location.country}}, {{post.location.city}}, {{post.location.street}}</b-card-sub-title>
           </b-card-body>
 
-          <b-card-img src="https://placekitten.com/480/210" alt="Image"></b-card-img>
+          <b-card-img :src="post.imagesAndVideos[0]" alt="Image"></b-card-img>
 
           <b-card-body>
             <b-row no-gutters>
