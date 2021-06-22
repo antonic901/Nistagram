@@ -41,11 +41,38 @@
                 </b-card-text>
             </b-col>
             <b-col md="1" style="text-align:right">
-                 <b-icon icon="bookmark" scale="1.5" v-b-tooltip.hover.right="'Add to favourites'"></b-icon>
+                 <b-icon icon="bookmark" scale="1.5" v-b-modal.modal-center v-b-tooltip.hover.right="'Add to favourites'"></b-icon>
+                 <b-modal id="modal-center" :hide-footer="true" title="Add to collection" style="height: 500px;">
+                   <b-row no-gutters>
+                      <b-col sm="8">
+                        <b-form-input type="text" v-model="user.email" placeholder="Collection name" style="font-style:italic; width: 300px;"/>
+                      </b-col>
+                      <b-col sm="4">
+                        <b-button variant="primary" style="margine-top: 10px; margine-bottom: 10px;">Create collection</b-button>
+                      </b-col>
+                    </b-row>
+                    <b-row no-gutters>
+                      <b-col sm="4">
+                        <b-card-text style="margin-top: 15px; font-size: 20px;">
+                          Select collection:
+                        </b-card-text>
+                      </b-col>
+                      <b-col sm="8">
+                        <b-form-input list="my-list-id" style="margin: 10px;"></b-form-input>
+                        <datalist id="my-list-id">
+                          <option>Manual Option</option>
+                          <!--<option v-for="size in sizes">{{ size }}</option>-->
+                        </datalist>
+                      </b-col>
+                    </b-row>
+                    <div style="height: 100px;" ></div>
+                    <b-button variant="primary" style="margin-left: 180px; margine-top: 10px; margine-bottom: 10px;">Add post</b-button>
+                  </b-modal>
             </b-col>
         </b-row>
         <b-row no-gutters>
-          <span class="likebtn-wrapper" data-theme="drop" data-ef_voting="push" data-white_label="true" data-identifier="LikeDislike" style="height: 15px; padding-top: 0px; padding-bottom: 0px;" ></span>
+          <b-icon icon="hand-thumbs-up" scale="1.5" v-b-tooltip.hover.left.v-success="'I like this!'" variant="success" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;" ></b-icon>
+          <b-icon icon="hand-thumbs-down" scale="1.5" v-b-tooltip.hover.right.v-danger="'Dislike'" variant="danger" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;"></b-icon>
         </b-row>
       </b-card-body>
 
