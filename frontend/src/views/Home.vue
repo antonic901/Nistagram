@@ -107,8 +107,7 @@ export default {
     text-align: center;
     transition: 0.25s;
     margin-top: 20px;
-    margin-left: 75px;
-    margin-right: 75px;
+    margin-left: 100px;
     border-radius: 20px; 
 }
 .cls{
