@@ -32,6 +32,7 @@
       </div>
     </div>
      <div class="container-1">
+         <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
         <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change(post.id)">
           <b-img-lazy class="item-2" rounded="circle" :src="post.imagesAndVideos[0]"></b-img-lazy>
         </div>
@@ -64,6 +65,7 @@
             <b-col md="4">
 		          <b-card-body>
                   <b-card-text>
+                    <p>{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</p>
                     <p>{{this.post.caption.description}}</p>
                     <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
                   </b-card-text>
