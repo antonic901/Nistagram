@@ -31,10 +31,14 @@
           <EditProfile v-bind:showEdit="showEdit"/>
       </div>
     </div>
+
+
      <div class="container-1" style="height:84px;margin-bottom:40px;">
+       <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
         <div class="container-5" v-for="highLight in this.highLights" :key="highLight.id" v-on:click="changeStory(highLight)">
           <b-img-lazy class="item-2" rounded="circle" :src="highLight.stories[0].imagesAndVideos[0]"></b-img-lazy>
           <label class="item-5" style="color:white;text-aling:center;"><b>{{highLight.name}}</b></label>
+
         </div>
     </div>
     <div class="container-1">
@@ -65,6 +69,7 @@
             <b-col md="4">
 		          <b-card-body>
                   <b-card-text>
+                    <p>{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</p>
                     <p>{{this.post.caption.description}}</p>
                     <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
                   </b-card-text>
