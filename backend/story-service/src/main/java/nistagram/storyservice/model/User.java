@@ -33,7 +33,7 @@ public class User {
 	private Set<Story> stories = new HashSet<Story>();
 	 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<HighLight> highLights = new HashSet<HighLight>();
 	 
 }
