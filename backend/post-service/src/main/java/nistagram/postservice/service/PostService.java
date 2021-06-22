@@ -1,7 +1,9 @@
 package nistagram.postservice.service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -138,6 +140,32 @@ public class PostService implements IPostService {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	public ResponseEntity<Set<Post>> getPostsForFeed(Long id) {
+		Set<Post> response = new HashSet<Post>();
+		if(id == -1) {
+			for(Post post : postRepository.findAll()) {
+				CheckFollowDTO checkFollowDTO = new CheckFollowDTO(post.getUser().getId(),id);
+				Boolean isPrivate = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-private", checkFollowDTO, Boolean.class);
+				if(!isPrivate) {
+					response.add(post);
+				}
+			}
+		}
+		else {
+			for(Post post : postRepository.findAll()) {
+				if(post.getUser().getId() != id) {
+					CheckFollowDTO checkFollowDTO = new CheckFollowDTO(post.getUser().getId(),id);
+					Boolean isUserFollowing = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-followed-by", checkFollowDTO, Boolean.class);
+					if(isUserFollowing) {
+						response.add(post);
+					}
+				}
+			}
+		}
+		return new ResponseEntity<Set<Post>>(response, HttpStatus.OK);
 	}
 	
 }

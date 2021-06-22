@@ -28,7 +28,6 @@
     </div>
     <div style="max-width: 50rem;  margin: auto;">
       <Post/>
-      <Post/>
     </div>
   </div>
 </template>
@@ -37,12 +36,16 @@
 
 import Navbar from '../components/Navbar.vue'
 import Post from '../components/Post.vue'
+import axios from 'axios'
 
 export default {
   name: "Home",
   computed: {
         isUserLogged() {
             return this.$store.getters.isUserLogged
+        },
+        User() {
+            return this.$store.getters.getUser
         }
   },
   components: {
@@ -63,7 +66,30 @@ export default {
                 this.url.push(URL.createObjectURL(selectedFile));
             })
     },
+    async addUser(userId) {
+      axios.get("http://localhost:8081/api/userprofile/get-by-id/" + userId)
+                    .then(r => {
+                        post.user = JSON.parse(JSON.stringify(r.data))
+                    })
+      
+    }
   },
+  created() {
+    var id;
+    if(this.User.id == null) id = -1;
+    else id = this.User.id; 
+    axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
+      .then(r => {
+        var posts = JSON.parse(JSON.stringify(r.data))
+        posts.forEach(post => {
+                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                    .then(r => {
+                        post.user = JSON.parse(JSON.stringify(r.data))
+                        this.$store.dispatch('updatePosts', posts)
+                    })
+            })
+      })
+  }
 };
 </script>
 
@@ -78,6 +104,7 @@ export default {
     background-color: whitesmoke;
     border-radius: 20px;
     box-shadow: 12px 12px 12px 0 rgba(0,0,0,0.2);
+    margin:10px;
     /* justify-content:space-between; */
   }
   .container-story2 {

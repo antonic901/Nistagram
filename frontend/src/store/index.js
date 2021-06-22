@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   //states (data) can be edided only through mutations
-  strict: true,
+  // strict: true,
   // this is like data:
   state: {
     user: {

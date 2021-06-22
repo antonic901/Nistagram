@@ -1,12 +1,15 @@
 package nistagram.postservice.controller;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import nistagram.postservice.dto.NewPostDTO;
@@ -41,5 +44,9 @@ public class PostController {
 		return postService.searchByLocation(searchDTO);
 	}
 	
+	@RequestMapping(value = "/get-posts-for-feed/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Post>> createUser(@PathVariable("id") Long id) {
+		return postService.getPostsForFeed(id);
+	}
 	
 }
