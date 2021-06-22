@@ -1,6 +1,7 @@
 package nistagram.postservice.model;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -41,7 +42,7 @@ public class Comment {
 	private User user;
 	
 	@Column(nullable = false)
-	private Date timeAndDate;
+	private LocalDateTime timeAndDate;
 	
 	@ManyToMany
     @JoinTable
@@ -50,6 +51,6 @@ public class Comment {
         joinColumns = @JoinColumn(name = "comment_id"),
         inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
-	private Set<Tag> tags;
+	private Set<Tag> tags = new HashSet<Tag>();
 
 }

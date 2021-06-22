@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,11 +27,11 @@ public class User {
 	private Long id;
 	
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+	@OneToMany(mappedBy = "user")
 	private Set<Post> posts = new HashSet<Post>();
 	 
 	@JsonIgnore
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany
 	private Set<Collection> collections = new HashSet<Collection>();
 	 
 }
