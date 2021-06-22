@@ -81,13 +81,14 @@ export default {
     axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
       .then(r => {
         var posts = JSON.parse(JSON.stringify(r.data))
-        posts.forEach(post => {
-                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
-                    .then(r => {
-                        post.user = JSON.parse(JSON.stringify(r.data))
-                        this.$store.dispatch('updatePosts', posts)
-                    })
-            })
+        // posts.forEach(post => {
+        //         axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+        //             .then(r => {
+        //                 post.user = JSON.parse(JSON.stringify(r.data))
+                        
+        //             })
+        //     })
+        this.$store.dispatch('updatePosts', posts)
       })
 
     axios.get("http://localhost:8083/api/story/get-story-for-feed/" + id)
