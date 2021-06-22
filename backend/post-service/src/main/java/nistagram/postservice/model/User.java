@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,9 +27,11 @@ public class User {
 	@Id
 	private Long id;
 	
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
 	private Set<Post> posts = new HashSet<Post>();
 	 
+	@JsonIgnore
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Collection> collections = new HashSet<Collection>();
 	 

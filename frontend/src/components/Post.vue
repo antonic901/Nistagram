@@ -55,8 +55,8 @@
       <div>
         <b-form-textarea
           id="textarea-state" 
-          v-model="this.text" 
-          :state="text.length <= 300"
+          v-model="text" 
+
           placeholder="Leave a comment..."
           rows="3"
           no-resize

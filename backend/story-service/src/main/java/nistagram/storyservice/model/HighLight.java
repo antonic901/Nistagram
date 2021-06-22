@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,6 +33,6 @@ public class HighLight {
 	@Column(nullable = false)
 	private String name;
 	
-	@OneToMany(targetEntity=Story.class, cascade = {CascadeType.ALL}) 
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<Story> stories = new HashSet<Story>();
 }

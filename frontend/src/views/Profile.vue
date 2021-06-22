@@ -31,10 +31,14 @@
           <EditProfile v-bind:showEdit="showEdit"/>
       </div>
     </div>
-     <div class="container-1">
-         <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change(post.id)">
-          <b-img-lazy class="item-2" rounded="circle" :src="post.imagesAndVideos[0]"></b-img-lazy>
+
+
+     <div class="container-1" style="height:84px;margin-bottom:40px;">
+       <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
+        <div class="container-5" v-for="highLight in this.highLights" :key="highLight.id" v-on:click="changeStory(highLight)">
+          <b-img-lazy class="item-2" rounded="circle" :src="highLight.stories[0].imagesAndVideos[0]"></b-img-lazy>
+          <label class="item-5" style="color:white;text-aling:center;"><b>{{highLight.name}}</b></label>
+
         </div>
     </div>
     <div class="container-1">
@@ -104,8 +108,10 @@ export default {
     return {
       showEdit: false,
       post: null,
+      highLight: null,
       url: [],
-      i: 0
+      i: 0,
+      highLights: []
     }
   },
   methods: {
@@ -115,6 +121,9 @@ export default {
     clickEdit() {
       if(this.showEdit) this.showEdit = false
       else this.showEdit = true
+    },
+    changeStory(highLight) {
+      this.highLight = highLight
     },
     previus() {
       var i = this.i - 1
@@ -146,6 +155,12 @@ export default {
          var posts = JSON.parse(JSON.stringify(r.data))
          this.$store.dispatch('updatePosts', posts)
       })
+    
+    axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
+      .then(r => {
+        var response = JSON.parse(JSON.stringify(r.data))
+        this.highLights = response;
+      }) 
   }  
 }
 </script>
@@ -188,6 +203,17 @@ export default {
     margin-left: 20px;
   }
 
+  .container-5 {
+    display: flex;
+    flex-flow: column;
+    margin-left: 20px;
+    transition: 0.2s all ease-in-out;
+  }
+
+  .container-5:hover {
+    margin-top: -10px;
+  }
+
   .item-1 {
     width: 292px;
     height: 292px;
@@ -198,12 +224,26 @@ export default {
   .item-2 {
     width: 84px;
     height: 84px;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    align-self: center;
   }
 
   .item-3 {
     align-self: center;
     margin: 20px;
+  }
+
+  .item-4 {
+    align-self: center;
+    /* margin: 20px; */
+  }
+
+  .item-5 {
+    align-self: center;
+    text-align: center;
+    /* margin: 20px; */
   }
 
   .card {

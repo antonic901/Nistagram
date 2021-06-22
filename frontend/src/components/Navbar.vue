@@ -27,6 +27,9 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/collections" class="nav-link">Collections</router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link to="/loginPage" v-if="!isUserLogged" class="nav-link">
                             <b-button variant="success">Login</b-button>
                         </router-link>
