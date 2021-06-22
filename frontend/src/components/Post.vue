@@ -8,19 +8,20 @@
             </b-col>
             <b-col md="1" style="text-align:right">
                  <b-icon icon="exclamation-triangle" scale="1.25" v-b-modal.modal-tall v-b-tooltip.hover.right.v-danger="'Report content'" variant="danger" ></b-icon>
-                 <b-modal id="modal-tall" title="Overflowing Content">
-                    <b-form-group label="Report for:" v-slot="{ ariaDescribedby }">
+                 <b-modal id="modal-tall" :hide-footer="true" title="REPORT CONTENT">
+                    <b-form-group label="Report for:" v-slot="{ ariaDescribedby }" style="margin-left: 120px;">
                           <b-form-radio-group
                             id="btn-radios-3"
                             v-model="selected"
                             :options="options"
                             :aria-describedby="ariaDescribedby"
-                            button-variant="outline-primary"
+                            button-variant="outline-danger"
                             name="radio-btn-stacked"
                             buttons
                             stacked
                           ></b-form-radio-group>
                     </b-form-group>
+                    <b-button variant="danger" style="margin-left: 200px; margine-top: 10px; margine-bottom: 10px;">Report</b-button>
                   </b-modal>
             </b-col>
           </b-row>
@@ -55,8 +56,8 @@
       <div>
         <b-form-textarea
           id="textarea-state" 
-          v-model="text" 
-
+          v-model="text1" 
+          :state="text.length <= 300"
           placeholder="Leave a comment..."
           rows="3"
           no-resize
@@ -97,7 +98,7 @@ export default {
           { text: 'SCAM', value: 'radio9' },
           { text: 'FALSE_INFORMATION', value: 'radio10' }
         ],
-        text:''
+        text1:''
       }
     },
     methods: {
