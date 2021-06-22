@@ -38,7 +38,7 @@ public class Story {
 	private LocalDateTime timeAndDate;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userprofile_id", nullable = true)
+    @JoinColumn(name = "user_id", nullable = true)
 	private User user;
 	
 	@ElementCollection

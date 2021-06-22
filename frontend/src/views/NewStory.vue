@@ -13,7 +13,10 @@
                                 <input type="file" @change="onFileSelected" multiple>
                                 <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
                             </div>
-                            <b-button style="color: white" >Create</b-button>
+                            <b-form-checkbox v-model="status" name="checkbox-1" :value="true" :unchecked-value="false" style="margin-bottom:20px;">
+                                Is this story only for closed friends?
+                            </b-form-checkbox>
+                            <b-button style="color: white" v-on:click="upload" >Add new story</b-button>
                         </form>
                     </div>
                 </div>
@@ -25,16 +28,23 @@
 <script>
 
 import Navbar from '../components/Navbar.vue'
+import axios from 'axios'
 
 export default {
-  name: "New story",
+  name: "NewStory",
   components: {
-    Navbar,
+    Navbar
+  },
+  computed: {
+      User() {
+          return this.$store.getters.getUser
+      }
   },
   data() {
     return {
-        url: []
-    };
+        url: [],
+        status: false
+    }
   },
   methods: {
       onFileSelected(event) {
@@ -44,6 +54,32 @@ export default {
                 this.url.push(URL.createObjectURL(selectedFile));
             })
         },
+        async upload() {
+            var i = 1
+            var date = (new Date()).getTime();
+            var images = [];
+            this.selectedFiles.forEach(selectedFile => {
+                const fileToUpload = new FormData();
+                images.push(this.User.username + '-story-' + date + '-image-' + i + ".jpg")
+                fileToUpload.append('file', selectedFile, images[i-1])
+                images[i-1] = "https://nistagramstorage.s3.eu-central-1.amazonaws.com/" + images[i-1]
+                axios.post('http://localhost:8083/api/upload/upload-file', fileToUpload);
+
+                i++
+            })
+
+
+            if(this.status) {
+                console.log("prosao")
+            }
+            var newStory = {
+                userId: this.User.id,
+                forClosedFriends: this.status,
+                imagesAndVideos: images
+            }
+
+            await axios.post("http://localhost:8083/api/story/add-new-story", newStory)
+        }
     }
 };
 </script>
