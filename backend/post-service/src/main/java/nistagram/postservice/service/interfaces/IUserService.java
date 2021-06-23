@@ -11,4 +11,5 @@ public interface IUserService {
 	ResponseEntity<String> createUser(Long id);
 	ResponseEntity<Set<Post>> getPostsForUser(Long id);
 	ResponseEntity<Set<Collection>> getCollections(Long id);
+	ResponseEntity<Set<Collection>> createCollection(Long userId, String name);
 }

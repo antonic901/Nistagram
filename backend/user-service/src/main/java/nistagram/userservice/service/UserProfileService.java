@@ -77,6 +77,8 @@ public class UserProfileService implements IUserProfileService {
 		
 		restTemplate.getForEntity("http://localhost:8083/api/user/create-user/" + newUserProfile.getId(), String.class);
 		
+		restTemplate.getForEntity("http://localhost:8084/api/user/create-user/" + newUserProfile.getId(), String.class);
+		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 
@@ -151,6 +153,27 @@ public class UserProfileService implements IUserProfileService {
 	public Boolean isFollowedBy(Long userPostId, Long userViewId) {
 		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
 		for(UserProfile up : userProfile.getFollowers()) {
+			if(up.getId() == userViewId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public Boolean isMutedBy(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userViewId).get();
+		for(UserProfile up : userProfile.getMutedUsers()) {
+			if(up.getId() == userPostId) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public Boolean isClosedFriend(Long userPostId, Long userViewId) {
+		UserProfile userProfile = userProfileRepository.findById(userPostId).get();
+		for(UserProfile up : userProfile.getClosedFriends()) {
 			if(up.getId() == userViewId) {
 				return true;
 			}

@@ -4,7 +4,7 @@
         <div class="container-6">
             <div class="container-4">
                 <div v-for="collection in collections" :key="collection.id" class="container-3" style="width:500px;" v-on:click="openCollection(collection)">
-                    <b-card style="margin:20px;" :img-src="collection.posts[0].imagesAndVideos[0]" img-top>
+                    <b-card v-if="collection.posts.length != 0" style="margin:20px;" :img-src="collection.posts[0].imagesAndVideos[0]" img-top>
                         <b-card-text style="text-align:center;">
                             {{collection.name}}
                         </b-card-text>
@@ -51,10 +51,12 @@ export default {
         async openCollection(collection) {
             this.posts = collection.posts
             this.posts.forEach(post => {
-                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
-                    .then(r => {
-                        post.user = JSON.parse(JSON.stringify(r.data))
-                    })
+                if(post != []) {
+                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                        .then(r => {
+                            post.user = JSON.parse(JSON.stringify(r.data))
+                        })
+                }
             })
             this.show = true;
         },
@@ -65,7 +67,7 @@ export default {
     created() {
         axios.get("http://localhost:8082/api/user/get-collections/" + this.User.id)
             .then(r => {
-                this.collections = JSON.parse(JSON.stringify(r.data))
+                 this.collections = JSON.parse(JSON.stringify(r.data))
             })
     }
 }

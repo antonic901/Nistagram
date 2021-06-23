@@ -3,6 +3,7 @@ package nistagram.postservice.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -31,7 +32,7 @@ public class User {
 	private Set<Post> posts = new HashSet<Post>();
 	 
 	@JsonIgnore
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private Set<Collection> collections = new HashSet<Collection>();
 	 
 }

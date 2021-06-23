@@ -14,10 +14,10 @@
                         <router-link v-if="isUserLogged" to="/new-post" class="nav-link">New post</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/allUsers" class="nav-link">Blocked, muted, followers...</router-link>
+                        <router-link v-if="isUserLogged" to="/new-story" class="nav-link">New story</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/new-story" class="nav-link">New story</router-link>
+                        <router-link v-if="isUserLogged" to="/allUsers" class="nav-link">Blocked, muted, followers...</router-link>
                     </li>
                 </ul>
             </div>
@@ -30,10 +30,12 @@
                         <router-link v-if="isUserLogged" to="/collections" class="nav-link">Collections</router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link to="/loginPage" v-if="!isUserLogged" class="nav-link">
+                        <router-link to="/loginPage" v-if="!isUserLogged">
                             <b-button variant="success">Login</b-button>
                         </router-link>
-                        <b-button v-else variant="danger" style="border-radius:10px;" v-on:click="logout">Logout</b-button>
+                        <router-link to="/" v-else>
+                            <b-button variant="danger" style="border-radius:10px;" v-on:click="logout">Logout</b-button>
+                        </router-link>
                     </li>
                 </ul>
             </div>
@@ -108,8 +110,20 @@ export default {
                 axios.post("http://localhost:8082/api/post/search-by-hashtag", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
+                        posts.forEach(post => {
+                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                                .then(r => {
+                                    post.user = JSON.parse(JSON.stringify(r.data))
+                                })
+                            post.comments.forEach(comment => {
+                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                .then(r => {
+                                    comment.user = JSON.parse(JSON.stringify(r.data))
+                                })
+                            })
+                        })
                         this.$store.dispatch('updatePosts', posts)
-                    })   
+                    })
             }
             else {
                 
@@ -120,8 +134,20 @@ export default {
                 axios.post("http://localhost:8082/api/post/search-by-location", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
+                        posts.forEach(post => {
+                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                                .then(r => {
+                                    post.user = JSON.parse(JSON.stringify(r.data))
+                                })
+                            post.comments.forEach(comment => {
+                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                .then(r => {
+                                    comment.user = JSON.parse(JSON.stringify(r.data))
+                                })
+                            })
+                        })
                         this.$store.dispatch('updatePosts', posts)
-                    }) 
+                    })
             }
 
             this.$store.dispatch('updateSearchType', this.searchInput)

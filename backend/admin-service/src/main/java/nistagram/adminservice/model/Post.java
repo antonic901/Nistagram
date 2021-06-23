@@ -38,7 +38,6 @@ public class Post {
     @JoinColumn(name = "caption_id", referencedColumnName = "id")
 	private Caption caption;
 	
-	//pitati asistenta
 	@ElementCollection
 	private List<String> imagesAndVideos = new ArrayList<String>();
 }

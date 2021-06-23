@@ -1,6 +1,7 @@
 package nistagram.adminservice.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import lombok.Setter;
 import nistagram.adminservice.model.enums.ReportType;
 
 @Table(name = "reports")
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor

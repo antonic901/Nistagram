@@ -19,6 +19,8 @@ public interface IUserProfileService {
 	ResponseEntity<String> updateUser(UserDTO userDTO);
 	ResponseEntity<List<UserProfile>> searchByUsername(SearchDTO searchDTO);
 	Boolean isFollowedBy(Long userPostId, Long userViewId);
+	Boolean isMutedBy(Long userPostId, Long userViewId);
+	Boolean isClosedFriend(Long userPostId, Long userViewId);
 	Boolean isPrivate(Long userPostId, Long userViewId);
 	ResponseEntity<String> checkIsUserFollowing(Long userProfileId, Long userLoggedId);
 	ResponseEntity<String> checkIsUserBlocked(Long userProfileId, Long userLoggedId);

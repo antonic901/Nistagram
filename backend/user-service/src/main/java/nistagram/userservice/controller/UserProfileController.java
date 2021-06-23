@@ -75,6 +75,16 @@ public class UserProfileController {
 		return userProfileService.isFollowedBy(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
 	}
 	
+	@PostMapping(value = "/is-muted-by", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean isMutedBy(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.isMutedBy(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
+	@PostMapping(value = "/is-closed-friend", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public Boolean isClosedFriend(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.isClosedFriend(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
 	@PostMapping(value = "/is-private", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public Boolean isPrivate(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
 		return userProfileService.isPrivate(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
