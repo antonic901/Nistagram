@@ -42,5 +42,15 @@ public class UserService implements IUserService {
 		}
 		return new ResponseEntity<Set<HighLight>>(response, HttpStatus.OK);
 	}
+
+	@Override
+	public ResponseEntity<Set<HighLight>> createHighLight(Long userId, String name) {
+		HighLight newHighLight = new HighLight();
+		newHighLight.setName(name);
+		User user = userRepository.findById(userId).get();
+		user.getHighLights().add(newHighLight);
+		userRepository.save(user);
+		return new ResponseEntity<Set<HighLight>>(user.getHighLights(), HttpStatus.OK);
+	}
 	
 }

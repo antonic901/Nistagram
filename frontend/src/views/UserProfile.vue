@@ -29,37 +29,71 @@
           <EditProfile v-bind:showEdit="showEdit"/>
       </div>
     </div>
-     <div v-if="!show" class="container-1">
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-on:click="change(post.id)">
-          <b-img-lazy class="item-2" rounded="circle" :src="post.imagesAndVideos[0]"></b-img-lazy>
-        </div>
+    <div class="container-1" style="height:84px;margin-bottom:40px;">
+      <!-- <b-icon icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Create new a higlight'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon> -->
+      <div class="container-6" v-for="highLight in this.highLights" :key="highLight.id" v-b-modal.modalHighLight v-on:click="changeStory(highLight)">
+        <b-img-lazy class="item-2" rounded="circle" :src="highLight.stories[0].imagesAndVideos[0]"></b-img-lazy>
+        <label class="item-5" style="color:white;text-aling:center;"><b>{{highLight.name}}</b></label>
+      </div>
+    </div>
+    <div v-if="this.highLight != null">
+      <b-modal id="modalHighLight" size="lg" :hide-footer="true" :title="this.highLight.name">
+        <b-card no-body class="overflow-hidden" style="max-width: auto; max-height: auto; margin-top: 0px;">
+          <b-row no-gutters>
+            <b-col md="12">
+              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <b-card-img :src="highLight.stories[i].imagesAndVideos[j]" alt="Image" class="rounded-0"></b-card-img>
+                </div>
+                <a class="carousel-control-prev" role="button" v-on:click="previusHighlightStory" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" role="button" v-on:click="nextHighlightStory" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </b-col>
+          </b-row>
+        </b-card>
+      </b-modal>
     </div>
     <div v-if="!show" class="container-1">
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modal-xl v-on:click="change(post)">
+        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modalPost v-on:click="change(post)">
           <b-img-lazy class="item-1" :src="post.imagesAndVideos[0]"></b-img-lazy>
         </div>
     </div>
     <div v-if="this.post != null">
-      <b-modal id="modal-xl" size="xl" :hide-footer="true" :title="'@' + this.User.username">
-        <b-card no-body class="overflow-hidden" style="max-width: 1200px; max-height: 600px; margin-top: 0px;">
+      <b-modal id="modalPost" size="xl" :hide-footer="true" :title="'@' + this.User.username">
+        <b-card no-body class="overflow-hidden" style="max-width: auto; max-height: auto; margin-top: 0px;">
           <b-row no-gutters>
             <b-col md="8">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                      <div class="carousel-inner">
-                          <b-card-img :src="this.post.imagesAndVideos[i]" alt="Image" class="rounded-0"></b-card-img>
-                      </div>
-                      <a class="carousel-control-prev" role="button" v-on:click="previus" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                      </a>
-                      <a class="carousel-control-next" role="button" v-on:click="next" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                      </a>
-                    </div>
+              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <b-card-img :src="this.post.imagesAndVideos[i]" alt="Image" class="rounded-0"></b-card-img>
+                </div>
+                <a class="carousel-control-prev" role="button" v-on:click="previus" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" role="button" v-on:click="next" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
             </b-col>
             <b-col md="4">
-
+		          <b-card-body>
+                <b-card-text>
+                  <p v-if="this.post.location != null" style="font-size:20px"><b>{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</b></p>
+                  <p>{{this.post.caption.description}}</p>
+                  <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
+                </b-card-text>
+                <b-card-text>
+                  <p v-for="comment in post.comments" :key="comment.id" ><b style="font-size:14px;">@{{comment.user.username}}</b> {{comment.content}}</p>
+                </b-card-text>
+              </b-card-body>
             </b-col>
           </b-row>
         </b-card>
@@ -85,9 +119,9 @@ export default {
     User() {
       return this.$store.getters.getUserProfile;
     },
-    Posts() {
-      return this.$store.getters.getPosts;
-    },
+    // Posts() {
+    //   return this.$store.getters.getPosts;
+    // },
     LoggedUser() {
       return this.$store.getters.getUser
     }
@@ -95,8 +129,12 @@ export default {
   data() {
     return {
       showEdit: false,
+      Posts: [],
       post: null,
+      highLights: [],
+      highLight: null,
       i: 0,
+      j: 0,
       message1: '',
       message2: '',
       message3: '',
@@ -111,6 +149,9 @@ export default {
     clickEdit() {
       if(this.showEdit) this.showEdit = false
       else this.showEdit = true
+    },
+    changeStory(highLight) {
+      this.highLight = highLight
     },
     previus() {
       var i = this.i - 1
@@ -127,6 +168,46 @@ export default {
         return
       }
       this.i = i
+    },
+    previusHighlightStory() {
+        var i = this.i;
+        var j = this.j;
+        
+        j = j - 1;
+
+        if(i == 0 && j < 0) {
+          i = this.highLight.stories.length - 1
+          j = this.highLight.stories[i].imagesAndVideos.length - 1
+        }
+
+        if(j < 0) {
+          i = i - 1
+          j = this.highLight.stories[i].imagesAndVideos.length - 1
+        }
+
+
+
+        this.i = i;
+        this.j = j;
+    },
+    nextHighlightStory() {
+        var i = this.i;
+        var j = this.j;
+
+        j = j + 1;
+
+        if(j >= this.highLight.stories[i].imagesAndVideos.length) {
+          j = 0;
+          i = i + 1;
+        }
+        
+        if(i >= this.highLight.stories.length) {
+          i = 0;
+          j = 0;
+        }
+
+        this.i = i;
+        this.j = j;
     },
     async follow() {
         if(this.LoggedUser.id == null) {
@@ -220,11 +301,29 @@ export default {
         }
     }
   },
-  created() {
+  mounted() {
     axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
       .then(r => {
-         var posts = JSON.parse(JSON.stringify(r.data))
-         this.$store.dispatch('updatePosts', posts)
+        var posts = JSON.parse(JSON.stringify(r.data))
+        posts.forEach(post => {
+          axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+            .then(r => {
+                post.user = JSON.parse(JSON.stringify(r.data))
+            })
+          post.comments.forEach(comment => {
+            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+              .then(r => {
+                  comment.user = JSON.parse(JSON.stringify(r.data))
+              })
+          })
+        })
+        this.Posts = posts
+      })
+    
+    axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
+      .then(r => {
+        var response = JSON.parse(JSON.stringify(r.data))
+        this.highLights = response;
       })
     
     var check = {
@@ -283,6 +382,16 @@ export default {
                 this.message4 = 'Remove from closed friends'
             }
         })
+
+    this.$root.$on('bv::modal::hidden', (bvEvent, modalPost) => {
+      this.i = 0
+      this.j = 0
+    })
+
+    this.$root.$on('bv::modal::hidden', (bvEvent, modalHighLight) => {
+      this.i = 0
+      this.j = 0
+    })
   }  
 }
 </script>
@@ -330,6 +439,17 @@ export default {
       flex-direction: column;
   }
 
+  .container-6 {
+    display: flex;
+    flex-flow: column;
+    margin-left: 20px;
+    transition: 0.2s all ease-in-out;
+  }
+
+  .container-6:hover {
+    margin-top: -10px;
+  }
+
   .item-1 {
     width: 292px;
     height: 292px;
@@ -340,12 +460,21 @@ export default {
   .item-2 {
     width: 84px;
     height: 84px;
-    margin: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 10px;
+    align-self: center;
   }
 
   .item-3 {
     align-self: center;
     margin: 20px;
+  }
+
+  .item-5 {
+    align-self: center;
+    text-align: center;
+    /* margin: 20px; */
   }
 
   .card {

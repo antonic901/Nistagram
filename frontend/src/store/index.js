@@ -24,7 +24,9 @@ export const store = new Vuex.Store({
    posts: [],
    users: [],
    searchType: '',
-   userProfile: null
+   userProfile: null,
+   type: '',
+   entity: null
   },
   //methods that return data (state)
   getters: {
@@ -57,6 +59,12 @@ export const store = new Vuex.Store({
     },
     getUserProfile(state) {
       return state.userProfile
+    },
+    getType(state) {
+      return state.type
+    },
+    getEntity(state) {
+      return state.entity
     }
   },
   //methods for changing date (state)
@@ -75,6 +83,12 @@ export const store = new Vuex.Store({
     },
     updateUserProfile(state, userProfile) {
       state.userProfile = userProfile
+    },
+    updateType(state, type) {
+      state.type = type
+    },
+    updateEntity(state, entity) {
+      state.entity = entity
     }
   },
   //always on components dispatch action which commit some mutations. Never commit mutations from component because of async
@@ -93,6 +107,12 @@ export const store = new Vuex.Store({
     },
     updateUserProfile(context, userProfile) {
       context.commit('updateUserProfile', userProfile)
+    },
+    updateType(context, type) {
+      context.commit('updateType', type)
+    },
+    updateEntity(context, entity) {
+      context.commit('updateEntity', entity)
     }
   }
 })

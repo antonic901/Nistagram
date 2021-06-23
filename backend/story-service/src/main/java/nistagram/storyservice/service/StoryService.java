@@ -62,13 +62,35 @@ public class StoryService implements IStoryService  {
 				if(post.getUser().getId() != id) {
 					CheckFollowDTO checkFollowDTO = new CheckFollowDTO(post.getUser().getId(),id);
 					Boolean isUserFollowing = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-followed-by", checkFollowDTO, Boolean.class);
-					if(isUserFollowing) {
-						response.add(post);
+					Boolean isMuted = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-muted-by", checkFollowDTO, Boolean.class);
+					Boolean isActive = isStoryActive(post);
+					if(isActive) {
+						if(isUserFollowing) {
+							if(!isMuted) {
+								if(post.isForClosedFriends()) {
+									Boolean isClosedFriend = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-closed-friend", checkFollowDTO, Boolean.class);
+									if(isClosedFriend) {
+										response.add(post);
+									}
+								}
+								else {
+									response.add(post);
+								}
+							}
+						}
 					}
 				}
 			}
 		}
 		return new ResponseEntity<Set<Story>>(response, HttpStatus.OK);
+	}
+	
+	private Boolean isStoryActive(Story story) {
+		LocalDateTime start = story.getTimeAndDate().plusDays(1);
+		if(LocalDateTime.now().compareTo(start) > 0) {
+			return false;
+		}
+		return true;
 	}
 	
 }

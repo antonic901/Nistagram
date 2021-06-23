@@ -1,33 +1,14 @@
 <template>
   <div class="background">  
     <Navbar/>
-    <div class="container-story1">
-         <b-icon v-if="isUserLogged" @click="$root.$emit('bv::show::modal', 'modal-scrollable', $event.target)" icon="plus-circle" scale="5" v-b-tooltip.hover.top="'Add a new story'" style="margin-left: 50px; margin-right: 40px; margin-top: 45px;"></b-icon>
-         <b-modal id="modal-scrollable" :hide-footer="true" size="lg" body-bg-variant="primary" scrollable title="New story">
-            <div class="cardStory">
-              <form onsubmit="event.preventDefault()" class="box">
-                  <div class = "cls">
-                      <h1 class = "title">New story</h1>
-                  </div>
-                  <div style="font-style:italic" required class="app">
-                      <input type="file" @change="onFileSelected" multiple>
-                      <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
-                  </div>
-                  <div style="margin-bottom: 20px;">
-                    <b-form-checkbox v-model="checked" name="check-button" switch>
-                      <b>Close friends only</b>
-                    </b-form-checkbox>
-                  </div>
-                  <b-button variant="primary" >Create</b-button>
-              </form>
-            </div>
-          </b-modal>
-        <div class="container-story2" v-for="i in 10" :key="i">
-          <b-img-lazy class="item-story2" rounded="circle" src="https://placekitten.com/480/210" alt="Image"></b-img-lazy>
-        </div>
+    <div>
+      <Story/>
     </div>
     <div style="max-width: 50rem;  margin: auto;">
       <Post/>
+    </div>
+    <div>
+      <Favorites/>
     </div>
   </div>
 </template>
@@ -36,6 +17,8 @@
 
 import Navbar from '../components/Navbar.vue'
 import Post from '../components/Post.vue'
+import Story from '../components/Story.vue'
+import Favorites from '../components/Favorites.vue'
 import axios from 'axios'
 
 export default {
@@ -50,50 +33,30 @@ export default {
   },
   components: {
     Navbar,
-    Post
+    Post,
+    Story,
+    Favorites
   },
-  data() {
-    return {
-      url: [],
-      checked: false
-    }
-  },
-  methods: {
-    onFileSelected(event) {
-            this.url = []
-            this.selectedFiles = event.target.files
-            this.selectedFiles.forEach(selectedFile => {
-                this.url.push(URL.createObjectURL(selectedFile));
-            })
-    },
-    async addUser(userId) {
-      axios.get("http://localhost:8081/api/userprofile/get-by-id/" + userId)
-                    .then(r => {
-                        post.user = JSON.parse(JSON.stringify(r.data))
-                    })
-      
-    }
-  },
-  created() {
+  mounted() {
     var id;
     if(this.User.id == null) id = -1;
     else id = this.User.id; 
     axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
       .then(r => {
         var posts = JSON.parse(JSON.stringify(r.data))
-        // posts.forEach(post => {
-        //         axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
-        //             .then(r => {
-        //                 post.user = JSON.parse(JSON.stringify(r.data))
-                        
-        //             })
-        //     })
+        posts.forEach(post => {
+          axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+            .then(r => {
+                post.user = JSON.parse(JSON.stringify(r.data))
+            })
+          post.comments.forEach(comment => {
+            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+              .then(r => {
+                  comment.user = JSON.parse(JSON.stringify(r.data))
+              })
+          })
+        })
         this.$store.dispatch('updatePosts', posts)
-      })
-
-    axios.get("http://localhost:8083/api/story/get-story-for-feed/" + id)
-      .then(r => {
-        console.log(r.data)
       })
   }
 };
@@ -102,7 +65,16 @@ export default {
 <style>
  .background {
     background-color: #3498db;
+    min-width: 100%;
+    min-height: 100%;
+    position: absolute;
   }
+
+  .container-1 {
+    display: flex;
+    flex-direction: column;
+  }
+
   .container-story1 {
     display: flex;
     flex-direction: row;

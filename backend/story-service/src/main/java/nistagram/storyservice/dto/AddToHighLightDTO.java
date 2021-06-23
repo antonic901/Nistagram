@@ -1,0 +1,18 @@
+package nistagram.storyservice.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class AddToHighLightDTO {
+	
+	private Long collectionId;
+	
+	private Long postId;
+	
+}

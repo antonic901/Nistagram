@@ -42,12 +42,18 @@ public class UserService implements IUserService {
 	public ResponseEntity<Set<Collection>> getCollections(Long id) {
 		User user = userRepository.findById(id).get();
 		Set<Collection> response = new HashSet<Collection>();
-		for(Collection c : user.getCollections()) {
-			if(c.getPosts().size() != 0) {
-				response.add(c);
-			}
-		}
+		response = user.getCollections();
 		return new ResponseEntity<Set<Collection>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<Collection>> createCollection(Long userId, String name) {
+		Collection newCollection = new Collection();
+		newCollection.setName(name);
+		User user = userRepository.findById(userId).get();
+		user.getCollections().add(newCollection);
+		userRepository.save(user);
+		return new ResponseEntity<Set<Collection>>(user.getCollections(), HttpStatus.OK);
 	}
 	
 	

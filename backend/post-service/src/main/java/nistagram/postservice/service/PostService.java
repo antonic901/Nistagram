@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import nistagram.postservice.dto.AddNewPostDTO;
 import nistagram.postservice.dto.CheckFollowDTO;
 import nistagram.postservice.dto.NewPostDTO;
 import nistagram.postservice.dto.SearchDTO;
@@ -67,7 +68,15 @@ public class PostService implements IPostService {
 		for(String s : newPostDTO.getImagesAndVideos()) {
 			newPost.getImagesAndVideos().add(s);
 		}
-		postRepository.save(newPost);
+		newPost = postRepository.save(newPost);
+		
+		AddNewPostDTO addNewPostDTO = new AddNewPostDTO();
+		addNewPostDTO.setPostId(newPost.getId());
+		addNewPostDTO.setImagesAndVideos(newPost.getImagesAndVideos());
+		addNewPostDTO.setCaptionId(newPost.getCaption().getId());
+		addNewPostDTO.setDescription(newPost.getCaption().getDescription());
+		
+		restTemplate.postForEntity("http://localhost:8084/api/post/create-post", addNewPostDTO, String.class);
 		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
@@ -159,8 +168,11 @@ public class PostService implements IPostService {
 				if(post.getUser().getId() != id) {
 					CheckFollowDTO checkFollowDTO = new CheckFollowDTO(post.getUser().getId(),id);
 					Boolean isUserFollowing = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-followed-by", checkFollowDTO, Boolean.class);
+					Boolean isMuted = restTemplate.postForObject("http://localhost:8081/api/userprofile/is-muted-by", checkFollowDTO, Boolean.class);
 					if(isUserFollowing) {
-						response.add(post);
+						if(!isMuted) {
+							response.add(post);
+						}
 					}
 				}
 			}
