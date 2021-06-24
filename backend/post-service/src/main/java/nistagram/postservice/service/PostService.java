@@ -226,4 +226,41 @@ public class PostService implements IPostService {
 		return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(),HttpStatus.OK);
 	}
 	
+	@Override
+	public ResponseEntity<Set<Post>> getLikedPosts(Long id) {
+		Set<Post> response = new HashSet<Post>();
+		for(Post post : postRepository.findAll()) {
+			LikeDislike ld = isLikedOrDisliked(post, id);
+			if(ld != null) {
+				if(ld.isLike()) {
+					response.add(post);
+				}
+			}
+		}
+		return new ResponseEntity<Set<Post>>(response, HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<Set<Post>> getDislikedPosts(Long id) {
+		Set<Post> response = new HashSet<Post>();
+		for(Post post : postRepository.findAll()) {
+			LikeDislike ld = isLikedOrDisliked(post, id);
+			if(ld != null) {
+				if(!ld.isLike()) {
+					response.add(post);
+				}
+			}
+		}
+		return new ResponseEntity<Set<Post>>(response, HttpStatus.OK);
+	}
+	
+	private LikeDislike isLikedOrDisliked(Post post, Long userId) {
+		for(LikeDislike ld : post.getLikesDislikes()) {
+			if(ld.getUser().getId() == userId) {
+				return ld;
+			}
+		}
+		return null;
+	}
+	
 }

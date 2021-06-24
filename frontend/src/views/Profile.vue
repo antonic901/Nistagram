@@ -45,44 +45,12 @@
       </b-modal>
     </div>
     <div class="container-1">
-        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modalPost v-on:click="change(post)">
+        <div class="container-2" v-for="post in this.Posts" :key="post.id" v-b-modal.modalAdditionalPost v-on:click="change(post)">
           <b-img-lazy class="item-1" :src="post.imagesAndVideos[0]"></b-img-lazy>
         </div>
     </div>
-    <div v-if="this.post != null">
-      <b-modal id="modalPost" size="xl" :hide-footer="true" :title="'@' + this.User.username">
-        <b-card no-body class="overflow-hidden" style="max-width: auto; max-height: auto; margin-top: 0px;">
-          <b-row no-gutters>
-            <b-col md="8">
-              <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                    <b-card-img :src="this.post.imagesAndVideos[i]" alt="Image" class="rounded-0"></b-card-img>
-                </div>
-                <a class="carousel-control-prev" role="button" v-on:click="previus" data-slide="prev">
-                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Previous</span>
-                </a>
-                <a class="carousel-control-next" role="button" v-on:click="next" data-slide="next">
-                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </div>
-            </b-col>
-            <b-col md="4">
-		          <b-card-body>
-                <b-card-text>
-                  <p v-if="this.post.location != null" style="font-size:20px"><b>{{this.post.location.street}}, {{this.post.location.city}}, {{this.post.location.country}}</b></p>
-                  <p>{{this.post.caption.description}}</p>
-                  <p v-for="t in this.post.caption.tags" :key="t.id">{{t.name}}</p>
-                </b-card-text>
-                <b-card-text>
-                  <p v-for="comment in post.comments" :key="comment.id" ><b style="font-size:14px;">@{{comment.user.username}}</b> {{comment.content}}</p>
-                </b-card-text>
-              </b-card-body>
-            </b-col>
-          </b-row>
-        </b-card>
-      </b-modal>
+    <div>
+      <PostModal/>
     </div>
   </div>
 
@@ -93,26 +61,24 @@
 import axios from 'axios'
 import Navbar from '../components/Navbar.vue'
 import EditProfile from '../components/EditProfile.vue'
+import PostModal from '../components/PostModal.vue'
 
 export default {
   name: "Profile",
   components: {
       Navbar,
-      EditProfile
+      EditProfile,
+      PostModal
   },
   computed: {
     User() {
       return this.$store.getters.getUser;
     }
-    // Posts() {
-    //   return this.$store.getters.getPosts;
-    // }
   },
   data() {
     return {
       showEdit: false,
       Posts: [],
-      post: null,
       highLights: [],
       highLight: null,
       url: [],
@@ -122,7 +88,7 @@ export default {
   },
   methods: {
     change(post) {
-      this.post = post
+      this.$store.dispatch('updateEntity', post)
     },
     clickEdit() {
       if(this.showEdit) this.showEdit = false
@@ -130,22 +96,6 @@ export default {
     },
     changeStory(highLight) {
       this.highLight = highLight
-    },
-    previus() {
-      var i = this.i - 1
-      if(i < 0) {
-        this.i = this.post.imagesAndVideos.length-1
-        return
-      }
-      this.i = i
-    },
-    next() {
-      var i = this.i + 1
-      if(i >= this.post.imagesAndVideos.length) {
-        this.i = 0
-        return
-      }
-      this.i = i
     },
     previusHighlightStory() {
         var i = this.i;
@@ -186,16 +136,6 @@ export default {
 
         this.i = i;
         this.j = j;
-    },
-    // onFileSelected(event) {
-    //   this.url = []
-    //   this.selectedFiles = event.target.files
-    //   this.selectedFiles.forEach(selectedFile => {
-    //       this.url.push(URL.createObjectURL(selectedFile));
-    //   })
-    // },
-    close() {
-      alert("hello")
     }
   },
   mounted() {
