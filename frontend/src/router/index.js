@@ -10,6 +10,7 @@ import Search from '../views/Search.vue'
 import UserProfile from '../views/UserProfile.vue'
 import AllUsers from '../views/AllUsers.vue'
 import Collections from '../views/Collections.vue'
+import LikedAndDisliked from '../views/LikedAndDisliked.vue'
 
 Vue.use(VueRouter)
 
@@ -64,6 +65,11 @@ const routes = [
     path: '/collections',
     name: 'Collections',
     component: Collections
+  },
+  {
+    path: '/likedAndDisliked',
+    name: 'LikedAndDisliked',
+    component: LikedAndDisliked
   }
 ]
 

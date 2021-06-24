@@ -16,4 +16,6 @@ public interface IPostService {
 	ResponseEntity<List<Post>> searchByLocation(SearchDTO searchDTO);
 	ResponseEntity<Set<Post>> getPostsForFeed(Long id);
 	ResponseEntity<Set<LikeDislike>> addLikeOrDislike(Long postId, Long userId, Boolean isLike);
+	ResponseEntity<Set<Post>> getLikedPosts(Long id);
+	ResponseEntity<Set<Post>> getDislikedPosts(Long id);
 }

@@ -57,4 +57,14 @@ public class PostController {
 		return postService.addLikeOrDislike(addLikeDislikeDTO.getPostId(), addLikeDislikeDTO.getUserId(), addLikeDislikeDTO.isLike());
 	}
 	
+	@RequestMapping(value = "/get-liked-posts/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Post>> getLikedPosts(@PathVariable("id") Long id) {
+		return postService.getLikedPosts(id);
+	}
+	
+	@RequestMapping(value = "/get-disliked-posts/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Post>> getDislikedPosts(@PathVariable("id") Long id) {
+		return postService.getDislikedPosts(id);
+	}
+	
 }
