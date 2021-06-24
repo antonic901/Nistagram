@@ -19,6 +19,8 @@ public class AddCommentDTO {
 	
 	private String content;
 	
-	List<String> tags;
+	List<String> hashTags;
+	
+	List<String> profileTags;
 	
 }

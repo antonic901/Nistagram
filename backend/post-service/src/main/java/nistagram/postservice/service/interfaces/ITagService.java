@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import nistagram.postservice.model.Tag;
 
 public interface ITagService {
-	ResponseEntity<String> createTagIfNotExist(List<String> tags);
+	ResponseEntity<String> createTagsIfNotExist(List<String> tags);
+	ResponseEntity<String> createTag(String name);
 	Tag getTagByName(String name);
 }

@@ -22,13 +22,23 @@ public class TagService implements ITagService {
 	}
 
 	@Override
-	public ResponseEntity<String> createTagIfNotExist(List<String> tags) {
+	public ResponseEntity<String> createTagsIfNotExist(List<String> tags) {
 		for(String tag : tags) {
 			if(!exist(tag)) {
 				Tag newTag = new Tag();
 				newTag.setName(tag);
 				tagRepository.save(newTag);
 			}
+		}
+		return new ResponseEntity<String>("ok", HttpStatus.OK);
+	}
+	
+	@Override
+	public ResponseEntity<String> createTag(String name) {
+		if(!exist(name)) {
+			Tag newTag = new Tag();
+			newTag.setName(name);
+			tagRepository.save(newTag);
 		}
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}

@@ -30,6 +30,13 @@ public class UserProfile extends User {
 	@Column(nullable = false)
 	private boolean isPrivate;
 	
+	//do user want to receive messsages from non-friends
+	@Column(nullable = false)
+	private boolean receiveMessage;
+	
+	@Column(nullable = false)
+	private boolean isTaggable;
+	
 	@Column
 	private boolean isDeleted;
 	 
@@ -58,7 +65,7 @@ public class UserProfile extends User {
 	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
 	            inverseJoinColumns = @JoinColumn(name = "follower_request_user_id", referencedColumnName = "id")
 	    )
-	 private Set<UserProfile> followRequests = new HashSet<UserProfile>();
+	 private Set<FollowRequest> followRequests = new HashSet<FollowRequest>();
 	 
 	@JsonIgnore
 	 @ManyToMany
@@ -89,7 +96,7 @@ public class UserProfile extends User {
 	 
 	 public UserProfile(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
 			String website, String biography, String username, String password, boolean isPrivate,
-			Set<UserProfile> followers, Set<UserProfile> following, Set<UserProfile> followRequests,
+			Set<UserProfile> followers, Set<UserProfile> following, Set<FollowRequest> followRequests,
 			Set<UserProfile> closedFriends) {
 		super(name, surname, email, phoneNumber, gender, birthdayDate, website, biography, username, password);
 		this.isPrivate = isPrivate;

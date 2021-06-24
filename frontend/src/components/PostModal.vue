@@ -43,7 +43,7 @@
 
 <script>
 export default {
-    name: 'entityModal',
+    name: 'PostModal',
     computed: {
         entity() {
             return this.$store.getters.getEntity;

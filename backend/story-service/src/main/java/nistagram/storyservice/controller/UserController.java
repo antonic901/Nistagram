@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import nistagram.storyservice.dto.CreateHighLightDTO;
 import nistagram.storyservice.model.HighLight;
+import nistagram.storyservice.model.Story;
 import nistagram.storyservice.service.UserService;
 
 @RestController
@@ -35,6 +36,11 @@ public class UserController {
 	@RequestMapping(value = "/get-highlights/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Set<HighLight>> getHighLights(@PathVariable("id") Long id) {
 		return userService.getHighLights(id);
+	}
+	
+	@RequestMapping(value = "/get-stories/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<Story>> getStories(@PathVariable("id") Long id) {
+		return userService.getAllStories(id);
 	}
 	
 	@PostMapping(value = "/create-highlight", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)

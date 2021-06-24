@@ -20,7 +20,9 @@ export const store = new Vuex.Store({
       biography: "",
       username: "",
       password: "",
-      private: null
+      private: null,
+      taggable: null,
+      receiveMessage: null
    },
    posts: [],
    users: [],
