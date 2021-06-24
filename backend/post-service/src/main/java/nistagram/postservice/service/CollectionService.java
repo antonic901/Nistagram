@@ -31,11 +31,29 @@ public class CollectionService implements ICollectionService {
 				return new ResponseEntity<String>("exist", HttpStatus.OK);
 			}
 		}
+		addToFavorites(postId);
 		collection.getPosts().add(postRepository.findById(postId).get());
 		collectionRepository.save(collection);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 	
-	
+	private boolean addToFavorites(Long postId) {
+		Collection collection = null;
+		for(Collection c : collectionRepository.findAll()) {
+			if(c.getName().toLowerCase().trim().equals("favorites")) {
+				collection = c;
+				break;
+			}
+		}
+		
+		for(Post post : collection.getPosts()) {
+			if(post.getId() == postId) {
+				return false;
+			}
+		}
+		collection.getPosts().add(postRepository.findById(postId).get());
+		collectionRepository.save(collection);
+		return true;
+	}
 	
 }
