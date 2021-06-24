@@ -1,6 +1,5 @@
 package nistagram.postservice.service;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +27,9 @@ public class UserService implements IUserService {
 	public ResponseEntity<String> createUser(Long id) {
 		User newUser = new User();
 		newUser.setId(id);
+		Collection collection = new Collection();
+		collection.setName("Favorites");
+		newUser.getCollections().add(collection);
 		userRepository.save(newUser);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
@@ -41,19 +43,32 @@ public class UserService implements IUserService {
 	@Override
 	public ResponseEntity<Set<Collection>> getCollections(Long id) {
 		User user = userRepository.findById(id).get();
-		Set<Collection> response = new HashSet<Collection>();
-		response = user.getCollections();
+		Set<Collection> response = user.getCollections();
 		return new ResponseEntity<Set<Collection>>(response, HttpStatus.OK);
 	}
 
 	@Override
 	public ResponseEntity<Set<Collection>> createCollection(Long userId, String name) {
+		User user = userRepository.findById(userId).get();
+		
+		if(isAlreadyExist(user,name)) {
+			return getCollections(user.getId());
+		}
+		
 		Collection newCollection = new Collection();
 		newCollection.setName(name);
-		User user = userRepository.findById(userId).get();
 		user.getCollections().add(newCollection);
 		userRepository.save(user);
 		return new ResponseEntity<Set<Collection>>(user.getCollections(), HttpStatus.OK);
+	}
+	
+	private boolean isAlreadyExist(User user, String name) {
+		for(Collection c : user.getCollections()) {
+			if(c.getName().toLowerCase().trim().equals(name.toLowerCase().trim())) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	
