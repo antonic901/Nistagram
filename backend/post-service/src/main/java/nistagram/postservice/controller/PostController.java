@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import nistagram.postservice.dto.AddLikeDislikeDTO;
 import nistagram.postservice.dto.NewPostDTO;
 import nistagram.postservice.dto.SearchDTO;
+import nistagram.postservice.model.LikeDislike;
 import nistagram.postservice.model.Post;
 import nistagram.postservice.service.PostService;
 
@@ -47,6 +49,12 @@ public class PostController {
 	@RequestMapping(value = "/get-posts-for-feed/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Set<Post>> createUser(@PathVariable("id") Long id) {
 		return postService.getPostsForFeed(id);
+	}
+	
+	@PostMapping(value = "/add-like-dislike", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Set<LikeDislike>> searchLikeOrDislike(@RequestBody AddLikeDislikeDTO addLikeDislikeDTO) throws Exception
+	{
+		return postService.addLikeOrDislike(addLikeDislikeDTO.getPostId(), addLikeDislikeDTO.getUserId(), addLikeDislikeDTO.isLike());
 	}
 	
 }

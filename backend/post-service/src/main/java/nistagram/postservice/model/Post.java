@@ -48,7 +48,7 @@ public class Post {
 	@OneToMany(fetch = FetchType.LAZY)
 	private Set<Comment> comments = new HashSet<Comment>();
 	
-	@OneToMany(fetch = FetchType.LAZY)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Set<LikeDislike> likesDislikes = new HashSet<LikeDislike>();
 	
 	@ElementCollection

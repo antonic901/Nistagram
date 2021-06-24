@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card v-for="post in Posts" :key="post.id" no-body style="flex-direction: column; max-width: 50rem; margin-top: 50px; border-radius: 10px;
+    <b-card v-for="post in posts" :key="post.id" no-body style="flex-direction: column; max-width: 50rem; margin-top: 50px; border-radius: 10px;
         box-shadow: 12px 12px 12px 0 rgba(0,0,0,0.2);">
           <template #header>
             <b-row no-gutters>
@@ -33,8 +33,16 @@
                 </b-col>
             </b-row>
             <b-row v-if="isUserLogged" no-gutters>
+              <b-icon v-on:click="addLikeDislike(true, post)" icon="hand-thumbs-up" scale="1.5" v-b-tooltip.hover.left.v-success="'I like this!'" variant="success" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;" ></b-icon>
+              <label>{{countLikes(post)}}</label>
+              <b-icon v-on:click="addLikeDislike(false, post)" icon="hand-thumbs-down" scale="1.5" v-b-tooltip.hover.right.v-danger="'Dislike'" variant="danger" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;"></b-icon>
+              <label>{{countDislikes(post)}}</label>
+            </b-row>
+            <b-row v-else no-gutters>
               <b-icon icon="hand-thumbs-up" scale="1.5" v-b-tooltip.hover.left.v-success="'I like this!'" variant="success" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;" ></b-icon>
+              <label>{{countLikes(post)}}</label>
               <b-icon icon="hand-thumbs-down" scale="1.5" v-b-tooltip.hover.right.v-danger="'Dislike'" variant="danger" style="margin-top: 10px; margin-bottom: 0px; margin-left: 10px; margin-right: 10px;"></b-icon>
+              <label>{{countDislikes(post)}}</label>
             </b-row>
           </b-card-body>
 
@@ -86,9 +94,6 @@ export default {
         },
         userFullname() {
             return this.$store.getters.getFullName
-        },
-        Posts() {
-            return this.$store.getters.getPosts
         }
     },
     data() {
@@ -96,7 +101,8 @@ export default {
         text:'',
         description: '',
         hashTags: [],
-        type: 'collection'
+        type: 'collection',
+        posts: []
       }
     },
     methods: {
@@ -127,7 +133,11 @@ export default {
         await axios.post("http://localhost:8082/api/comment/add-new-comment", comment)
           .then(r => {
             var newComment = JSON.parse(JSON.stringify(r.data))
-            post.comments.push(newComment)
+            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + this.user.id)
+              .then(r => {
+                newComment.user = JSON.parse(JSON.stringify(r.data))
+                post.comments.push(newComment)
+              })
             this.text = ''
             this.description = ''
             this.hashTags = []
@@ -155,7 +165,67 @@ export default {
           var type = 'collection'
           this.$store.dispatch('updateType', type)
           this.$store.dispatch('updateEntity', post)
+        },
+        addLikeDislike(isLike, post) {
+          var add = {
+            userId: this.user.id,
+            postId: post.id,
+            like: isLike
+          }
+
+          axios.post("http://localhost:8082/api/post/add-like-dislike", add)
+            .then(r => {
+                var response = JSON.parse(JSON.stringify(r.data))
+                response.forEach(likedislike => {
+                  axios.get("http://localhost:8081/api/userprofile/get-by-id/" + likedislike.user.id)
+                    .then(r => {
+                      likedislike.user = JSON.parse(JSON.stringify(r.data))
+                    })
+                })
+                post.likesDislikes = response
+            })
+        },
+        countLikes(post) {
+          var counter = 0
+          post.likesDislikes.forEach(l => {
+              if(l.like) counter = counter + 1
+          })
+          return counter
+        },
+        countDislikes(post) {
+          var counter = 0
+          post.likesDislikes.forEach(l => {
+              if(!l.like) counter = counter + 1
+          })
+          return counter
         }
-    }
+    },
+    mounted() {
+      var id;
+      if(this.user.id == null) id = -1;
+      else id = this.user.id; 
+      axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
+        .then(r => {
+          this.posts = JSON.parse(JSON.stringify(r.data))
+          this.posts.forEach(post => {
+            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+              .then(r => {
+                  post.user = JSON.parse(JSON.stringify(r.data))
+              })
+            post.comments.forEach(comment => {
+              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                .then(r => {
+                    comment.user = JSON.parse(JSON.stringify(r.data))
+                })
+            })
+            post.likesDislikes.forEach(comment => {
+              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                .then(r => {
+                    comment.user = JSON.parse(JSON.stringify(r.data))
+                })
+            })
+          })
+        })
+  }
 }
 </script>

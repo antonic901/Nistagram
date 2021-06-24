@@ -15,7 +15,7 @@ public interface IUserProfileService {
 	ResponseEntity<String> registerUser(UserDTO userDTO);
 	ResponseEntity<String> checkIsUsernameTaken(String username);
 	ResponseEntity<String> checkIsEmailTaken(String email);
-	ResponseEntity<UserDTO> login(LoginDTO loginDTO);
+	ResponseEntity<UserProfile> login(LoginDTO loginDTO);
 	ResponseEntity<String> updateUser(UserDTO userDTO);
 	ResponseEntity<List<UserProfile>> searchByUsername(SearchDTO searchDTO);
 	Boolean isFollowedBy(Long userPostId, Long userViewId);

@@ -36,28 +36,6 @@ export default {
     Post,
     Story,
     Favorites
-  },
-  mounted() {
-    var id;
-    if(this.User.id == null) id = -1;
-    else id = this.User.id; 
-    axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
-      .then(r => {
-        var posts = JSON.parse(JSON.stringify(r.data))
-        posts.forEach(post => {
-          axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
-            .then(r => {
-                post.user = JSON.parse(JSON.stringify(r.data))
-            })
-          post.comments.forEach(comment => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
-              .then(r => {
-                  comment.user = JSON.parse(JSON.stringify(r.data))
-              })
-          })
-        })
-        this.$store.dispatch('updatePosts', posts)
-      })
   }
 };
 </script>

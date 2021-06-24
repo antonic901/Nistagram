@@ -17,6 +17,15 @@
                     <b-form-input type="text" v-model="user.surname" style="border-radius:20px; margin:5px; text-align:center;font-weight:bold;" placeholder="surname" trim></b-form-input>
                     <b-form-input type="text" v-model="user.phoneNumber" style="border-radius:20px; margin:5px; text-align:center;font-weight:bold;" placeholder="phone" trim></b-form-input>
                 </div>
+                <div class="container-3">
+                    <b-form-checkbox
+                        v-model="user.private"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Private profile</b-form-checkbox>
+                    <b-button v-on:click="verifyClick" class="item-4" style="margin:5px;border-radius:20px;">Verify profile</b-button>
+                </div>
             </div>
             <label style="color:red;text-align:center;"><b>{{message}}</b></label>
             <b-button class="item-4" style="border-radius:20px; margin:5px; text-align:center; width:150px" v-on:click="clickSave">Save</b-button>
@@ -51,7 +60,8 @@ export default {
                 birthdayDate: null,
                 website: "",
                 biography: "",
-                username: ""
+                username: "",
+                private: null
             },
             oldPassword: '',
             newPassword: '',
@@ -129,7 +139,8 @@ export default {
                     website: this.user.website,
                     biography: this.user.biography,
                     username: this.user.username,
-                    password: this.newPassword
+                    password: this.newPassword,
+                    private: this.user.private
                 }
             }
             else {
@@ -144,7 +155,8 @@ export default {
                     website: this.user.website,
                     biography: this.user.biography,
                     username: this.user.username,
-                    password: this.User.password
+                    password: this.User.password,
+                    private: this.user.private
                 }
             }
 
@@ -154,6 +166,17 @@ export default {
 
             alert('Your profile is successfuly updated!')
 
+        },
+        async verifyClick() {
+            await axios.get("http://localhost:8084/api/verificationrequest/request-verification/" + this.user.id)
+                .then(r => {
+                    if(r.data == 'ok') {
+                        alert("Request is successfuly sended.")
+                    }
+                    else if(r.data == 'waiting') {
+                        alert("Verification is still in progress.")
+                    }
+                })
         }
     },
     created() {
@@ -168,6 +191,7 @@ export default {
         this.user.website = user.website
         this.user.biography = user.biography
         this.user.username = user.username
+        this.user.private = user.private
     }
 }
 </script>

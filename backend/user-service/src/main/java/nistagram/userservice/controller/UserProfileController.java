@@ -54,7 +54,7 @@ public class UserProfileController {
 	}
 	
 	@PostMapping(value = "/login-user", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserDTO> login(@RequestBody LoginDTO loginDTO) throws Exception{
+	public ResponseEntity<UserProfile> login(@RequestBody LoginDTO loginDTO) throws Exception{
 		return userProfileService.login(loginDTO);
 	}
 	
