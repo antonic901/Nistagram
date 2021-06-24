@@ -24,6 +24,18 @@
                         :unchecked-value="false"
                         style="color:white;margin:10px;font-size:16px;"
                     >Private profile</b-form-checkbox>
+                    <b-form-checkbox
+                        v-model="user.taggable"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Can other user tag you</b-form-checkbox>
+                    <b-form-checkbox
+                        v-model="user.receiveMessage"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Receive messages only from friends</b-form-checkbox>
                     <b-button v-on:click="verifyClick" class="item-4" style="margin:5px;border-radius:20px;">Verify profile</b-button>
                 </div>
             </div>
@@ -61,7 +73,9 @@ export default {
                 website: "",
                 biography: "",
                 username: "",
-                private: null
+                private: null,
+                taggable: null,
+                receiveMessage: null
             },
             oldPassword: '',
             newPassword: '',
@@ -140,7 +154,9 @@ export default {
                     biography: this.user.biography,
                     username: this.user.username,
                     password: this.newPassword,
-                    private: this.user.private
+                    private: this.user.private,
+                    taggable: this.user.taggable,
+                    receiveMessage: this.user.receiveMessage
                 }
             }
             else {
@@ -156,7 +172,9 @@ export default {
                     biography: this.user.biography,
                     username: this.user.username,
                     password: this.User.password,
-                    private: this.user.private
+                    private: this.user.private,
+                    taggable: this.user.taggable,
+                    receiveMessage: this.user.receiveMessage
                 }
             }
 
@@ -192,6 +210,8 @@ export default {
         this.user.biography = user.biography
         this.user.username = user.username
         this.user.private = user.private
+        this.user.taggable = user.taggable
+        this.user.receiveMessage = user.receiveMessage
     }
 }
 </script>

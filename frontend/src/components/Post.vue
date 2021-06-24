@@ -101,6 +101,7 @@ export default {
         text:'',
         description: '',
         hashTags: [],
+        profileTags: [],
         type: 'collection',
         posts: []
       }
@@ -127,20 +128,28 @@ export default {
             userId: this.user.id,
             postId: post.id,
             content: this.description,
-            tags: this.hashTags
+            hashTags: this.hashTags,
+            profileTags: this.profileTags
         }
 
         await axios.post("http://localhost:8082/api/comment/add-new-comment", comment)
           .then(r => {
             var newComment = JSON.parse(JSON.stringify(r.data))
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + this.user.id)
-              .then(r => {
-                newComment.user = JSON.parse(JSON.stringify(r.data))
-                post.comments.push(newComment)
-              })
-            this.text = ''
-            this.description = ''
-            this.hashTags = []
+            if(newComment.id == null) {
+              alert(newComment.content)
+            }
+            else {
+              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + this.user.id)
+                .then(r => {
+                  newComment.user = JSON.parse(JSON.stringify(r.data))
+                  post.comments.push(newComment)
+                })
+              this.text = ''
+              // this.description = ''
+              this.hashTags = []
+              this.profileTags = []
+            }
+
           })
 
       },
@@ -150,10 +159,20 @@ export default {
             var tags = searchText.match(regexp);
             if(tags == null ) this.hashTags = []
             else this.hashTags = tags
+            
+            var regexp = /\@\w+\b/g
+            tags = searchText.match(regexp);
+            if(tags == null) this.profileTags = [] 
+            else this.profileTags = tags;
+
             this.description = this.text;
+
             try {
                 this.hashTags.forEach(hashTag => {
-                    this.description = this.description.replace(hashTag, "");
+                  this.description = this.description.replace(hashTag, "");
+                })
+                this.profileTags.forEach(hashTag => {
+                  this.description = this.description.replace(hashTag, "");
                 })
             } catch (error) {
 

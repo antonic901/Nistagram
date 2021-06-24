@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import nistagram.storyservice.model.HighLight;
+import nistagram.storyservice.model.Story;
 import nistagram.storyservice.model.User;
 import nistagram.storyservice.repository.UserRepository;
 import nistagram.storyservice.service.interfaces.IUserService;
@@ -51,6 +52,12 @@ public class UserService implements IUserService {
 		user.getHighLights().add(newHighLight);
 		userRepository.save(user);
 		return new ResponseEntity<Set<HighLight>>(user.getHighLights(), HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<Story>> getAllStories(Long userId) {
+		User user = userRepository.findById(userId).get();
+		return new ResponseEntity<Set<Story>>(user.getStories(),HttpStatus.OK);
 	}
 	
 }

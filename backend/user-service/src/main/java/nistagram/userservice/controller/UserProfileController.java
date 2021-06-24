@@ -174,4 +174,9 @@ public class UserProfileController {
 	public ResponseEntity<Set<UserProfile>> getBlockedUsers(@PathVariable("id") Long id) {
 		return userProfileService.getBlockedUsers(id);
 	}
+	
+	@RequestMapping(value = "/is-taggable/{username}", method = RequestMethod.GET)
+	public String isTaggable(@PathVariable("username") String username) {
+		return userProfileService.isTaggable(username);
+	}
 }

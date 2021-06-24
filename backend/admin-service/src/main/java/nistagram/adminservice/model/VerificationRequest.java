@@ -37,7 +37,7 @@ public class VerificationRequest {
 	@OneToOne
 	private User user;
 
-	@Column(name = "categorytype", nullable = false)
+	@Column(name = "categorytype")
 	@Enumerated(EnumType.STRING)
 	CategoryType category;
 	

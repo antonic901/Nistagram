@@ -11,6 +11,7 @@ import UserProfile from '../views/UserProfile.vue'
 import AllUsers from '../views/AllUsers.vue'
 import Collections from '../views/Collections.vue'
 import LikedAndDisliked from '../views/LikedAndDisliked.vue'
+import AllStories from '../views/AllStories.vue'
 
 Vue.use(VueRouter)
 
@@ -70,6 +71,11 @@ const routes = [
     path: '/likedAndDisliked',
     name: 'LikedAndDisliked',
     component: LikedAndDisliked
+  },
+  {
+    path: '/allStories',
+    name: 'AllStories',
+    component: AllStories
   }
 ]
 

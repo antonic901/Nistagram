@@ -19,6 +19,8 @@ public class NewPostDTO {
 	
 	private List<String> hashTags;
 	
+	private List<String> profileTags;
+	
 	private Long locationId;
 	
 	private List<String> imagesAndVideos;

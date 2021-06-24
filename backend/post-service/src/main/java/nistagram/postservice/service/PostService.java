@@ -55,9 +55,27 @@ public class PostService implements IPostService {
 		Location location = null; 
 		if(newPostDTO.getLocationId()!=null) location = locationRepository.findById(newPostDTO.getLocationId()).get();
 		
+		for(String profileTag : newPostDTO.getProfileTags()) {
+			String check = profileTag.replace("@", "");
+			String response = restTemplate.getForObject("http://localhost:8081/api/userprofile/is-taggable/" + check, String.class);
+			if(response.equals("not_taggable")) {
+				return new ResponseEntity<String>("User " + profileTag + " can't be tagged!", HttpStatus.OK);
+			}
+			else if(response.equals("doesnt_exist")) {
+				return new ResponseEntity<String>("User " + profileTag + " doesn't exist!", HttpStatus.OK);
+			}
+		}
+		
 		Caption caption = new Caption();
 		caption.setDescription(newPostDTO.getDescription());
 		for(String t : newPostDTO.getHashTags()) {
+			Tag tag = tagService.getTagByName(t);
+			if(tag != null) {
+				caption.getTags().add(tag);
+			}
+		}
+		
+		for(String t : newPostDTO.getProfileTags()) {
 			Tag tag = tagService.getTagByName(t);
 			if(tag != null) {
 				caption.getTags().add(tag);
@@ -83,7 +101,7 @@ public class PostService implements IPostService {
 		
 		restTemplate.postForEntity("http://localhost:8084/api/post/create-post", addNewPostDTO, String.class);
 		
-		return new ResponseEntity<String>("ok", HttpStatus.OK);
+		return new ResponseEntity<String>("Post is succesfully added!", HttpStatus.OK);
 	}
 
 	@Override

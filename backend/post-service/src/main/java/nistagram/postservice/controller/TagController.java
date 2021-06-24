@@ -29,7 +29,12 @@ public class TagController {
 	@PostMapping(value = "/create-tag", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> createTagIfNotExist(@RequestBody TagDTO tagDTO) throws Exception
 	{
-		return tagService.createTagIfNotExist(tagDTO.getTags());
+		return tagService.createTagsIfNotExist(tagDTO.getTags());
+	}
+	
+	@RequestMapping(value = "/create-tag/{name}", method = RequestMethod.GET)
+	public ResponseEntity<String> createTag(@PathVariable("name") String name) {
+		return tagService.createTag(name);
 	}
 	
 	@RequestMapping(value = "/get-tag/{name}", method = RequestMethod.GET)

@@ -15,6 +15,7 @@ import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.SearchDTO;
 import nistagram.userservice.dto.UserDTO;
 import nistagram.userservice.model.UserProfile;
+import nistagram.userservice.model.FollowRequest;
 import nistagram.userservice.repository.UserProfileRepository;
 import nistagram.userservice.service.interfaces.IUserProfileService;
 
@@ -69,7 +70,7 @@ public class UserProfileService implements IUserProfileService {
 		
 		UserProfile newUserProfile = new UserProfile(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(),
 				userDTO.getGender(), userDTO.getBirthdayDate(), userDTO.getWebsite(), userDTO.getBiography(), userDTO.getUsername(), 
-				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>());
+				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<FollowRequest>(), new HashSet<UserProfile>());
 		
 		newUserProfile = userProfileRepository.save(newUserProfile);
 		
@@ -78,6 +79,8 @@ public class UserProfileService implements IUserProfileService {
 		restTemplate.getForEntity("http://localhost:8083/api/user/create-user/" + newUserProfile.getId(), String.class);
 		
 		restTemplate.getForEntity("http://localhost:8084/api/user/create-user/" + newUserProfile.getId(), String.class);
+		
+		restTemplate.getForEntity("http://localhost:8082/api/tag/create-tag/@" + newUserProfile.getUsername(), String.class);
 		
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
@@ -109,7 +112,10 @@ public class UserProfileService implements IUserProfileService {
 		userProfile.setUsername(userDTO.getUsername());
 		userProfile.setPassword(userDTO.getPassword());
 		userProfile.setPrivate(userDTO.isPrivate());
+		userProfile.setTaggable(userDTO.isTaggable());
+		userProfile.setReceiveMessage(userDTO.isReceiveMessage());
 		userProfileRepository.save(userProfile);
+		restTemplate.getForEntity("http://localhost:8082/api/tag/create-tag/@" + userDTO.getUsername(), String.class);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}
 
@@ -335,5 +341,20 @@ public class UserProfileService implements IUserProfileService {
 		UserProfile userProfile = userProfileRepository.findById(id).get();
 		Set<UserProfile> response = userProfile.getBlockedUsers();
 		return new ResponseEntity<Set<UserProfile>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public String isTaggable(String username) {
+		for(UserProfile userProfile : userProfileRepository.findAll()) {
+			if(userProfile.getUsername().trim().equals(username)) {
+				if(userProfile.isTaggable()) {
+					return "taggable";
+				}
+				else { 
+					return "not_taggable";
+				}
+			}
+		}
+		return "doesnt_exist";
 	}
 }

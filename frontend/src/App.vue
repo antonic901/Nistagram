@@ -1,9 +1,9 @@
 <template>
   <div >
-    <!-- <router-view>
+    <router-view>
 
-    </router-view> -->
-    <Test/>
+    </router-view>
+    <!-- <Test/> -->
   </div>
 </template>
 

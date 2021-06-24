@@ -38,4 +38,8 @@ public class UserDTO {
 	
 	private boolean isPrivate;
 	
+	private boolean isTaggable;
+	
+	private boolean receiveMessage;
+	
 }

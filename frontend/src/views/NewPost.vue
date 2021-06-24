@@ -69,7 +69,8 @@ export default {
         locations: [],
         location: null,
         description: '',
-        hashTags: []
+        hashTags: [],
+        profileTags: []
     };
   },
     methods:{
@@ -122,6 +123,7 @@ export default {
                 userId: this.User.id,
                 description: this.description,
                 hashTags: this.hashTags,
+                profileTags: this.profileTags,
                 locationId: this.location.id,
                 imagesAndVideos: images
                 }
@@ -130,6 +132,7 @@ export default {
                 userId: this.User.id,
                 description: this.description,
                 hashTags: this.hashTags,
+                profileTags: this.profileTags,
                 locationId: null,
                 imagesAndVideos: images
                 }
@@ -137,7 +140,7 @@ export default {
 
             await axios.post("http://localhost:8082/api/post/add-new-post", newPost)
                 .then(r => {
-                    console.log(r.data);
+                    alert(r.data);
                 })
         },
         findHashtags(searchText) {
@@ -146,6 +149,12 @@ export default {
             var tags = searchText.match(regexp);
             if(tags == null ) this.hashTags = []
             else this.hashTags = tags
+            
+            var regexp = /\@\w+\b/g
+            tags = searchText.match(regexp);
+            if(tags == null) this.profileTags = [] 
+            else this.profileTags = tags;
+
             this.description = this.enterDescription;
             try {
                 this.hashTags.forEach(hashTag => {
