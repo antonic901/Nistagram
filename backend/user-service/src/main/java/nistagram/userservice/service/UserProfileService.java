@@ -69,7 +69,7 @@ public class UserProfileService implements IUserProfileService {
 		
 		UserProfile newUserProfile = new UserProfile(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(),
 				userDTO.getGender(), userDTO.getBirthdayDate(), userDTO.getWebsite(), userDTO.getBiography(), userDTO.getUsername(), 
-				userDTO.getPassword(),false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>());
+				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>());
 		
 		newUserProfile = userProfileRepository.save(newUserProfile);
 		
@@ -83,29 +83,16 @@ public class UserProfileService implements IUserProfileService {
 	}
 
 	@Override
-	public ResponseEntity<UserDTO> login(LoginDTO loginDTO) {
+	public ResponseEntity<UserProfile> login(LoginDTO loginDTO) {
 		for(UserProfile userProfile : userProfileRepository.findAll()) {
 			if(userProfile.getUsername().equals(loginDTO.getUsername())) {
 				if(userProfile.getPassword().equals(loginDTO.getPassword())) {
-					UserDTO userDTO = new UserDTO(
-						userProfile.getId(),
-						userProfile.getName(),
-						userProfile.getSurname(),
-						userProfile.getEmail(),
-						userProfile.getPhoneNumber(),
-						userProfile.getGender(),
-						userProfile.getBirthdayDate(),
-						userProfile.getWebsite(),
-						userProfile.getBiography(),
-						userProfile.getUsername(),
-						userProfile.getPassword()
-					);
-					return new ResponseEntity<UserDTO>(userDTO,HttpStatus.OK);
+					return new ResponseEntity<UserProfile>(userProfile,HttpStatus.OK);
 				}
-				return new ResponseEntity<UserDTO>(new UserDTO(), HttpStatus.OK);
+				return new ResponseEntity<UserProfile>(new UserProfile(), HttpStatus.OK);
 			}
 		}
-		return new ResponseEntity<UserDTO>(new UserDTO(), HttpStatus.OK);
+		return new ResponseEntity<UserProfile>(new UserProfile(), HttpStatus.OK);
 	}
 
 	@Override
@@ -121,6 +108,7 @@ public class UserProfileService implements IUserProfileService {
 		userProfile.setBiography(userDTO.getBiography());
 		userProfile.setUsername(userDTO.getUsername());
 		userProfile.setPassword(userDTO.getPassword());
+		userProfile.setPrivate(userDTO.isPrivate());
 		userProfileRepository.save(userProfile);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
 	}

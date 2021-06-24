@@ -19,7 +19,8 @@ export const store = new Vuex.Store({
       website: "",
       biography: "",
       username: "",
-      password: ""
+      password: "",
+      private: null
    },
    posts: [],
    users: [],

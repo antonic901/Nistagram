@@ -16,10 +16,12 @@ import nistagram.postservice.dto.CheckFollowDTO;
 import nistagram.postservice.dto.NewPostDTO;
 import nistagram.postservice.dto.SearchDTO;
 import nistagram.postservice.model.Caption;
+import nistagram.postservice.model.LikeDislike;
 import nistagram.postservice.model.Location;
 import nistagram.postservice.model.Post;
 import nistagram.postservice.model.Tag;
 import nistagram.postservice.model.User;
+import nistagram.postservice.repository.LikeDislikeRepository;
 import nistagram.postservice.repository.LocationRepository;
 import nistagram.postservice.repository.PostRepository;
 import nistagram.postservice.repository.UserRepository;
@@ -31,18 +33,21 @@ public class PostService implements IPostService {
 	private PostRepository postRepository;
 	private LocationRepository locationRepository;
 	private UserRepository userRepository;
+	private LikeDislikeRepository likeDislikeRepository;
 	
 	private TagService tagService;
 	
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	public PostService(PostRepository postRepository, LocationRepository locationRepository, TagService tagService, UserRepository userRepository, RestTemplate restTemplate) {
+	public PostService(PostRepository postRepository, LocationRepository locationRepository, TagService tagService, 
+			UserRepository userRepository, LikeDislikeRepository likeDislikeRepository , RestTemplate restTemplate) {
 		this.postRepository = postRepository;
 		this.locationRepository = locationRepository;
 		this.tagService = tagService;
 		this.userRepository = userRepository;
 		this.restTemplate = restTemplate;
+		this.likeDislikeRepository = likeDislikeRepository;
 	}
 
 	@Override
@@ -178,6 +183,47 @@ public class PostService implements IPostService {
 			}
 		}
 		return new ResponseEntity<Set<Post>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<LikeDislike>> addLikeOrDislike(Long postId, Long userId, Boolean isLike) {
+		Post post = postRepository.findById(postId).get();
+		for(LikeDislike ld : post.getLikesDislikes()) {
+			if(ld.getUser().getId() == userId) {
+				if(ld.isLike()) {
+					if(isLike) {
+						return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(), HttpStatus.OK);
+					}
+					else {
+						ld.setLike(isLike);
+						likeDislikeRepository.save(ld);
+						return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(), HttpStatus.OK);
+					}
+				}
+				else {
+					if(!isLike) {
+						return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(), HttpStatus.OK);
+					}
+					else {
+						ld.setLike(isLike);
+						likeDislikeRepository.save(ld);
+						return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(), HttpStatus.OK);
+					}
+				}
+
+			}
+		}
+		
+		LikeDislike likeDislike = new LikeDislike();
+		likeDislike.setLike(isLike);
+		
+		User user = userRepository.findById(userId).get();
+		likeDislike.setUser(user);
+		
+		post.getLikesDislikes().add(likeDislike);
+		postRepository.save(post);
+		
+		return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(),HttpStatus.OK);
 	}
 	
 }
