@@ -61,12 +61,16 @@ export default {
         }
     },
     mounted() {
-        this.$root.$on('bv::modal::show', (bvEvent, modalReport) => {
-            axios.get("http://localhost:8084/api/reporttype/get-report-types")
+        axios.get("http://localhost:8084/api/reporttype/get-report-types")
                 .then(r => {
                     this.options = JSON.parse(JSON.stringify(r.data))
                 })
-        })
+        // this.$root.$on('bv::modal::show', (bvEvent, modalReport) => {
+        //     axios.get("http://localhost:8084/api/reporttype/get-report-types")
+        //         .then(r => {
+        //             this.options = JSON.parse(JSON.stringify(r.data))
+        //         })
+        // })
     }
 }
 </script>

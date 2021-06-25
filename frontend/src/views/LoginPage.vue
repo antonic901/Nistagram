@@ -52,13 +52,23 @@ export default {
         this.error = "Please fill all input fields!"
         return
       }
-      axios.post("http://localhost:8081/api/userprofile/login-user", this.Login)
+      axios.post("http://localhost:8081/api/user/login-user", this.Login)
         .then(r => {
             var user = JSON.parse(JSON.stringify(r.data))
             if(user.id != null) {
               this.show = false;
-              this.$store.dispatch('updateUser', {user});
-              this.$router.push({name: 'Home'})
+              if(user.userType == 'USER') {
+                axios.post("http://localhost:8081/api/userprofile/login-user", this.Login)
+                  .then(r => {
+                      var user = JSON.parse(JSON.stringify(r.data))
+                      this.$store.dispatch('updateUser', {user});
+                      this.$router.push({name: 'Home'})
+                  })
+              }
+              else {
+                this.$store.dispatch('updateUser', {user});
+                this.$router.push({name: 'HomeAdmin'})
+              }
             }
             else {
               this.show = true;

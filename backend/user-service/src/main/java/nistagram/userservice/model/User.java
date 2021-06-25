@@ -16,6 +16,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nistagram.userservice.model.enums.GenderEnum;
+import nistagram.userservice.model.enums.UserType;
 
 @Entity
 @Table(name = "users")
@@ -41,9 +42,13 @@ public class User {
 	@Column(nullable = false)
 	private int phoneNumber;
 	
-	@Column(name = "usertype", nullable = false)
+	@Column(name = "gender", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private GenderEnum gender;
+	
+	@Column(name = "usertype", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private UserType userType;
 	
 	@Column(nullable = false)
 	private Date birthdayDate;
@@ -61,7 +66,7 @@ public class User {
 	private String password;
 	
 	public User(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
-			String website, String biography, String username, String password) {
+			String website, String biography, String username, String password, UserType userType) {
 		super();
 		this.name = name;
 		this.surname = surname;
@@ -73,6 +78,7 @@ public class User {
 		this.biography = biography;
 		this.username = username;
 		this.password = password;
+		this.userType = userType;
 	}
 	
 }

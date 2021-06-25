@@ -19,7 +19,6 @@ import Navbar from '../components/Navbar.vue'
 import Post from '../components/Post.vue'
 import Story from '../components/Story.vue'
 import Favorites from '../components/Favorites.vue'
-import axios from 'axios'
 
 export default {
   name: "Home",
@@ -40,7 +39,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
  .background {
     background-color: #3498db;
     min-width: 100%;

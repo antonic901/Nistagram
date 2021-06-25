@@ -70,7 +70,8 @@ public class UserProfileService implements IUserProfileService {
 		
 		UserProfile newUserProfile = new UserProfile(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(),
 				userDTO.getGender(), userDTO.getBirthdayDate(), userDTO.getWebsite(), userDTO.getBiography(), userDTO.getUsername(), 
-				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<FollowRequest>(), new HashSet<UserProfile>());
+				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<FollowRequest>(), new HashSet<UserProfile>(),
+				userDTO.getUserType());
 		
 		newUserProfile = userProfileRepository.save(newUserProfile);
 		

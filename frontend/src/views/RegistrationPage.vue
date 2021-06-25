@@ -25,7 +25,7 @@
                             </b-form>
                             <b-form-input type="password" v-model="user.password" placeholder="enter password" style="font-style:italic"  aria-describedby="input-live-help input-live-feedback" :state= validation trim required/> 
                               <b-form-invalid-feedback id="input-live-feedback" style="font-style:italic">
-                                  Enter at least 7 characters. 
+                                  Enter at least 3 characters. 
                               </b-form-invalid-feedback>
                             <b-form-input type="password" v-model="user.confirmPassword" placeholder="confirm password" style="font-style:italic" required/> 
                             <b-form-input type="text" v-model="user.name" placeholder="enter name" style="font-style:italic" required/>
@@ -35,6 +35,12 @@
                               <b-form-radio-group v-model="user.gender" :aria-describedby="ariaDescribedby" aria-controls="ex-disabled-readonly">
                                 <b-form-radio value="MALE">MALE</b-form-radio>
                                 <b-form-radio value="FEMALE">FEMALE</b-form-radio>
+                              </b-form-radio-group>
+                            </b-form-group>
+                            <b-form-group label="Select USERTYPE:">
+                              <b-form-radio-group v-model="user.userType" :aria-describedby="ariaDescribedby" aria-controls="ex-disabled-readonly">
+                                <b-form-radio value="USER">USER</b-form-radio>
+                                <b-form-radio value="ADMIN">ADMIN</b-form-radio>
                               </b-form-radio-group>
                             </b-form-group>
                             <b-form-datepicker id="example-datepicker" v-model="user.birthdayDate" class="mb-2" placeholder="enter date of your birth"></b-form-datepicker>
@@ -70,6 +76,7 @@ export default {
        email: "",
        phoneNumber: "",
        gender: null,
+       userType: null,
        birthdayDate: null,
        website: "",
        biography: "",
@@ -96,19 +103,37 @@ export default {
           return;
       }
       this.formValid = true;
-      axios.post("http://localhost:8081/api/userprofile/register-user", this.user)
-        .then(r => {
-            if(r.data == "ok") {
-              alert("Welcome to Nistagram! Please, now log in to get best experience.");
-              this.$router.push({name: 'LoginPage'});
-            }
-            else {
-              alert ("There was a problem trying to register you! Please try again in a few minutes!")
-            }
-        })
-        .catch(r => {
-          console.log(r);
-        })
+      if(this.user.userType == 'USER') {
+        axios.post("http://localhost:8081/api/userprofile/register-user", this.user)
+          .then(r => {
+              if(r.data == "ok") {
+                alert("Welcome to Nistagram! Please, now log in to get best experience.");
+                this.$router.push({name: 'LoginPage'});
+              }
+              else {
+                alert ("There was a problem trying to register you! Please try again in a few minutes!")
+              }
+          })
+          .catch(r => {
+            console.log(r);
+          })
+      }
+      else {
+        axios.post("http://localhost:8081/api/user/register-user", this.user)
+          .then(r => {
+              if(r.data == "ok") {
+                alert("Welcome to Nistagram! Please, now log in to get best experience.");
+                this.$router.push({name: 'LoginPage'});
+              }
+              else {
+                alert ("There was a problem trying to register you! Please try again in a few minutes!")
+              }
+          })
+          .catch(r => {
+            console.log(r);
+          })
+      }
+
     },
     checkIsUsernameValid() {
       if(this.user.username.length >= 5 && this.user.username.length <= 15) {
@@ -154,7 +179,7 @@ export default {
   },
   computed: {
       validation() {
-        if(this.user.password.length > 7) {
+        if(this.user.password.length > 3) {
           this.passwordValid = true;
         }
         else {
@@ -166,7 +191,7 @@ export default {
         else {
           this.passwordValid = true;
         }
-        return this.user.password.length > 7 ? true : false
+        return this.user.password.length > 3 ? true : false
       }
   }}
 </script>

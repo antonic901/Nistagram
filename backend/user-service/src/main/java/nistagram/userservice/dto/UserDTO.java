@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nistagram.userservice.model.enums.GenderEnum;
+import nistagram.userservice.model.enums.UserType;
 
 @Getter
 @Setter
@@ -25,6 +26,8 @@ public class UserDTO {
 	private int phoneNumber;
 
 	private GenderEnum gender;
+	
+	private UserType userType;
 
 	private Date birthdayDate;
 

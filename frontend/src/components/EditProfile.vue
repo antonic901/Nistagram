@@ -36,11 +36,16 @@
                         :unchecked-value="false"
                         style="color:white;margin:10px;font-size:16px;"
                     >Receive messages only from friends</b-form-checkbox>
-                    <b-button v-on:click="verifyClick" class="item-4" style="margin:5px;border-radius:20px;">Verify profile</b-button>
+                    <b-button v-if="this.verifyStatus == 'Verification is in progress' || this.verifyStatus == 'Profile is verified'" class="item-4" style="margin:5px;border-radius:20px;">{{verifyStatus}}</b-button>
+                    <b-button v-else v-b-modal.modalVerifyProfile class="item-4" style="margin:5px;border-radius:20px;">{{verifyStatus}}</b-button>
+
                 </div>
             </div>
             <label style="color:red;text-align:center;"><b>{{message}}</b></label>
             <b-button class="item-4" style="border-radius:20px; margin:5px; text-align:center; width:150px" v-on:click="clickSave">Save</b-button>
+        </div>
+        <div>
+            <VerifyProfile/>
         </div>
     </div>     
 </template>
@@ -48,16 +53,23 @@
 <script>
 
 import axios from 'axios'
+import VerifyProfile from '../components/VerifyProfile.vue'
 
 export default {
     name: 'EditProfile',
     props: ['showEdit'],
+    components: {
+        VerifyProfile
+    },
     computed: {
         User() {
             return this.$store.getters.getUser
         },
         ShowEdit() {
             return this.showEdit
+        },
+        verifyStatus() {
+            return this.$store.getters.getVerifyStatus
         }
     },
     data() {
@@ -186,15 +198,11 @@ export default {
 
         },
         async verifyClick() {
-            await axios.get("http://localhost:8084/api/verificationrequest/request-verification/" + this.user.id)
-                .then(r => {
-                    if(r.data == 'ok') {
-                        alert("Request is successfuly sended.")
-                    }
-                    else if(r.data == 'waiting') {
-                        alert("Verification is still in progress.")
-                    }
-                })
+            if(this.verifyStatus == 'Verification is in progress' || this.verifyStatus == 'Profile is verified') {
+                return
+            }
+            // await axios.get("http://localhost:8084/api/verificationrequest/request-verification/" + this.user.id)
+            // this.verifyStatus = 'Verification is in progress'
         }
     },
     created() {
@@ -212,6 +220,18 @@ export default {
         this.user.private = user.private
         this.user.taggable = user.taggable
         this.user.receiveMessage = user.receiveMessage
+        axios.get("http://localhost:8084/api/verificationrequest/check-status-of-verification/" + this.user.id)
+            .then(r => {
+                if(r.data == 'not_sended') {
+                    this.$store.dispatch('updateVerifyStatus', 'Verify profile')
+                }
+                else if(r.data == 'waiting') {
+                    this.$store.dispatch('updateVerifyStatus', 'Verification is in progress')
+                }
+                else if(r.data == 'verified') {
+                    this.$store.dispatch('updateVerifyStatus', 'Profile is verified')
+                }
+            })
     }
 }
 </script>
