@@ -29,6 +29,9 @@ public class VerificationRequest {
 	private Long id;
 	
 	@Column
+	private boolean isDeleted;
+	
+	@Column
 	private boolean isProcessed;
 	
 	@Column
@@ -42,5 +45,5 @@ public class VerificationRequest {
 	CategoryType category;
 	
 	@Column
-	private String imagesAndVideos;
+	private String image;
 }

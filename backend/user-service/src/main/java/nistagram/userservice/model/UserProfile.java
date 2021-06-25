@@ -19,6 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nistagram.userservice.model.enums.GenderEnum;
+import nistagram.userservice.model.enums.UserType;
 
 @Entity
 @DiscriminatorValue("UserProfile")
@@ -28,14 +29,14 @@ import nistagram.userservice.model.enums.GenderEnum;
 @NoArgsConstructor
 public class UserProfile extends User {
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private boolean isPrivate;
 	
 	//do user want to receive messsages from non-friends
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private boolean receiveMessage;
 	
-	@Column(nullable = false)
+	@Column(nullable = true)
 	private boolean isTaggable;
 	
 	@Column
@@ -98,8 +99,8 @@ public class UserProfile extends User {
 	 public UserProfile(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
 			String website, String biography, String username, String password, boolean isPrivate,
 			Set<UserProfile> followers, Set<UserProfile> following, Set<FollowRequest> followRequests,
-			Set<UserProfile> closedFriends) {
-		super(name, surname, email, phoneNumber, gender, birthdayDate, website, biography, username, password);
+			Set<UserProfile> closedFriends, UserType userType) {
+		super(name, surname, email, phoneNumber, gender, birthdayDate, website, biography, username, password, userType);
 		this.isPrivate = isPrivate;
 		this.followers = followers;
 		this.following = following;

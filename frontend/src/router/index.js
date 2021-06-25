@@ -13,6 +13,7 @@ import Collections from '../views/Collections.vue'
 import LikedAndDisliked from '../views/LikedAndDisliked.vue'
 import AllStories from '../views/AllStories.vue'
 import FollowRequest from '../views/FollowRequest.vue'
+import HomeAdmin from '../views/HomeAdmin.vue'
 
 Vue.use(VueRouter)
 
@@ -82,6 +83,11 @@ const routes = [
     path: '/followRequest',
     name: 'FollowRequest',
     component: FollowRequest
+  },
+  {
+    path: '/homeAdmin',
+    name: 'HomeAdmin',
+    component: HomeAdmin
   }
 ]
 

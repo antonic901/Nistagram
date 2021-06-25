@@ -120,12 +120,18 @@ export default {
                         this.collections = JSON.parse(JSON.stringify(r.data))
                 })
             } 
-            else {
+            else if(this.type == 'highlight') {
                 axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
                     .then(r => {
                         this.collections = JSON.parse(JSON.stringify(r.data))
                     })
             }
+        })
+
+        this.$root.$on('bv::modal::hidden', (bvEvent, modalFavorites) => {
+            var type = ''
+            this.$store.dispatch('updateType', type)
+            this.$store.dispatch('updateEntity', null)
         })
     }
 }
