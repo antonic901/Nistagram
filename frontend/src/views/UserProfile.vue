@@ -169,14 +169,31 @@ export default {
             return
         }
 
+        if(this.message1 == 'Sended request') {
+          alert("Request is already sended.")
+          return
+        }
+
         var check = {
             userPostId: this.User.id,
             userViewId: this.LoggedUser.id
         }
         if(this.message1 == 'Follow') {
             await axios.post("http://localhost:8081/api/userprofile/follow", check)
-            this.message1 = 'Unfollow'
-            this.show = false
+              .then(r => {
+                if(r.data == 'success') {
+                  this.message1 = 'Unfollow'
+                  this.show = false
+                }
+                else {
+                  this.message1 = 'Sended request'
+                  this.show = this.User.private
+                }
+              })
+
+        }
+        else if(this.message1 == 'Sended request') {
+            alert("Awaiting other user to approve your request.")
         }
         else {
             await axios.post("http://localhost:8081/api/userprofile/unfollow", check)
@@ -231,7 +248,7 @@ export default {
             return
         }
 
-        if(this.message1 == 'Follow') {
+        if(this.message1 == 'Follow' || this.message1 == 'Sended request') {
             alert("You are not following this user!")
             return
         }
@@ -294,7 +311,15 @@ export default {
     axios.post("http://localhost:8081/api/userprofile/check-is-user-following", check)
         .then(r => {
             if(r.data == 'not_following') {
-                this.message1 = 'Follow'
+              axios.post("http://localhost:8081/api/userprofile/check-is-awaiting", check)
+                .then(r => {
+                  if(r.data == 'awaiting') {
+                    this.message1 = 'Sended request'
+                  }
+                  else {
+                    this.message1 = 'Follow'
+                  }
+                })
             }
             else {
                 this.show = false

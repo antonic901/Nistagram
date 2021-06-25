@@ -27,6 +27,9 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
+                        <router-link v-if="isUserLogged" to="/followRequest" class="nav-link">Follow Request</router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link v-if="isUserLogged" to="/allStories" class="nav-link">All Stories</router-link>
                     </li>
                     <li class="nav-item">

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.SearchDTO;
 import nistagram.userservice.dto.UserDTO;
+import nistagram.userservice.model.FollowRequest;
 import nistagram.userservice.model.UserProfile;
 
 public interface IUserProfileService {
@@ -27,7 +28,8 @@ public interface IUserProfileService {
 	ResponseEntity<String> checkIsUserBlocked(Long userProfileId, Long userLoggedId);
 	ResponseEntity<String> checkIsUserMuted(Long userProfileId, Long userLoggedId);
 	ResponseEntity<String> checkIsUserClosedFriend(Long userProfileId, Long userLoggedId);
-	ResponseEntity<UserProfile> follow(Long userProfileId, Long userLoggedId);
+	ResponseEntity<String> checkIsAwaitingForApprov(Long userProfileId, Long userLoggedId);
+	ResponseEntity<String> follow(Long userProfileId, Long userLoggedId);
 	ResponseEntity<UserProfile> unfollow(Long userProfileId, Long userLoggedId);
 	ResponseEntity<UserProfile> block(Long userProfileId, Long userLoggedId);
 	ResponseEntity<UserProfile> unblock(Long userProfileId, Long userLoggedId);
@@ -40,4 +42,5 @@ public interface IUserProfileService {
 	ResponseEntity<Set<UserProfile>> getClosedFriends(Long id);
 	ResponseEntity<Set<UserProfile>> getMutedUsers(Long id);
 	ResponseEntity<Set<UserProfile>> getBlockedUsers(Long id);
+	ResponseEntity<Set<FollowRequest>> getFollowRequestes(Long userId);
 }
