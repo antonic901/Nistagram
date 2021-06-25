@@ -12,6 +12,7 @@ import AllUsers from '../views/AllUsers.vue'
 import Collections from '../views/Collections.vue'
 import LikedAndDisliked from '../views/LikedAndDisliked.vue'
 import AllStories from '../views/AllStories.vue'
+import FollowRequest from '../views/FollowRequest.vue'
 
 Vue.use(VueRouter)
 
@@ -76,6 +77,11 @@ const routes = [
     path: '/allStories',
     name: 'AllStories',
     component: AllStories
+  },
+  {
+    path: '/followRequest',
+    name: 'FollowRequest',
+    component: FollowRequest
   }
 ]
 

@@ -18,6 +18,7 @@ import nistagram.userservice.dto.CheckFollowDTO;
 import nistagram.userservice.dto.LoginDTO;
 import nistagram.userservice.dto.SearchDTO;
 import nistagram.userservice.dto.UserDTO;
+import nistagram.userservice.model.FollowRequest;
 import nistagram.userservice.model.UserProfile;
 import nistagram.userservice.service.UserProfileService;
 
@@ -110,8 +111,13 @@ public class UserProfileController {
 		return userProfileService.checkIsUserClosedFriend(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
 	}
 	
+	@PostMapping(value = "/check-is-awaiting", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> checkIsAwaitingForApprov(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+		return userProfileService.checkIsAwaitingForApprov(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
+	}
+	
 	@PostMapping(value = "/follow", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<UserProfile> follow(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
+	public ResponseEntity<String> follow(@RequestBody CheckFollowDTO checkFollowDTO) throws Exception {
 		return userProfileService.follow(checkFollowDTO.getUserPostId(), checkFollowDTO.getUserViewId());
 	}
 	
@@ -178,5 +184,10 @@ public class UserProfileController {
 	@RequestMapping(value = "/is-taggable/{username}", method = RequestMethod.GET)
 	public String isTaggable(@PathVariable("username") String username) {
 		return userProfileService.isTaggable(username);
+	}
+	
+	@RequestMapping(value = "/get-follow-requests/{id}", method = RequestMethod.GET)
+	public ResponseEntity<Set<FollowRequest>> isTaggable(@PathVariable("id") Long id) {
+		return userProfileService.getFollowRequestes(id);
 	}
 }

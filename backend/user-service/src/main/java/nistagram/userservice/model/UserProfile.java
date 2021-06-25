@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
@@ -59,7 +60,7 @@ public class UserProfile extends User {
 	 private Set<UserProfile> following = new HashSet<UserProfile>();
 	 
 	@JsonIgnore
-	 @ManyToMany
+	 @ManyToMany(cascade = CascadeType.ALL)
 	 @JoinTable (
 	    		name = "follow_requests",
 	            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),

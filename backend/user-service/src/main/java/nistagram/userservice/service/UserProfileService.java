@@ -226,14 +226,35 @@ public class UserProfileService implements IUserProfileService {
 	}
 
 	@Override
-	public ResponseEntity<UserProfile> follow(Long userProfileId, Long userLoggedId) {
+	public ResponseEntity<String> follow(Long userProfileId, Long userLoggedId) {
+		
+		boolean isPrivate = isPrivate(userProfileId, userLoggedId);
+		
+		if(isPrivate) {
+			sendFollowRequest(userProfileId, userLoggedId);
+			return new ResponseEntity<String>("request_sended", HttpStatus.OK);
+		}
+		
 		UserProfile userWhoRequest = userProfileRepository.findById(userLoggedId).get();
 		UserProfile userWhoReceive = userProfileRepository.findById(userProfileId).get();
 		userWhoRequest.getFollowing().add(userWhoReceive);
 		userWhoReceive.getFollowers().add(userWhoRequest);
 		userProfileRepository.save(userWhoRequest);
 		userProfileRepository.save(userWhoReceive);
-		return new ResponseEntity<UserProfile>(userWhoReceive, HttpStatus.OK);
+		return new ResponseEntity<String>("success", HttpStatus.OK);
+	}
+	
+	private void sendFollowRequest(Long userProfileId, Long userLoggedId) {
+		FollowRequest followRequest = new FollowRequest();
+		followRequest.setActive(true);
+		followRequest.setUserWhoRequested(userProfileRepository.findById(userLoggedId).get());
+		followRequest.setUserWhoAccept(userProfileRepository.findById(userProfileId).get());
+		
+		UserProfile userProfile = userProfileRepository.findById(userProfileId).get();
+		userProfile.getFollowRequests().add(followRequest);
+		
+		userProfileRepository.save(userProfile);
+		
 	}
 
 	@Override
@@ -356,5 +377,31 @@ public class UserProfileService implements IUserProfileService {
 			}
 		}
 		return "doesnt_exist";
+	}
+
+	@Override
+	public ResponseEntity<String> checkIsAwaitingForApprov(Long userProfileId, Long userLoggedId) {
+		UserProfile userProfile = userProfileRepository.findById(userProfileId).get();
+		
+		for(FollowRequest fr : userProfile.getFollowRequests()) {
+			if(fr.getUserWhoAccept().getId() == userProfileId && fr.getUserWhoRequested().getId() == userLoggedId) {
+				if(fr.isActive()) {
+					return new ResponseEntity<String>("awaiting", HttpStatus.OK);
+				}
+			}
+		}
+		return new ResponseEntity<String>("not_awaiting", HttpStatus.OK);
+	}
+
+	@Override
+	public ResponseEntity<Set<FollowRequest>> getFollowRequestes(Long userId) {
+		UserProfile userProfile = userProfileRepository.findById(userId).get();
+		Set<FollowRequest> response = new HashSet<FollowRequest>();
+		for(FollowRequest fr : userProfile.getFollowRequests()) {
+			if(fr.isActive()) {
+				response.add(fr);
+			}
+		}
+		return new ResponseEntity<Set<FollowRequest>>(response, HttpStatus.OK);
 	}
 }
