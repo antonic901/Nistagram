@@ -24,7 +24,7 @@ public class CollectionController {
 	
 	@PostMapping(value = "/add-to-collection", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> addToCollection(@RequestBody AddToCollectionDTO addToCollectionDTO) throws Exception {
-		return collectionService.addToCollection(addToCollectionDTO.getCollectionId(), addToCollectionDTO.getPostId());
+		return collectionService.addToCollection(addToCollectionDTO.getCollectionId(), addToCollectionDTO.getPostId(), addToCollectionDTO.getUserId());
 	}
 	
 }

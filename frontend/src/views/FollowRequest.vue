@@ -14,10 +14,10 @@
                 :fields="fields"
                 :filter="filter"
                 :filter-included-fields="filterOn">
-                <template v-if="this.selected!='followers'" #cell(accept)="row">
+                <template #cell(accept)="row">
                     <b-button size="sm" @click="buttonClickAllow(row.item)" class="mr-2">Accept</b-button>
                 </template>
-                <template v-if="this.selected!='followers'" #cell(reject)="row">
+                <template #cell(reject)="row">
                     <b-button size="sm" @click="buttonClickReject(row.item)" class="mr-2">Reject</b-button>
                 </template>
             </b-table>

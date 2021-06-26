@@ -93,17 +93,23 @@ export default {
                 
                 return
             }
-            var add = {
-                collectionId: this.selectedCollection.id,
-                postId: this.entity.id
-            }
+
             if(this.type == 'collection') {
+                var add = {
+                    collectionId: this.selectedCollection.id,
+                    postId: this.entity.id,
+                    userId: this.User.id
+                }
                 axios.post("http://localhost:8082/api/collection/add-to-collection", add)
                     .then(r => {
                         alert("Succesfully added to selected collection!")
                     }) 
             }
             else {
+                var add = {
+                    collectionId: this.selectedCollection.id,
+                    postId: this.entity.id
+                }
                 axios.post("http://localhost:8083/api/highlight/add-to-highlight", add)
                     .then(r => {
                         alert("Succesfully added to selected highlight!")
