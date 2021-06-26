@@ -15,4 +15,6 @@ public class AddToCollectionDTO {
 	
 	private Long postId;
 	
+	private Long userId;
+	
 }
