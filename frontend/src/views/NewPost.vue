@@ -158,8 +158,11 @@ export default {
             this.description = this.enterDescription;
             try {
                 this.hashTags.forEach(hashTag => {
-                this.description = this.description.replace(hashTag, "");
-            })
+                    this.description = this.description.replace(hashTag, "");
+                })
+                this.profileTags.forEach(hashTag => {
+                    this.description = this.description.replace(hashTag, "");
+                })
             } catch (error) {
 
             }

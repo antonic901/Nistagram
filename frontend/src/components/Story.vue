@@ -24,7 +24,7 @@
                         <span class="sr-only">Next</span>
                         </a>
                     </div>
-                    <b-icon v-if="isUserLogged" icon="bookmark" style="margin:10px" scale="1.5" v-b-modal.modalFavorites v-b-tooltip.hover.right="'Add to highlight'" v-on:click="setType(story)"></b-icon>  
+                    <!-- <b-icon v-if="isUserLogged" icon="bookmark" style="margin:10px" scale="1.5" v-b-modal.modalFavorites v-b-tooltip.hover.right="'Add to highlight'" v-on:click="setType(story)"></b-icon>   -->
                     </b-col>
                 </b-row>
                 </b-card>
