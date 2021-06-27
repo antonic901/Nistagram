@@ -142,6 +142,8 @@ export default {
                 .then(r => {
                     alert(r.data);
                 })
+            
+
         },
         findHashtags(searchText) {
             // var regexp = /\B\#\w\w+\b/g
@@ -160,8 +162,8 @@ export default {
                 this.hashTags.forEach(hashTag => {
                     this.description = this.description.replace(hashTag, "");
                 })
-                this.profileTags.forEach(hashTag => {
-                    this.description = this.description.replace(hashTag, "");
+                this.profileTags.forEach(profileTag => {
+                    this.description = this.description.replace(profileTag, "");
                 })
             } catch (error) {
 

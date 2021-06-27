@@ -1,6 +1,7 @@
 package nistagram.postservice.service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import nistagram.postservice.dto.AddCommentDTO;
+import nistagram.postservice.dto.AddNotificationDTO;
 import nistagram.postservice.model.Comment;
 import nistagram.postservice.model.Post;
 import nistagram.postservice.model.Tag;
@@ -26,16 +28,18 @@ public class CommentService implements ICommentService {
 	private PostRepository postRepository;
 	
 	private TagService tagService;
+	private NotificationService notificationService;
 	
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, TagService tagService, RestTemplate restTemplate) {
+	public CommentService(CommentRepository commentRepository, UserRepository userRepository, PostRepository postRepository, TagService tagService, RestTemplate restTemplate, NotificationService notificationService) {
 		this.commentRepository = commentRepository;
 		this.userRepository = userRepository;
 		this.postRepository = postRepository;
 		this.tagService = tagService;
 		this.restTemplate = restTemplate;
+		this.notificationService = notificationService;
 	}
 
 	@Override
@@ -81,7 +85,27 @@ public class CommentService implements ICommentService {
 		post.getComments().add(comment);
 		postRepository.save(post);
 		
+		notify(post, addCommentDTO.getUserId(), addCommentDTO.getProfileTags());
+		
 		return new ResponseEntity<Comment>(comment, HttpStatus.OK);
+	}
+	
+	private void notify(Post post, Long senderId, List<String> profileTags) {
+		AddNotificationDTO addNotificationDTO = new AddNotificationDTO();
+		String senderUsername = restTemplate.getForObject("http://localhost:8081/api/user/get-username-by-id/" + senderId, String.class);
+		for(String tag : profileTags) {
+			addNotificationDTO.setDescription("You have been tagged by @" + senderUsername + " in a comment.");
+			addNotificationDTO.setPost(post.getId());
+			addNotificationDTO.setReceiver(restTemplate.getForObject("http://localhost:8081/api/user/get-by-username/" + tag.replace("@", ""), Long.class));
+			addNotificationDTO.setSender(senderId);
+			notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+		}
+		
+		addNotificationDTO.setDescription("User @" + senderUsername + " commented on your post.");
+		addNotificationDTO.setPost(post.getId());
+		addNotificationDTO.setReceiver(post.getUser().getId());
+		addNotificationDTO.setSender(senderId);
+		notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
 	}
 	
 }

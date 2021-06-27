@@ -63,6 +63,14 @@ export default {
                       var user = JSON.parse(JSON.stringify(r.data))
                       this.$store.dispatch('updateUser', {user});
                       this.$router.push({name: 'Home'})
+                      axios.get("http://localhost:8082/api/notification/get-new-notifications/" + user.id)
+                          .then(r => {
+                              var response = JSON.parse(JSON.stringify(r.data))
+                              if(response.length == 0) {
+                                  this.$store.dispatch('updateNewNotification', false)
+                              }
+                              else this.$store.dispatch('updateNewNotification', true)
+                          })
                   })
               }
               else {

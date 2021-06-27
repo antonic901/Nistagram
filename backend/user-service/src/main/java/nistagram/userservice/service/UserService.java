@@ -60,5 +60,20 @@ public class UserService implements IUserService {
 		}
 		return new ResponseEntity<User>(new UserProfile(), HttpStatus.OK);
 	}
+
+	@Override
+	public Long getByUsername(String username) {
+		for(User user : userRepository.findAll()) {
+			if(user.getUsername().equals(username)) {
+				return user.getId();
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public String getUsernameById(Long id) {
+		return userRepository.findById(id).get().getUsername();
+	}
 	
 }

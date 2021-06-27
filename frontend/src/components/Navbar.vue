@@ -39,6 +39,10 @@
                         <router-link v-if="isUserLogged" to="/collections" class="nav-link">Collections</router-link>
                     </li>
                     <li class="nav-item">
+                        <router-link v-if="isUserLogged && newNotification" to="/notifications" style="color:red;" class="nav-link">Notifications</router-link>
+                        <router-link v-if="isUserLogged && !newNotification" to="/notifications" class="nav-link">Notifications</router-link>
+                    </li>
+                    <li class="nav-item">
                         <router-link to="/loginPage" v-if="!isUserLogged">
                             <b-button variant="success">Login</b-button>
                         </router-link>
@@ -67,6 +71,9 @@ export default {
         },
         User() {
             return this.$store.getters.getUser
+        },
+        newNotification() {
+            return this.$store.getters.getNewNotification
         }
     },
     data() {

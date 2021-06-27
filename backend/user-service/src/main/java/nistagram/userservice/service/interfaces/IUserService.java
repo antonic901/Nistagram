@@ -9,4 +9,6 @@ import nistagram.userservice.model.User;
 public interface IUserService {
 	ResponseEntity<String> registerUser(UserDTO userDTO);
 	ResponseEntity<User> login(LoginDTO loginDTO);
+	Long getByUsername(String username);
+	String getUsernameById(Long id);
 }

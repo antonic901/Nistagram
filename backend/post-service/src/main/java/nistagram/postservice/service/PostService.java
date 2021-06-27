@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import nistagram.postservice.dto.AddNewPostDTO;
+import nistagram.postservice.dto.AddNotificationDTO;
 import nistagram.postservice.dto.CheckFollowDTO;
 import nistagram.postservice.dto.NewPostDTO;
 import nistagram.postservice.dto.SearchDTO;
@@ -36,15 +37,17 @@ public class PostService implements IPostService {
 	private LikeDislikeRepository likeDislikeRepository;
 	
 	private TagService tagService;
+	private NotificationService notificationService;
 	
 	private RestTemplate restTemplate;
 	
 	@Autowired
 	public PostService(PostRepository postRepository, LocationRepository locationRepository, TagService tagService, 
-			UserRepository userRepository, LikeDislikeRepository likeDislikeRepository , RestTemplate restTemplate) {
+			UserRepository userRepository, LikeDislikeRepository likeDislikeRepository , RestTemplate restTemplate, NotificationService notificationService) {
 		this.postRepository = postRepository;
 		this.locationRepository = locationRepository;
 		this.tagService = tagService;
+		this.notificationService = notificationService;
 		this.userRepository = userRepository;
 		this.restTemplate = restTemplate;
 		this.likeDislikeRepository = likeDislikeRepository;
@@ -93,6 +96,8 @@ public class PostService implements IPostService {
 		}
 		newPost = postRepository.save(newPost);
 		
+		notifyAboutTagging(newPost, newPostDTO.getProfileTags());
+		
 		AddNewPostDTO addNewPostDTO = new AddNewPostDTO();
 		addNewPostDTO.setPostId(newPost.getId());
 		addNewPostDTO.setImagesAndVideos(newPost.getImagesAndVideos());
@@ -102,6 +107,18 @@ public class PostService implements IPostService {
 		restTemplate.postForEntity("http://localhost:8084/api/post/create-post", addNewPostDTO, String.class);
 		
 		return new ResponseEntity<String>("Post is succesfully added!", HttpStatus.OK);
+	}
+	
+	private void notifyAboutTagging(Post post, List<String> profileTags) {
+		AddNotificationDTO addNotificationDTO = new AddNotificationDTO();
+		String senderUsername = restTemplate.getForObject("http://localhost:8081/api/user/get-username-by-id/" + post.getUser().getId(), String.class);
+		for(String tag : profileTags) {
+			addNotificationDTO.setDescription("You have been tagged by @" + senderUsername + " in a post.");
+			addNotificationDTO.setPost(post.getId());
+			addNotificationDTO.setReceiver(restTemplate.getForObject("http://localhost:8081/api/user/get-by-username/" + tag.replace("@", ""), Long.class));
+			addNotificationDTO.setSender(post.getUser().getId());
+			notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+		}
 	}
 
 	@Override
@@ -241,7 +258,19 @@ public class PostService implements IPostService {
 		post.getLikesDislikes().add(likeDislike);
 		postRepository.save(post);
 		
+		notifyAboutLikeDislike(post, userId);
+		
 		return new ResponseEntity<Set<LikeDislike>>(post.getLikesDislikes(),HttpStatus.OK);
+	}
+	
+	private void notifyAboutLikeDislike(Post post, Long senderId) {
+		AddNotificationDTO addNotificationDTO = new AddNotificationDTO();
+		String senderUsername = restTemplate.getForObject("http://localhost:8081/api/user/get-username-by-id/" + senderId, String.class);
+		addNotificationDTO.setDescription("User @" + senderUsername + " reacted on your post.");
+		addNotificationDTO.setPost(post.getId());
+		addNotificationDTO.setReceiver(post.getUser().getId());
+		addNotificationDTO.setSender(senderId);
+		notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
 	}
 	
 	@Override

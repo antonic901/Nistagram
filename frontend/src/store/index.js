@@ -30,7 +30,8 @@ export const store = new Vuex.Store({
    userProfile: null,
    type: '',
    entity: null,
-   verifyStatus: ''
+   verifyStatus: '',
+   newNotification: false
   },
   //methods that return data (state)
   getters: {
@@ -72,6 +73,9 @@ export const store = new Vuex.Store({
     },
     getVerifyStatus(state) {
       return state.verifyStatus
+    },
+    getNewNotification(state) {
+      return state.newNotification
     }
   },
   //methods for changing date (state)
@@ -99,6 +103,9 @@ export const store = new Vuex.Store({
     },
     updateVerifyStatus(state, status) {
       state.verifyStatus = status
+    },
+    updateNewNotification(state,  set) {
+      state.newNotification = set
     }
   },
   //always on components dispatch action which commit some mutations. Never commit mutations from component because of async
@@ -126,6 +133,9 @@ export const store = new Vuex.Store({
     },
     updateVerifyStatus(context, status) {
       context.commit('updateVerifyStatus', status)
+    },
+    updateNewNotification(context, set) {
+      context.commit('updateNewNotification', set)
     }
   }
 })
