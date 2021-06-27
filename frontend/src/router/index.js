@@ -14,6 +14,7 @@ import LikedAndDisliked from '../views/LikedAndDisliked.vue'
 import AllStories from '../views/AllStories.vue'
 import FollowRequest from '../views/FollowRequest.vue'
 import HomeAdmin from '../views/HomeAdmin.vue'
+import Notifications from '../views/Notifications.vue'
 
 Vue.use(VueRouter)
 
@@ -88,6 +89,11 @@ const routes = [
     path: '/homeAdmin',
     name: 'HomeAdmin',
     component: HomeAdmin
+  },
+  {
+    path: '/notifications',
+    name: 'Notifications',
+    component: Notifications
   }
 ]
 
