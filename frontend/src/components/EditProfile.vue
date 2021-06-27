@@ -38,7 +38,26 @@
                     >Receive messages only from friends</b-form-checkbox>
                     <b-button v-if="this.verifyStatus == 'Verification is in progress' || this.verifyStatus == 'Profile is verified'" class="item-4" style="margin:5px;border-radius:20px;">{{verifyStatus}}</b-button>
                     <b-button v-else v-b-modal.modalVerifyProfile class="item-4" style="margin:5px;border-radius:20px;">{{verifyStatus}}</b-button>
-
+                </div>
+                <div class="container-3">
+                    <b-form-checkbox
+                        v-model="user.tagNotificationEnabled"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Do you want to receive notification when somebody tag you?</b-form-checkbox>
+                    <b-form-checkbox
+                        v-model="user.commentNotificationEnabled"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Do you want to receive notification when somebody comment on your post?</b-form-checkbox>
+                    <b-form-checkbox
+                        v-model="user.likeDislikeNotificationEnabled"
+                        :value="true"
+                        :unchecked-value="false"
+                        style="color:white;margin:10px;font-size:16px;"
+                    >Do you want to receive notification when somebody react on your post?</b-form-checkbox>
                 </div>
             </div>
             <label style="color:red;text-align:center;"><b>{{message}}</b></label>
@@ -87,7 +106,10 @@ export default {
                 username: "",
                 private: null,
                 taggable: null,
-                receiveMessage: null
+                receiveMessage: null,
+                tagNotificationEnabled: null,
+                commentNotificationEnabled: null,
+                likeDislikeNotificationEnabled: null
             },
             oldPassword: '',
             newPassword: '',
@@ -168,7 +190,11 @@ export default {
                     password: this.newPassword,
                     private: this.user.private,
                     taggable: this.user.taggable,
-                    receiveMessage: this.user.receiveMessage
+                    receiveMessage: this.user.receiveMessage,
+                    tagNotificationEnabled: this.user.tagNotificationEnabled,
+                    commentNotificationEnabled: this.user.commentNotificationEnabled,
+                    likeDislikeNotificationEnabled: this.user.likeDislikeNotificationEnabled
+                    
                 }
             }
             else {
@@ -186,7 +212,10 @@ export default {
                     password: this.User.password,
                     private: this.user.private,
                     taggable: this.user.taggable,
-                    receiveMessage: this.user.receiveMessage
+                    receiveMessage: this.user.receiveMessage,
+                    tagNotificationEnabled: this.user.tagNotificationEnabled,
+                    commentNotificationEnabled: this.user.commentNotificationEnabled,
+                    likeDislikeNotificationEnabled: this.user.likeDislikeNotificationEnabled
                 }
             }
 
@@ -220,6 +249,9 @@ export default {
         this.user.private = user.private
         this.user.taggable = user.taggable
         this.user.receiveMessage = user.receiveMessage
+        this.user.likeDislikeNotificationEnabled = user.likeDislikeNotificationEnabled
+        this.user.commentNotificationEnabled = user.commentNotificationEnabled
+        this.user.tagNotificationEnabled = user.tagNotificationEnabled
         axios.get("http://localhost:8084/api/verificationrequest/check-status-of-verification/" + this.user.id)
             .then(r => {
                 if(r.data == 'not_sended') {

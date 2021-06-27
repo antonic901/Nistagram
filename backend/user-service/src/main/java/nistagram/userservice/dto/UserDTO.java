@@ -44,5 +44,11 @@ public class UserDTO {
 	private boolean isTaggable;
 	
 	private boolean receiveMessage;
+
+	private boolean tagNotificationEnabled;
+
+	private boolean commentNotificationEnabled;
+
+	private boolean likeDislikeNotificationEnabled;
 	
 }

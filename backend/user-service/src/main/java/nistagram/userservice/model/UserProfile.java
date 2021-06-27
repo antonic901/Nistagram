@@ -39,6 +39,15 @@ public class UserProfile extends User {
 	@Column(nullable = true)
 	private boolean isTaggable;
 	
+	@Column(nullable = true)
+	private boolean tagNotificationEnabled;
+	
+	@Column(nullable = true)
+	private boolean commentNotificationEnabled;
+	
+	@Column(nullable = true)
+	private boolean likeDislikeNotificationEnabled;
+	
 	@Column
 	private boolean isDeleted;
 	 
@@ -95,17 +104,28 @@ public class UserProfile extends User {
 	            inverseJoinColumns = @JoinColumn(name = "blockedfriend__user_id", referencedColumnName = "id")
 	    )
 	 private Set<UserProfile> blockedUsers = new HashSet<UserProfile>();
-	 
-	 public UserProfile(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
-			String website, String biography, String username, String password, boolean isPrivate,
+
+	public UserProfile(String name, String surname, String email, int phoneNumber, GenderEnum gender, Date birthdayDate,
+			String website, String biography, String username, String password, UserType userType, boolean isPrivate,
+			boolean receiveMessage, boolean isTaggable, boolean tagNotificationEnabled,
+			boolean commentNotificationEnabled, boolean likeDislikeNotificationEnabled, boolean isDeleted,
 			Set<UserProfile> followers, Set<UserProfile> following, Set<FollowRequest> followRequests,
-			Set<UserProfile> closedFriends, UserType userType) {
-		super(name, surname, email, phoneNumber, gender, birthdayDate, website, biography, username, password, userType);
+			Set<UserProfile> closedFriends, Set<UserProfile> mutedUsers, Set<UserProfile> blockedUsers) {
+		super(name, surname, email, phoneNumber, gender, birthdayDate, website, biography, username, password,
+				userType);
 		this.isPrivate = isPrivate;
+		this.receiveMessage = receiveMessage;
+		this.isTaggable = isTaggable;
+		this.tagNotificationEnabled = tagNotificationEnabled;
+		this.commentNotificationEnabled = commentNotificationEnabled;
+		this.likeDislikeNotificationEnabled = likeDislikeNotificationEnabled;
+		this.isDeleted = isDeleted;
 		this.followers = followers;
 		this.following = following;
 		this.followRequests = followRequests;
 		this.closedFriends = closedFriends;
+		this.mutedUsers = mutedUsers;
+		this.blockedUsers = blockedUsers;
 	}
-	 
+	
 }

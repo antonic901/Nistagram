@@ -24,6 +24,9 @@ public interface IUserProfileService {
 	Boolean isClosedFriend(Long userPostId, Long userViewId);
 	Boolean isPrivate(Long userPostId, Long userViewId);
 	String isTaggable(String username);
+	Boolean tagNotificationEnaled(Long id);
+	Boolean commentNotificationEnaled(Long id);
+	Boolean likeDislikeNotificationEnaled(Long id);
 	ResponseEntity<String> checkIsUserFollowing(Long userProfileId, Long userLoggedId);
 	ResponseEntity<String> checkIsUserBlocked(Long userProfileId, Long userLoggedId);
 	ResponseEntity<String> checkIsUserMuted(Long userProfileId, Long userLoggedId);
