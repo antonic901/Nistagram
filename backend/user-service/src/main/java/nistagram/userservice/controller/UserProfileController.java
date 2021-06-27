@@ -190,4 +190,19 @@ public class UserProfileController {
 	public ResponseEntity<Set<FollowRequest>> isTaggable(@PathVariable("id") Long id) {
 		return userProfileService.getFollowRequestes(id);
 	}
+	
+	@RequestMapping(value = "/tag-notification-enabled/{id}", method = RequestMethod.GET)
+	public boolean tagNotificationEnabled(@PathVariable("id") Long id) {
+		return userProfileService.tagNotificationEnaled(id);
+	}
+	
+	@RequestMapping(value = "/comment-notification-enabled/{id}", method = RequestMethod.GET)
+	public boolean commentNotificationEnabled(@PathVariable("id") Long id) {
+		return userProfileService.commentNotificationEnaled(id);
+	}
+	
+	@RequestMapping(value = "/likedislike-notification-enabled/{id}", method = RequestMethod.GET)
+	public boolean likeDislikeNotificationEnabled(@PathVariable("id") Long id) {
+		return userProfileService.likeDislikeNotificationEnaled(id);
+	}
 }

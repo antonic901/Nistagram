@@ -70,8 +70,8 @@ public class UserProfileService implements IUserProfileService {
 		
 		UserProfile newUserProfile = new UserProfile(userDTO.getName(), userDTO.getSurname(), userDTO.getEmail(), userDTO.getPhoneNumber(),
 				userDTO.getGender(), userDTO.getBirthdayDate(), userDTO.getWebsite(), userDTO.getBiography(), userDTO.getUsername(), 
-				userDTO.getPassword(), false, new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<FollowRequest>(), new HashSet<UserProfile>(),
-				userDTO.getUserType());
+				userDTO.getPassword(), userDTO.getUserType(), false, true, true, true, true, true, true, new HashSet<UserProfile>(), new HashSet<UserProfile>(), 
+				new HashSet<FollowRequest>(), new HashSet<UserProfile>(), new HashSet<UserProfile>(), new HashSet<UserProfile>());
 		
 		newUserProfile = userProfileRepository.save(newUserProfile);
 		
@@ -115,6 +115,9 @@ public class UserProfileService implements IUserProfileService {
 		userProfile.setPrivate(userDTO.isPrivate());
 		userProfile.setTaggable(userDTO.isTaggable());
 		userProfile.setReceiveMessage(userDTO.isReceiveMessage());
+		userProfile.setTagNotificationEnabled(userDTO.isTagNotificationEnabled());
+		userProfile.setCommentNotificationEnabled(userDTO.isCommentNotificationEnabled());
+		userProfile.setLikeDislikeNotificationEnabled(userDTO.isLikeDislikeNotificationEnabled());
 		userProfileRepository.save(userProfile);
 		restTemplate.getForEntity("http://localhost:8082/api/tag/create-tag/@" + userDTO.getUsername(), String.class);
 		return new ResponseEntity<String>("ok", HttpStatus.OK);
@@ -404,5 +407,23 @@ public class UserProfileService implements IUserProfileService {
 			}
 		}
 		return new ResponseEntity<Set<FollowRequest>>(response, HttpStatus.OK);
+	}
+
+	@Override
+	public Boolean tagNotificationEnaled(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		return userProfile.isTagNotificationEnabled();
+	}
+
+	@Override
+	public Boolean commentNotificationEnaled(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		return userProfile.isCommentNotificationEnabled();
+	}
+
+	@Override
+	public Boolean likeDislikeNotificationEnaled(Long id) {
+		UserProfile userProfile = userProfileRepository.findById(id).get();
+		return userProfile.isLikeDislikeNotificationEnabled();
 	}
 }

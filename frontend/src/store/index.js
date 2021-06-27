@@ -22,7 +22,10 @@ export const store = new Vuex.Store({
       password: "",
       private: null,
       taggable: null,
-      receiveMessage: null
+      receiveMessage: null,
+      tagNotificationEnabled: null,
+      commentNotificationEnabled: null,
+      likeDislikeNotificationEnabled: null
    },
    posts: [],
    users: [],

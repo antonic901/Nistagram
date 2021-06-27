@@ -117,7 +117,9 @@ public class PostService implements IPostService {
 			addNotificationDTO.setPost(post.getId());
 			addNotificationDTO.setReceiver(restTemplate.getForObject("http://localhost:8081/api/user/get-by-username/" + tag.replace("@", ""), Long.class));
 			addNotificationDTO.setSender(post.getUser().getId());
-			notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+			if(restTemplate.getForObject("http://localhost:8081/api/userprofile/tag-notification-enabled/" + addNotificationDTO.getReceiver(), boolean.class)) {
+				notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+			}
 		}
 	}
 
@@ -270,7 +272,9 @@ public class PostService implements IPostService {
 		addNotificationDTO.setPost(post.getId());
 		addNotificationDTO.setReceiver(post.getUser().getId());
 		addNotificationDTO.setSender(senderId);
-		notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+		if(restTemplate.getForObject("http://localhost:8081/api/userprofile/likedislike-notification-enabled/" + addNotificationDTO.getReceiver(), boolean.class)) {
+			notificationService.notify(addNotificationDTO.getDescription(), addNotificationDTO.getSender(), addNotificationDTO.getReceiver(), addNotificationDTO.getPost());
+		}
 	}
 	
 	@Override
