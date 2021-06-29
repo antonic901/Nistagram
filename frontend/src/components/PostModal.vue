@@ -21,7 +21,7 @@
             <b-col md="4">
 		          <b-card-body>
                 <b-card-text>
-                  <p v-if="this.entity.location != null" style="font-size:20px"><b>{{this.entity.location.street}}, {{this.entity.location.city}}, {{this.entity.location.country}}</b></p>
+                  <p v-if="this.entity.location != null" style="font-size:20px"><b>{{this.entity.location.display_name}}</b></p>
                   <p>{{this.entity.caption.description}}</p>
                   <p v-for="t in this.entity.caption.tags" :key="t.id">{{t.name}}</p>
                 </b-card-text>
