@@ -4,17 +4,36 @@
 
     </router-view>
     <!-- <Test/> -->
+    <!-- <div id="app">
+      <HereMap  :center="center" />
+    </div> -->
+    <!-- <div>
+      <Map/>
+    </div> -->
   </div>
 </template>
 
 <script>
 
 import Test from './views/Test.vue'
+import HereMap from './components/HereMap.vue'
+import Map from './components/Map.vue'
 
 export default {
   name: 'App',
   components: {
-    Test
+    Test,
+    HereMap,
+    Map
+  },
+  data() {
+    return {
+        // we are this as prop to the HereMap component 
+      center:{ 
+        lat: 40.730610, 
+        lng: -73.935242
+      }
+    }   
   }
 }
 </script>

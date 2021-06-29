@@ -11,20 +11,14 @@
                             </div>
                             <div >
                                 <div>
-                                    <b-form-input v-model="enterLocation" type="text" v-on:input="searchLocation" placeholder="search in format: Country, City, Street" style="font-style:italic"></b-form-input>
-                                    <b-table
-                                        class="table-light" 
-                                        selectable
-                                        select-mode="single"
-                                        sticky-header="50vh" 
-                                        hover 
-                                        :striped=true 
-                                        head-variant="dark"  
-                                        :items="locations" 
-                                        :fields="fields"
-                                        @row-clicked="locationSelect" 
-                                        >
-                                    </b-table>
+                                    <b-form-input type="text" @keyup="search" id="search-input" style="margin:5px;border-radius:20px;" placeholder="search locations" v-model="query"></b-form-input>
+                                    <div v-if="results.length > 0" id="results">
+                                        <b-list-group style="max-width:300px;">
+                                            <b-list-group-item v-for="r in results" :key="r.place_id" class="d-flex align-items-center">
+                                                <p @click="select(r)" ><b>{{r.display_name}}</b></p>
+                                            </b-list-group-item>
+                                        </b-list-group>
+                                    </div>
                                 </div>
                                 <div style="font-style:italic" required class="app">
                                     <input type="file" @change="onFileSelected" multiple>
@@ -59,35 +53,36 @@ export default {
   },
   data() {
     return {
-        fields: ['country', 'city', 'street'],
         selectedFiles: [],
-        show: false,
         url: [],
         error: '',
-        enterLocation: '',
         enterDescription: '',
-        locations: [],
-        location: null,
         description: '',
         hashTags: [],
-        profileTags: []
+        profileTags: [],
+        timeout: null,
+        results: [],
+        selected: null,
+        query: '',
     };
   },
     methods:{
-        searchLocation() {
-            if(this.enterLocation == '') {
-                this.locations = []
-                this.location = null 
-                return
-            }
-            
-            axios.get("http://localhost:8082/api/location/search-location/" + this.enterLocation)  
-                .then(r => {
-                    this.locations = JSON.parse(JSON.stringify(r.data))
-                })  
+        select: function(r) {
+            this.selected = r;
+            this.results = [];
+            this.$emit('selected', r);
+            console.log(this.selected)
         },
-        locationSelect(location ,index) {
-            this.location = location
+        search: function() {
+            clearTimeout(this.timeout);
+            this.results = [];
+            let self = this;
+            this.timeout = setTimeout(function() {
+                axios.get('https://us1.locationiq.com/v1/search.php?key=pk.f79b28f4f091ea8662281203e0081f65&format=json&addressdetails=1&limit=5&q=' + self.query)
+                    .then(r => {
+                        self.results = r.data;
+                    })
+            }, 1000);
         },
         onFileSelected(event) {
             this.url = []
@@ -118,23 +113,27 @@ export default {
             })
 
             var newPost;
-            try {
+            if(this.selected != null) {
                 newPost = {
-                userId: this.User.id,
-                description: this.description,
-                hashTags: this.hashTags,
-                profileTags: this.profileTags,
-                locationId: this.location.id,
-                imagesAndVideos: images
+                    location: {
+                        address: this.selected.address,
+                        display_name: this.selected.display_name
+                    },
+                    userId: this.User.id,
+                    description: this.description,
+                    hashTags: this.hashTags,
+                    profileTags: this.profileTags,
+                    imagesAndVideos: images
                 }
-            } catch {
+            }
+            else {
                 newPost = {
-                userId: this.User.id,
-                description: this.description,
-                hashTags: this.hashTags,
-                profileTags: this.profileTags,
-                locationId: null,
-                imagesAndVideos: images
+                    location: null,
+                    userId: this.User.id,
+                    description: this.description,
+                    hashTags: this.hashTags,
+                    profileTags: this.profileTags,
+                    imagesAndVideos: images
                 }
             }
 

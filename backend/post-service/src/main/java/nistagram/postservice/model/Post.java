@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -42,7 +44,8 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = true)
 	private User user;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@Column(name = "location", nullable = true)
+	@Embedded
 	private Location location;
 	
 	@OneToMany(fetch = FetchType.LAZY)

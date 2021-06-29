@@ -23,7 +23,6 @@ import nistagram.postservice.model.Post;
 import nistagram.postservice.model.Tag;
 import nistagram.postservice.model.User;
 import nistagram.postservice.repository.LikeDislikeRepository;
-import nistagram.postservice.repository.LocationRepository;
 import nistagram.postservice.repository.PostRepository;
 import nistagram.postservice.repository.UserRepository;
 import nistagram.postservice.service.interfaces.IPostService;
@@ -32,7 +31,6 @@ import nistagram.postservice.service.interfaces.IPostService;
 public class PostService implements IPostService {
 	
 	private PostRepository postRepository;
-	private LocationRepository locationRepository;
 	private UserRepository userRepository;
 	private LikeDislikeRepository likeDislikeRepository;
 	
@@ -42,10 +40,9 @@ public class PostService implements IPostService {
 	private RestTemplate restTemplate;
 	
 	@Autowired
-	public PostService(PostRepository postRepository, LocationRepository locationRepository, TagService tagService, 
+	public PostService(PostRepository postRepository, TagService tagService, 
 			UserRepository userRepository, LikeDislikeRepository likeDislikeRepository , RestTemplate restTemplate, NotificationService notificationService) {
 		this.postRepository = postRepository;
-		this.locationRepository = locationRepository;
 		this.tagService = tagService;
 		this.notificationService = notificationService;
 		this.userRepository = userRepository;
@@ -55,8 +52,8 @@ public class PostService implements IPostService {
 
 	@Override
 	public ResponseEntity<String> addNewPost(NewPostDTO newPostDTO) {
-		Location location = null; 
-		if(newPostDTO.getLocationId()!=null) location = locationRepository.findById(newPostDTO.getLocationId()).get();
+		Location location = null;
+		if(newPostDTO.getLocation() != null) location = new Location(newPostDTO.getLocation());
 		
 		for(String profileTag : newPostDTO.getProfileTags()) {
 			String check = profileTag.replace("@", "");
@@ -181,16 +178,13 @@ public class PostService implements IPostService {
 	}
 	
 	private boolean filterByLocation(Post p, String location) {
-		String l;
-		try {
-			l = p.getLocation().getCountry().toLowerCase() + ", " + p.getLocation().getCity().toLowerCase() + ", " + p.getLocation().getStreet().toLowerCase();
-		} catch(Exception e) {
-			return false;
+		String[] locations = location.split(",");
+		for(String l : locations) {
+			if(!p.getLocation().getDisplay_name().toLowerCase().trim().contains(l.toLowerCase().trim())) {
+				return false;
+			}
 		}
-		if(l.contains(location)) {
-			return true;
-		}
-		return false;
+		return true;
 	}
 
 	@Override

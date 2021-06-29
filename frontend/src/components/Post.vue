@@ -15,7 +15,7 @@
           </template>
 
           <b-card-body v-if="post.location != null" style="padding-top: 10px; padding-bottom: 0px;">
-            <b-card-sub-title class="mb-2">{{post.location.country}}, {{post.location.city}}, {{post.location.street}}</b-card-sub-title>
+            <b-card-sub-title class="mb-2">{{post.location.display_name}}</b-card-sub-title>
           </b-card-body>
 
           <b-card-img :src="post.imagesAndVideos[0]" alt="Image"></b-card-img>
