@@ -78,34 +78,34 @@ export default {
     methods: {
         buttonPress() {
             if(this.selected == 'followers') {
-                axios.get("http://localhost:8081/api/userprofile/get-followers/" + this.User.id)
+                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-followers/" + this.User.id)
                     .then(r => {
                         this.users = JSON.parse(JSON.stringify(r.data));
                     })
             }
             else if(this.selected == 'following') {
-                axios.get("http://localhost:8081/api/userprofile/get-following/" + this.User.id)
+                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-following/" + this.User.id)
                     .then(r => {
                         this.users = JSON.parse(JSON.stringify(r.data));
                         this.buttonText = 'Unfollow'
                     })
             }
             else if(this.selected == 'closedfriends') {
-                axios.get("http://localhost:8081/api/userprofile/get-closed-friends/" + this.User.id)
+                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-closed-friends/" + this.User.id)
                     .then(r => {
                         this.users = JSON.parse(JSON.stringify(r.data));
                         this.buttonText = 'Remove from closed friends'
                     })
             }
             else if(this.selected == 'mutedusers') {
-                axios.get("http://localhost:8081/api/userprofile/get-muted-users/" + this.User.id)
+                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-muted-users/" + this.User.id)
                     .then(r => {
                         this.users = JSON.parse(JSON.stringify(r.data));
                         this.buttonText = 'Unmute'
                     })
             }
             else if(this.selected == 'blockedusers') {
-                axios.get("http://localhost:8081/api/userprofile/get-blocked-users/" + this.User.id)
+                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-blocked-users/" + this.User.id)
                     .then(r => {
                         this.users = JSON.parse(JSON.stringify(r.data));
                         this.buttonText = 'Unblock'
@@ -118,36 +118,36 @@ export default {
                 userViewId: this.User.id
             }
             if(this.selected == 'following') {
-                axios.post("http://localhost:8081/api/userprofile/unfollow", check)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unfollow", check)
                     .then(r => {
-                        axios.get("http://localhost:8081/api/userprofile/get-following/" + this.User.id)
+                        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-following/" + this.User.id)
                             .then(r => {
                                 this.users = JSON.parse(JSON.stringify(r.data));
                             })
                     })
             }
             else if(this.selected == 'closedfriends') {
-                axios.post("http://localhost:8081/api/userprofile/remove-from-closed-friends", check)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/remove-from-closed-friends", check)
                     .then(r => {
-                        axios.get("http://localhost:8081/api/userprofile/get-closed-friends/" + this.User.id)
+                        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-closed-friends/" + this.User.id)
                             .then(r => {
                                 this.users = JSON.parse(JSON.stringify(r.data));
                             })
                     })
             }
             else if(this.selected == 'mutedusers') {
-                axios.post("http://localhost:8081/api/userprofile/unmute", check)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unmute", check)
                     .then(r => {
-                        axios.get("http://localhost:8081/api/userprofile/get-muted-users/" + this.User.id)
+                        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-muted-users/" + this.User.id)
                             .then(r => {
                                 this.users = JSON.parse(JSON.stringify(r.data));
                             })
                     })
             }
             else if(this.selected == 'blockedusers') {
-                axios.post("http://localhost:8081/api/userprofile/unblock", check)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unblock", check)
                     .then(r => {
-                        axios.get("http://localhost:8081/api/userprofile/get-blocked-users/" + this.User.id)
+                        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-blocked-users/" + this.User.id)
                             .then(r => {
                                 this.users = JSON.parse(JSON.stringify(r.data));
                             })

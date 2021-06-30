@@ -120,7 +120,7 @@ export default {
     methods: {
         async clickSave() {
             if(this.user.username != this.User.username) {
-                var error = await axios.get("http://localhost:8081/api/userprofile/check-username/" + this.user.username)
+                var error = await axios.get(this.$store.getters.getUserAPI + "/api/userprofile/check-username/" + this.user.username)
                     .then(r => {
                         if(r.data == 'taken') {
                             this.message = "Username is already taken"
@@ -136,7 +136,7 @@ export default {
             }
 
             if(this.user.email != this.User.email) {
-                var error = await axios.get("http://localhost:8081/api/userprofile/check-email/" + this.user.email)
+                var error = await axios.get(this.$store.getters.getUserAPI + "/api/userprofile/check-email/" + this.user.email)
                     .then(r => {
                         if(r.data == 'taken') {
                             this.message = "Email is already taken"
@@ -221,17 +221,10 @@ export default {
 
             this.$store.dispatch('updateUser', {user})
 
-            axios.post("http://localhost:8081/api/userprofile/update-user", user)
+            axios.post(this.$store.getters.getUserAPI + "/api/userprofile/update-user", user)
 
             alert('Your profile is successfuly updated!')
 
-        },
-        async verifyClick() {
-            if(this.verifyStatus == 'Verification is in progress' || this.verifyStatus == 'Profile is verified') {
-                return
-            }
-            // await axios.get("http://localhost:8084/api/verificationrequest/request-verification/" + this.user.id)
-            // this.verifyStatus = 'Verification is in progress'
         }
     },
     created() {
@@ -252,7 +245,7 @@ export default {
         this.user.likeDislikeNotificationEnabled = user.likeDislikeNotificationEnabled
         this.user.commentNotificationEnabled = user.commentNotificationEnabled
         this.user.tagNotificationEnabled = user.tagNotificationEnabled
-        axios.get("http://localhost:8084/api/verificationrequest/check-status-of-verification/" + this.user.id)
+        axios.get(this.$store.getters.getAdminAPI + "/api/verificationrequest/check-status-of-verification/" + this.user.id)
             .then(r => {
                 if(r.data == 'not_sended') {
                     this.$store.dispatch('updateVerifyStatus', 'Verify profile')

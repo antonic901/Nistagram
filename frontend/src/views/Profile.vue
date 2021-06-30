@@ -139,16 +139,16 @@ export default {
     }
   },
   mounted() {
-    axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
+    axios.get(this.$store.getters.getPostAPI + "/api/user/get-posts-for-user/" + this.User.id)
       .then(r => {
         var posts = JSON.parse(JSON.stringify(r.data))
         posts.forEach(post => {
-          axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+          axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
             .then(r => {
                 post.user = JSON.parse(JSON.stringify(r.data))
             })
           post.comments.forEach(comment => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
               .then(r => {
                   comment.user = JSON.parse(JSON.stringify(r.data))
               })
@@ -157,7 +157,7 @@ export default {
         this.Posts = posts
       })
     
-    axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
+    axios.get(this.$store.getters.getStoryAPI + "/api/user/get-highlights/" + this.User.id)
       .then(r => {
         var response = JSON.parse(JSON.stringify(r.data))
         this.highLights = response;

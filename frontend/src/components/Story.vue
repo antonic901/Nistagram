@@ -84,11 +84,11 @@ export default {
         var id;
         if(this.User.id == null) id = -1;
         else id = this.User.id; 
-        axios.get("http://localhost:8083/api/story/get-story-for-feed/" + id)
+        axios.get(this.$store.getters.getStoryAPI + "/api/story/get-story-for-feed/" + id)
             .then(r => {
             var stories = JSON.parse(JSON.stringify(r.data));
             stories.forEach(post => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                 .then(r => {
                     post.user = JSON.parse(JSON.stringify(r.data))
                 })

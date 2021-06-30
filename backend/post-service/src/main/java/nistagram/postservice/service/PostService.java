@@ -178,6 +178,9 @@ public class PostService implements IPostService {
 	}
 	
 	private boolean filterByLocation(Post p, String location) {
+		if(p.getLocation() == null) {
+			return false;
+		}
 		String[] locations = location.split(",");
 		for(String l : locations) {
 			if(!p.getLocation().getDisplay_name().toLowerCase().trim().contains(l.toLowerCase().trim())) {

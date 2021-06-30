@@ -49,7 +49,7 @@ export default {
                 postId: this.entity.id,
                 reason: this.selected
             }
-            axios.post("http://localhost:8084/api/report/add-report", add)
+            axios.post(this.$store.getters.getAdminAPI + "/api/report/add-report", add)
                 .then(r => {
                     if(r.data == 'ok') {
                         alert("Content is successfully reported!")
@@ -61,7 +61,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8084/api/reporttype/get-report-types")
+        axios.get(this.$store.getters.getAdminAPI + "/api/reporttype/get-report-types")
                 .then(r => {
                     this.options = JSON.parse(JSON.stringify(r.data))
                 })

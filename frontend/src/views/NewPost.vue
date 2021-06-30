@@ -97,7 +97,7 @@ export default {
             var tag = {
                 tags: this.hashTags
             }
-            await axios.post("http://localhost:8082/api/tag/create-tag", tag)
+            await axios.post(this.$store.getters.getPostAPI + "/api/tag/create-tag", tag)
 
             var i = 1
             var date = (new Date()).getTime();
@@ -107,7 +107,7 @@ export default {
                 images.push(this.User.username + '-post-' + date + '-image-' + i + ".jpg")
                 fileToUpload.append('file', selectedFile, images[i-1])
                 images[i-1] = "https://nistagramstorage.s3.eu-central-1.amazonaws.com/" + images[i-1]
-                axios.post('http://localhost:8082/api/upload/upload-file', fileToUpload);
+                axios.post(this.$store.getters.getPostAPI + "/api/upload/upload-file", fileToUpload);
 
                 i++
             })
@@ -137,7 +137,7 @@ export default {
                 }
             }
 
-            await axios.post("http://localhost:8082/api/post/add-new-post", newPost)
+            await axios.post(this.$store.getters.getPostAPI + "/api/post/add-new-post", newPost)
                 .then(r => {
                     alert(r.data);
                 })

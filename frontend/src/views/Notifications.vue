@@ -40,31 +40,31 @@ export default {
     methods: {
         async openPost(notification) {
             this.$store.dispatch('updateEntity', notification.post)
-            await axios.get("http://localhost:8082/api/notification/set-notification-status/" + notification.id)
-            await axios.get("http://localhost:8082/api/notification/get-new-notifications/" + this.User.id)
-                          .then(r => {
-                              var response = JSON.parse(JSON.stringify(r.data))
-                              if(response.length == 0) {
-                                  this.$store.dispatch('updateNewNotification', false)
-                              }
-                              else this.$store.dispatch('updateNewNotification', true)
-                          })
+            await axios.get(this.$store.getters.getPostAPI + "/api/notification/set-notification-status/" + notification.id)
+            await axios.get(this.$store.getters.getPostAPI + "/api/notification/get-new-notifications/" + this.User.id)
+                .then(r => {
+                    var response = JSON.parse(JSON.stringify(r.data))
+                    if(response.length == 0) {
+                        this.$store.dispatch('updateNewNotification', false)
+                    }
+                    else this.$store.dispatch('updateNewNotification', true)
+                })
         }
     },
     mounted() {
         if(this.User.id == null) return
-        axios.get("http://localhost:8082/api/notification/get-notifications/" + this.User.id)
+        axios.get(this.$store.getters.getPostAPI + "/api/notification/get-notifications/" + this.User.id)
             .then(r => {
                 var notifications = JSON.parse(JSON.stringify(r.data))
 
                 notifications.forEach(notification => {
                     var post = notification.post
-                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                         .then(r => {
                             post.user = JSON.parse(JSON.stringify(r.data))
                         })
                     post.comments.forEach(comment => {
-                        axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                             .then(r => {
                                 comment.user = JSON.parse(JSON.stringify(r.data))
                             })

@@ -68,7 +68,7 @@ export default {
             image = this.User.username + '-verificaion-' + date + ".jpg"
             fileToUpload.append('file', this.selected, image)
             image = "https://nistagramstorage.s3.eu-central-1.amazonaws.com/" + image
-            axios.post('http://localhost:8083/api/upload/upload-file', fileToUpload);
+            axios.post(this.$store.getters.getStoryAPI + "/api/upload/upload-file", fileToUpload);
 
             var request = {
                 userId: this.User.id,
@@ -76,7 +76,7 @@ export default {
                 category: this.selectedCategory
             }
 
-            await axios.post("http://localhost:8084/api/verificationrequest/request-verification", request)
+            await axios.post(this.$store.getters.getAdminAPI + "/api/verificationrequest/request-verification", request)
                 .then(r => {
                     alert("Verification is sended!");
                 })
@@ -88,7 +88,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8084/api/categorytype/get-category-types")
+        axios.get(this.$store.getters.getAdminAPI + "/api/categorytype/get-category-types")
             .then(r => {
                 this.options = JSON.parse(JSON.stringify(r.data))
             })

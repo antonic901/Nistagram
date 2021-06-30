@@ -112,7 +112,7 @@ export default {
                 userId: this.User.id,
                 input: this.searchInput.replace("@", "")
                 }
-                axios.post("http://localhost:8081/api/userprofile/search-by-username", search)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/search-by-username", search)
                     .then(r => {
                         var users = JSON.parse(JSON.stringify(r.data))
                         this.$store.dispatch('updateUsers', users)
@@ -123,16 +123,16 @@ export default {
                     userId: this.User.id,
                     input: this.searchInput.replace("#", "")
                 }
-                axios.post("http://localhost:8082/api/post/search-by-hashtag", search)
+                axios.post(this.$store.getters.getPostAPI + "/api/post/search-by-hashtag", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
                         posts.forEach(post => {
-                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                                 .then(r => {
                                     post.user = JSON.parse(JSON.stringify(r.data))
                                 })
                             post.comments.forEach(comment => {
-                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                                 .then(r => {
                                     comment.user = JSON.parse(JSON.stringify(r.data))
                                 })
@@ -147,16 +147,16 @@ export default {
                     userId: this.User.id,
                     input: this.searchInput
                 }
-                axios.post("http://localhost:8082/api/post/search-by-location", search)
+                axios.post(this.$store.getters.getPostAPI + "/api/post/search-by-location", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
                         posts.forEach(post => {
-                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                                 .then(r => {
                                     post.user = JSON.parse(JSON.stringify(r.data))
                                 })
                             post.comments.forEach(comment => {
-                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                                 .then(r => {
                                     comment.user = JSON.parse(JSON.stringify(r.data))
                                 })

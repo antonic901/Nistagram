@@ -122,7 +122,7 @@ export default {
         var tag = {
           tags: this.hashTags
         }
-        await axios.post("http://localhost:8082/api/tag/create-tag", tag)
+        await axios.post(this.$store.getters.getPostAPI + "/api/tag/create-tag", tag)
 
         var comment = {
             userId: this.user.id,
@@ -132,14 +132,14 @@ export default {
             profileTags: this.profileTags
         }
 
-        await axios.post("http://localhost:8082/api/comment/add-new-comment", comment)
+        await axios.post(this.$store.getters.getPostAPI + "/api/comment/add-new-comment", comment)
           .then(r => {
             var newComment = JSON.parse(JSON.stringify(r.data))
             if(newComment.id == null) {
               alert(newComment.content)
             }
             else {
-              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + this.user.id)
+              axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + this.user.id)
                 .then(r => {
                   newComment.user = JSON.parse(JSON.stringify(r.data))
                   post.comments.push(newComment)
@@ -192,11 +192,11 @@ export default {
             like: isLike
           }
 
-          axios.post("http://localhost:8082/api/post/add-like-dislike", add)
+          axios.post(this.$store.getters.getPostAPI + "/api/post/add-like-dislike", add)
             .then(r => {
                 var response = JSON.parse(JSON.stringify(r.data))
                 response.forEach(likedislike => {
-                  axios.get("http://localhost:8081/api/userprofile/get-by-id/" + likedislike.user.id)
+                  axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + likedislike.user.id)
                     .then(r => {
                       likedislike.user = JSON.parse(JSON.stringify(r.data))
                     })
@@ -223,22 +223,22 @@ export default {
       var id;
       if(this.user.id == null) id = -1;
       else id = this.user.id; 
-      axios.get("http://localhost:8082/api/post/get-posts-for-feed/" + id)
+      axios.get(this.$store.getters.getPostAPI + "/api/post/get-posts-for-feed/" + id)
         .then(r => {
           this.posts = JSON.parse(JSON.stringify(r.data))
           this.posts.forEach(post => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
               .then(r => {
                   post.user = JSON.parse(JSON.stringify(r.data))
               })
             post.comments.forEach(comment => {
-              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+              axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                 .then(r => {
                     comment.user = JSON.parse(JSON.stringify(r.data))
                 })
             })
             post.likesDislikes.forEach(comment => {
-              axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+              axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                 .then(r => {
                     comment.user = JSON.parse(JSON.stringify(r.data))
                 })

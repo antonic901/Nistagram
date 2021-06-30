@@ -63,7 +63,7 @@ export default {
                 images.push(this.User.username + '-story-' + date + '-image-' + i + ".jpg")
                 fileToUpload.append('file', selectedFile, images[i-1])
                 images[i-1] = "https://nistagramstorage.s3.eu-central-1.amazonaws.com/" + images[i-1]
-                axios.post('http://localhost:8083/api/upload/upload-file', fileToUpload);
+                axios.post(this.$store.getters.getStoryAPI + "/api/upload/upload-file", fileToUpload);
 
                 i++
             })
@@ -78,7 +78,7 @@ export default {
                 imagesAndVideos: images
             }
 
-            await axios.post("http://localhost:8083/api/story/add-new-story", newStory)
+            await axios.post(this.$store.getters.getStoryAPI + "/api/story/add-new-story", newStory)
         }
     }
 };
