@@ -35,18 +35,31 @@
                 </b-card-text>
               </b-card-body>
             </b-col>
+            <!-- <b-icon v-if="isUserLogged" icon="bookmark" style="margin:10px" scale="1.5" v-b-modal.modalFavorites v-b-tooltip.hover.right="'Add to highlight'" v-on:click="setType(entity)"></b-icon>   -->
           </b-row>
         </b-card>
       </b-modal>
+      <div>
+        <Favorites/>
+      </div>
     </div>
 </template>
 
 <script>
+
+import Favorites from '../components/Favorites.vue'
+
 export default {
     name: 'PostModal',
+    components: {
+      Favorites
+    },
     computed: {
         entity() {
             return this.$store.getters.getEntity;
+        },
+        isUserLogged() {
+            return this.$store.getters.isUserLogged;
         }
     },
     data() {
@@ -70,7 +83,12 @@ export default {
                 return
             }
             this.i = i
-        }
+        },
+        setType(post) {
+          var type = 'collection'
+          this.$store.dispatch('updateType', type)
+          // this.$store.dispatch('updateEntity', post)
+        },
     },
     mounted() {
         this.$root.$on('bv::modal::hidden', (bvEvent, modalPost) => {
