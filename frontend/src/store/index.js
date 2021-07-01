@@ -79,6 +79,22 @@ export const store = new Vuex.Store({
     },
     getNewNotification(state) {
       return state.newNotification
+    },
+    getUserAPI() {
+      // return "http://localhost:8081"
+      return "http://192.168.0.15:8081"
+    },
+    getPostAPI() {
+      // return "http://localhost:8082"
+      return "http://192.168.0.15:8082"
+    },
+    getStoryAPI() {
+      // return "http://localhost:8083"
+      return "http://192.168.0.15:8083"
+    },
+    getAdminAPI() {
+      // return "http://localhost:8084"
+      return "http://192.168.0.15:8084"
     }
   },
   //methods for changing date (state)

@@ -63,7 +63,7 @@ export default {
                 name: this.name
             }
             if(this.type == 'collection') {
-                axios.post("http://localhost:8082/api/user/create-collection", create)
+                axios.post(this.$store.getters.getPostAPI + "/api/user/create-collection", create)
                     .then(r => {
                         this.collections = JSON.parse(JSON.stringify(r.data));
                         this.name = ''
@@ -71,7 +71,7 @@ export default {
                     })
             }
             else {
-                axios.post("http://localhost:8083/api/user/create-highlight", create)
+                axios.post(this.$store.getters.getStoryAPI + "/api/user/create-highlight", create)
                     .then(r => {
                         this.collections = JSON.parse(JSON.stringify(r.data));
                         this.name = ''
@@ -100,7 +100,7 @@ export default {
                     postId: this.entity.id,
                     userId: this.User.id
                 }
-                axios.post("http://localhost:8082/api/collection/add-to-collection", add)
+                axios.post(this.$store.getters.getPostAPI + "/api/collection/add-to-collection", add)
                     .then(r => {
                         alert("Succesfully added to selected collection!")
                     }) 
@@ -110,7 +110,7 @@ export default {
                     collectionId: this.selectedCollection.id,
                     postId: this.entity.id
                 }
-                axios.post("http://localhost:8083/api/highlight/add-to-highlight", add)
+                axios.post(this.$store.getters.getStoryAPI + "/api/highlight/add-to-highlight", add)
                     .then(r => {
                         alert("Succesfully added to selected highlight!")
                     }) 
@@ -121,13 +121,13 @@ export default {
         this.$root.$on('bv::modal::show', (bvEvent, modalFavorites) => {
             if(this.User.id == null) return
             if(this.type == 'collection') {
-                axios.get("http://localhost:8082/api/user/get-collections/" + this.User.id)
+                axios.get(this.$store.getters.getPostAPI + "/api/user/get-collections/" + this.User.id)
                     .then(r => {
                         this.collections = JSON.parse(JSON.stringify(r.data))
                 })
             } 
             else if(this.type == 'highlight') {
-                axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
+                axios.get(this.$store.getters.getStoryAPI + "/api/user/get-highlights/" + this.User.id)
                     .then(r => {
                         this.collections = JSON.parse(JSON.stringify(r.data))
                     })

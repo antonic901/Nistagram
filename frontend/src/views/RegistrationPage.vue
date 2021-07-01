@@ -104,7 +104,7 @@ export default {
       }
       this.formValid = true;
       if(this.user.userType == 'USER') {
-        axios.post("http://localhost:8081/api/userprofile/register-user", this.user)
+        axios.post(this.$store.getters.getUserAPI + "/api/userprofile/register-user", this.user)
           .then(r => {
               if(r.data == "ok") {
                 alert("Welcome to Nistagram! Please, now log in to get best experience.");
@@ -119,7 +119,7 @@ export default {
           })
       }
       else {
-        axios.post("http://localhost:8081/api/user/register-user", this.user)
+        axios.post(this.$store.getters.getUserAPI + "/api/user/register-user", this.user)
           .then(r => {
               if(r.data == "ok") {
                 alert("Welcome to Nistagram! Please, now log in to get best experience.");
@@ -137,7 +137,7 @@ export default {
     },
     checkIsUsernameValid() {
       if(this.user.username.length >= 5 && this.user.username.length <= 15) {
-        axios.get("http://localhost:8081/api/userprofile/check-username/" + this.user.username)
+        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/check-username/" + this.user.username)
         .then(r => {
           if(r.data == "not_taken") {
             this.usernameValid = true;
@@ -156,7 +156,7 @@ export default {
     checkIsEmailValid() {
       console.log(this.user.email);
       if(this.validEmail(this.user.email)) {
-        axios.get("http://localhost:8081/api/userprofile/check-email/" + this.user.email)
+        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/check-email/" + this.user.email)
         .then(r => {
           if(r.data == "not_taken") {
             this.emailValid = true;

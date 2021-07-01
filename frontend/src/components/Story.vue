@@ -1,9 +1,13 @@
 <template>
     <div class="container-story1">
+        <div v-if="isUserLogged" class="container-1" v-b-modal.modalNewStory>
+            <b-img class="item-story2" :src="'https://picsum.photos/600/300'" rounded="circle" style="color:blue;"></b-img>
+            <label style="text-align:center;"><b>Your Story</b></label>
+        </div>
         <div class="container-story2" v-for="story in stories" :key="story.id">
             <div class="container-1" v-b-modal.modalStory v-on:click="changeStory(story)"> 
-            <b-img-lazy class="item-story2" rounded="circle" :src="story.imagesAndVideos[0]" alt="Image"></b-img-lazy>
-            <label style="text-align:center;">{{story.user.username}}</label>
+                <b-img-lazy class="item-story2" rounded="circle" :src="story.imagesAndVideos[0]" alt="Image"></b-img-lazy>
+                <label style="text-align:center;">{{story.user.username}}</label>
             </div>
         </div>
         <div v-if="this.story != null">
@@ -30,15 +34,22 @@
                 </b-card>
             </b-modal>
         </div>
+        <div>
+            <NewStory/>
+        </div>
     </div>
 </template>
 
 <script>
 
 import axios from 'axios'
+import NewStory from '../views/NewStory.vue'
 
 export default {
     name: 'Story',
+    components: { 
+        NewStory 
+    },
     computed: {
         User() {
             return this.$store.getters.getUser
@@ -84,11 +95,11 @@ export default {
         var id;
         if(this.User.id == null) id = -1;
         else id = this.User.id; 
-        axios.get("http://localhost:8083/api/story/get-story-for-feed/" + id)
+        axios.get(this.$store.getters.getStoryAPI + "/api/story/get-story-for-feed/" + id)
             .then(r => {
             var stories = JSON.parse(JSON.stringify(r.data));
             stories.forEach(post => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                 .then(r => {
                     post.user = JSON.parse(JSON.stringify(r.data))
                 })

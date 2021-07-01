@@ -69,16 +69,16 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8082/api/post/get-liked-posts/" + this.User.id)
+        axios.get(this.$store.getters.getPostAPI + "/api/post/get-liked-posts/" + this.User.id)
             .then(r => {
                 var posts = JSON.parse(JSON.stringify(r.data))
                 posts.forEach(post => {
-                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                         .then(r => {
                             post.user = JSON.parse(JSON.stringify(r.data))
                         })
                     post.comments.forEach(comment => {
-                       axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                       axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                             .then(r => {
                                 comment.user = JSON.parse(JSON.stringify(r.data))
                             }) 
@@ -86,16 +86,16 @@ export default {
                 });
                 this.likedPosts = posts;
             })
-        axios.get("http://localhost:8082/api/post/get-disliked-posts/" + this.User.id)
+        axios.get(this.$store.getters.getPostAPI + "/api/post/get-disliked-posts/" + this.User.id)
             .then(r => {
                 var posts = JSON.parse(JSON.stringify(r.data))
                 posts.forEach(post => {
-                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                         .then(r => {
                             post.user = JSON.parse(JSON.stringify(r.data))
                         })
                     post.comments.forEach(comment => {
-                       axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                       axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                             .then(r => {
                                 comment.user = JSON.parse(JSON.stringify(r.data))
                             }) 

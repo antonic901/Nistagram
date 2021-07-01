@@ -71,7 +71,7 @@ export default {
                 id: verificationRequest.id,
                 approved: true
             }
-            axios.post("http://localhost:8084/api/verificationrequest/proceed-verification", proceed)
+            axios.post(this.$store.getters.getAdminAPI + "/api/verificationrequest/proceed-verification", proceed)
                 .then(r => {
                     this.verificationRequestes = JSON.parse(JSON.stringify(r.data))
                 })
@@ -81,7 +81,7 @@ export default {
                 id: verificationRequest.id,
                 approved: true
             }
-            axios.post("http://localhost:8084/api/verificationrequest/proceed-verification", proceed)
+            axios.post(this.$store.getters.getAdminAPI + "/api/verificationrequest/proceed-verification", proceed)
                 .then(r => {
                     this.verificationRequestes = JSON.parse(JSON.stringify(r.data))
                 })
@@ -91,11 +91,11 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8084/api/verificationrequest/get-all")
+        axios.get(this.$store.getters.getAdminAPI + "/api/verificationrequest/get-all")
             .then(r => {
                 var verificationRequestes = JSON.parse(JSON.stringify(r.data))
                 verificationRequestes.forEach(element => {
-                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + element.user.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + element.user.id)
                         .then(r => {
                             element.user = JSON.parse(JSON.stringify(r.data))
                         })

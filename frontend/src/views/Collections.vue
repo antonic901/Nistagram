@@ -52,7 +52,7 @@ export default {
             this.posts = collection.posts
             this.posts.forEach(post => {
                 if(post != []) {
-                    axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                         .then(r => {
                             post.user = JSON.parse(JSON.stringify(r.data))
                         })
@@ -65,7 +65,7 @@ export default {
         }
     },
     created() {
-        axios.get("http://localhost:8082/api/user/get-collections/" + this.User.id)
+        axios.get(this.$store.getters.getPostAPI + "/api/user/get-collections/" + this.User.id)
             .then(r => {
                  this.collections = JSON.parse(JSON.stringify(r.data))
             })

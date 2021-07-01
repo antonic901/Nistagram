@@ -6,19 +6,10 @@
                     <li class="nav-item">
                         <router-link to="/" class="nav-link" style="color:#3498db;">Ništagram</router-link>
                     </li>
-                    <li class="nav-item">
+                    <!-- <li class="nav-item">
                         <router-link v-if="!isUserLogged" to="/loginPage" class="nav-link">Profile</router-link>
                         <router-link v-else to="/profile" class="nav-link">{{userFullname}}</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/new-post" class="nav-link">New post</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/new-story" class="nav-link">New story</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/allUsers" class="nav-link">Blocked, muted, followers...</router-link>
-                    </li>
+                    </li> -->
                 </ul>
             </div>
             <div class="mx-auto order-0">
@@ -27,28 +18,77 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/followRequest" class="nav-link">Follow Request</router-link>
+                        <router-link v-if="isUserLogged" to="/followRequest" class="nav-link">
+                            <b-icon icon="person-plus"></b-icon>
+                            Follow Request
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/allStories" class="nav-link">All Stories</router-link>
+                        <router-link v-if="isUserLogged && newNotification" to="/notifications" style="color:red;" class="nav-link">
+                            <b-icon icon="bell-fill"></b-icon>
+                            Notifications
+                        </router-link>
+                        <router-link v-if="isUserLogged && !newNotification" to="/notifications" class="nav-link">
+                            <b-icon icon="bell"></b-icon>
+                            Notifications
+                        </router-link>
                     </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/LikedAndDisliked" class="nav-link">All liked and disliked posts</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/collections" class="nav-link">Collections</router-link>
-                    </li>
-                    <li class="nav-item">
-                        <router-link v-if="isUserLogged && newNotification" to="/notifications" style="color:red;" class="nav-link">Notifications</router-link>
-                        <router-link v-if="isUserLogged && !newNotification" to="/notifications" class="nav-link">Notifications</router-link>
-                    </li>
-                    <li class="nav-item">
+                    <li v-if="!isUserLogged" class="nav-item">
                         <router-link to="/loginPage" v-if="!isUserLogged">
                             <b-button variant="success">Login</b-button>
                         </router-link>
-                        <router-link to="/" v-else>
-                            <b-button variant="danger" style="border-radius:10px;" v-on:click="logout">Logout</b-button>
-                        </router-link>
+                    </li>
+                    <li v-else class="nav-item">
+                        <div>
+                            <b-dropdown variant="primary" right>
+                                <template #button-content>
+                                    <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Settings
+                                </template>
+                                <router-link to="/profile" style="text-decoration:none;">
+                                    <b-dropdown-item-button>
+                                        <b-icon icon="person-circle" aria-hidden="true"></b-icon>
+                                        {{userFullname}} <span class="sr-only">(Click to unlock)</span>
+                                    </b-dropdown-item-button>
+                                </router-link>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <b-dropdown-group header="Choose options" class="small">
+                                    <router-link to="/collections" style="text-decoration:none;">
+                                        <b-dropdown-item-button >
+                                            <b-icon icon="collection" aria-hidden="true"></b-icon>
+                                            Collections <span class="sr-only">(Not selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                    <router-link to="/allStories" style="text-decoration:none;">
+                                        <b-dropdown-item-button>
+                                        <b-icon icon="camera" aria-hidden="true"></b-icon>
+                                        Stories <span class="sr-only">(Selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                    <router-link to="/LikedAndDisliked" style="text-decoration:none;" >
+                                        <b-dropdown-item-button>
+                                        <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon>
+                                        Posts <span class="sr-only">(Not selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                </b-dropdown-group>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <router-link to="/allUsers" style="text-decoration:none;">
+                                    <b-dropdown-item-button>
+                                        <b-icon icon="people" aria-hidden="true"></b-icon>
+                                        Users status
+                                    </b-dropdown-item-button>
+                                </router-link>
+
+                                <!-- <b-dropdown-item-button>Some other action</b-dropdown-item-button> -->
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <router-link to="/" style="text-decoration:none;">
+                                    <b-dropdown-item-button variant="danger" v-on:click="logout">
+                                        <b-icon icon="arrow-left-circle" aria-hidden="true"></b-icon>
+                                        Logout
+                                    </b-dropdown-item-button>
+                                </router-link>
+                            </b-dropdown>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -112,7 +152,7 @@ export default {
                 userId: this.User.id,
                 input: this.searchInput.replace("@", "")
                 }
-                axios.post("http://localhost:8081/api/userprofile/search-by-username", search)
+                axios.post(this.$store.getters.getUserAPI + "/api/userprofile/search-by-username", search)
                     .then(r => {
                         var users = JSON.parse(JSON.stringify(r.data))
                         this.$store.dispatch('updateUsers', users)
@@ -123,16 +163,16 @@ export default {
                     userId: this.User.id,
                     input: this.searchInput.replace("#", "")
                 }
-                axios.post("http://localhost:8082/api/post/search-by-hashtag", search)
+                axios.post(this.$store.getters.getPostAPI + "/api/post/search-by-hashtag", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
                         posts.forEach(post => {
-                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                                 .then(r => {
                                     post.user = JSON.parse(JSON.stringify(r.data))
                                 })
                             post.comments.forEach(comment => {
-                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                                 .then(r => {
                                     comment.user = JSON.parse(JSON.stringify(r.data))
                                 })
@@ -147,16 +187,16 @@ export default {
                     userId: this.User.id,
                     input: this.searchInput
                 }
-                axios.post("http://localhost:8082/api/post/search-by-location", search)
+                axios.post(this.$store.getters.getPostAPI + "/api/post/search-by-location", search)
                     .then(r => {
                         var posts = JSON.parse(JSON.stringify(r.data))
                         posts.forEach(post => {
-                            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+                            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
                                 .then(r => {
                                     post.user = JSON.parse(JSON.stringify(r.data))
                                 })
                             post.comments.forEach(comment => {
-                                axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+                                axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
                                 .then(r => {
                                     comment.user = JSON.parse(JSON.stringify(r.data))
                                 })

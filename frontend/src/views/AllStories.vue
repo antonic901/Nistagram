@@ -90,7 +90,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8083/api/user/get-stories/" + this.User.id)
+        axios.get(this.$store.getters.getStoryAPI + "/api/user/get-stories/" + this.User.id)
             .then(r => {
                 this.stories = JSON.parse(JSON.stringify(r.data))
             })

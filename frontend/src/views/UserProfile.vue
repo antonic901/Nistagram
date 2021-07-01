@@ -179,7 +179,7 @@ export default {
             userViewId: this.LoggedUser.id
         }
         if(this.message1 == 'Follow') {
-            await axios.post("http://localhost:8081/api/userprofile/follow", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/follow", check)
               .then(r => {
                 if(r.data == 'success') {
                   this.message1 = 'Unfollow'
@@ -196,7 +196,7 @@ export default {
             alert("Awaiting other user to approve your request.")
         }
         else {
-            await axios.post("http://localhost:8081/api/userprofile/unfollow", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unfollow", check)
             this.message1 = 'Follow'
             this.message4 = 'Add to closed friends'
             this.show = this.User.private
@@ -213,13 +213,13 @@ export default {
             userViewId: this.LoggedUser.id
         }
         if(this.message2 == 'Block') {
-            await axios.post("http://localhost:8081/api/userprofile/block", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/block", check)
             this.message2 = 'Unblock'
             this.message1 = 'Follow'
             this.show = this.User.private
         }
         else {
-            await axios.post("http://localhost:8081/api/userprofile/unblock", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unblock", check)
             this.message2 = 'Block'
         }
     },
@@ -234,11 +234,11 @@ export default {
             userViewId: this.LoggedUser.id
         }
         if(this.message3 == 'Mute') {
-            await axios.post("http://localhost:8081/api/userprofile/mute", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/mute", check)
             this.message3 = 'Unmute'
         }
         else {
-            await axios.post("http://localhost:8081/api/userprofile/unmute", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/unmute", check)
             this.message3 = 'Mute'
         }
     },
@@ -258,26 +258,26 @@ export default {
             userViewId: this.LoggedUser.id
         }
         if(this.message4 == 'Add to closed friends') {
-            await axios.post("http://localhost:8081/api/userprofile/add-to-closed-friends", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/add-to-closed-friends", check)
             this.message4 = 'Remove from closed friends'
         }
         else {
-            await axios.post("http://localhost:8081/api/userprofile/remove-from-closed-friends", check)
+            await axios.post(this.$store.getters.getUserAPI + "/api/userprofile/remove-from-closed-friends", check)
             this.message4 = 'Add to closed friends'
         }
     }
   },
   mounted() {
-    axios.get("http://localhost:8082/api/user/get-posts-for-user/" + this.User.id)
+    axios.get(this.$store.getters.getPostAPI + "/api/user/get-posts-for-user/" + this.User.id)
       .then(r => {
         var posts = JSON.parse(JSON.stringify(r.data))
         posts.forEach(post => {
-          axios.get("http://localhost:8081/api/userprofile/get-by-id/" + post.user.id)
+          axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + post.user.id)
             .then(r => {
                 post.user = JSON.parse(JSON.stringify(r.data))
             })
           post.comments.forEach(comment => {
-            axios.get("http://localhost:8081/api/userprofile/get-by-id/" + comment.user.id)
+            axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-by-id/" + comment.user.id)
               .then(r => {
                   comment.user = JSON.parse(JSON.stringify(r.data))
               })
@@ -286,7 +286,7 @@ export default {
         this.Posts = posts
       })
     
-    axios.get("http://localhost:8083/api/user/get-highlights/" + this.User.id)
+    axios.get(this.$store.getters.getStoryAPI + "/api/user/get-highlights/" + this.User.id)
       .then(r => {
         var response = JSON.parse(JSON.stringify(r.data))
         this.highLights = response;
@@ -308,10 +308,10 @@ export default {
         return
     }
     
-    axios.post("http://localhost:8081/api/userprofile/check-is-user-following", check)
+    axios.post(this.$store.getters.getUserAPI + "/api/userprofile/check-is-user-following", check)
         .then(r => {
             if(r.data == 'not_following') {
-              axios.post("http://localhost:8081/api/userprofile/check-is-awaiting", check)
+              axios.post(this.$store.getters.getUserAPI + "/api/userprofile/check-is-awaiting", check)
                 .then(r => {
                   if(r.data == 'awaiting') {
                     this.message1 = 'Sended request'
@@ -327,7 +327,7 @@ export default {
             }
         })
 
-    axios.post("http://localhost:8081/api/userprofile/check-is-user-blocked", check)
+    axios.post(this.$store.getters.getUserAPI + "/api/userprofile/check-is-user-blocked", check)
         .then(r => {
             if(r.data == 'not_blocked') {
                 this.message2 = 'Block'
@@ -337,7 +337,7 @@ export default {
             }
         })
 
-    axios.post("http://localhost:8081/api/userprofile/check-is-user-muted", check)
+    axios.post(this.$store.getters.getUserAPI + "/api/userprofile/check-is-user-muted", check)
         .then(r => {
             if(r.data == 'not_muted') {
                 this.message3 = 'Mute'
@@ -347,7 +347,7 @@ export default {
             }
         })
 
-    axios.post("http://localhost:8081/api/userprofile/check-is-user-closed-friend", check)
+    axios.post(this.$store.getters.getUserAPI + "/api/userprofile/check-is-user-closed-friend", check)
         .then(r => {
             if(r.data == 'not_closedfriend') {
                 this.message4 = 'Add to closed friends'

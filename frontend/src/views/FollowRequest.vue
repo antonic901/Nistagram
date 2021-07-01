@@ -62,9 +62,9 @@ export default {
                 requestId: followRequest.id,
                 approved: true
             }
-            axios.post("http://localhost:8081/api/followrequest/approve-request", approve)
+            axios.post(this.$store.getters.getUserAPI + "/api/followrequest/approve-request", approve)
                 .then(r => {
-                    axios.get("http://localhost:8081/api/userprofile/get-follow-requests/" + this.User.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-follow-requests/" + this.User.id)
                         .then(r => {
                             this.followRequestes = JSON.parse(JSON.stringify(r.data))
                         })
@@ -75,9 +75,9 @@ export default {
                 requestId: followRequest.id,
                 approved: false
             }
-            axios.post("http://localhost:8081/api/followrequest/approve-request", approve)
+            axios.post(this.$store.getters.getUserAPI + "/api/followrequest/approve-request", approve)
                 .then(r => {
-                    axios.get("http://localhost:8081/api/userprofile/get-follow-requests/" + this.User.id)
+                    axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-follow-requests/" + this.User.id)
                         .then(r => {
                             this.followRequestes = JSON.parse(JSON.stringify(r.data))
                         })
@@ -85,7 +85,7 @@ export default {
         }
     },
     mounted() {
-        axios.get("http://localhost:8081/api/userprofile/get-follow-requests/" + this.User.id)
+        axios.get(this.$store.getters.getUserAPI + "/api/userprofile/get-follow-requests/" + this.User.id)
             .then(r => {
                 this.followRequestes = JSON.parse(JSON.stringify(r.data))
             })
