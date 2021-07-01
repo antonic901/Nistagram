@@ -1,40 +1,35 @@
 <template>
-    <div class = "background">
-    <Navbar/>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <form onsubmit="event.preventDefault()" class="box">
-                            <div class = "cls">
-                                <h1 class = "title" style="color:#4d4d4d ">New story</h1>
-                            </div>
-                            <div style="font-style:italic" required class="app">
-                                <input type="file" @change="onFileSelected" multiple>
-                                <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
-                            </div>
-                            <b-form-checkbox v-model="status" name="checkbox-1" :value="true" :unchecked-value="false" style="margin-bottom:20px;">
-                                Is this story only for closed friends?
-                            </b-form-checkbox>
-                            <b-button style="color: white" v-on:click="upload" >Add new story</b-button>
-                        </form>
-                    </div>
+    <div>
+        <b-modal id="modalNewStory" :hide-footer="true" :hide-header="true">
+            <div class="cls" style="display:flex;justify-content:center;">
+                <h1 class = "title" style="color:#4d4d4d ">New story</h1>
+            </div>
+            <div style="font-style:italic" required class="app">
+                <div style="display:flex;justify-content:center;">
+                    <input type="file" @change="onFileSelected" multiple>
+                </div>
+                <div v-for="u in url" :key="u.blob" style="display:flex;justify-content:center;">
+                    <img style="margin:10px" class="image" :src="u" />
                 </div>
             </div>
-        </div>
+            <div style="display:flex;justify-content:center;">
+                <b-form-checkbox v-model="status" name="checkbox-1" :value="true" :unchecked-value="false" style="margin-bottom:20px;">
+                    Is this story only for closed friends?
+                </b-form-checkbox>
+            </div>
+            <div style="display:flex;justify-content:center;">
+                <b-button style="color: white" v-on:click="upload" >Add new story</b-button>
+            </div>
+        </b-modal>
     </div>
 </template>
 
 <script>
 
-import Navbar from '../components/Navbar.vue'
 import axios from 'axios'
 
 export default {
   name: "NewStory",
-  components: {
-    Navbar
-  },
   computed: {
       User() {
           return this.$store.getters.getUser
@@ -79,6 +74,8 @@ export default {
             }
 
             await axios.post(this.$store.getters.getStoryAPI + "/api/story/add-new-story", newStory)
+
+            alert("Story succesfully added.")
         }
     }
 };
@@ -201,6 +198,7 @@ body {
 
 .app {
   padding: 20px;
+  align-self: center;
 }
 
 .preview {

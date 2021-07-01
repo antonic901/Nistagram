@@ -1,38 +1,31 @@
 <template>
-    <div class = "background">
-    <Navbar/>
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <div class="card">
-                        <form onsubmit="event.preventDefault()" class="box">
-                            <div class = "cls">
-                                <h1 class = "title" style="color:#4d4d4d ">New post</h1>
-                            </div>
-                            <div >
-                                <div>
-                                    <b-form-input type="text" @keyup="search" id="search-input" style="margin:5px;border-radius:20px;" placeholder="search locations" v-model="query"></b-form-input>
-                                    <div v-if="results.length > 0" id="results">
-                                        <b-list-group style="max-width:300px;">
-                                            <b-list-group-item v-for="r in results" :key="r.place_id" class="d-flex align-items-center">
-                                                <p @click="select(r)" ><b>{{r.display_name}}</b></p>
-                                            </b-list-group-item>
-                                        </b-list-group>
-                                    </div>
-                                </div>
-                                <div style="font-style:italic" required class="app">
-                                    <input type="file" @change="onFileSelected" multiple>
-                                    <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
-                                </div>
-                            </div>
-                            <b-form-textarea class="textarea" v-model="enterDescription" type="text" placeholder="enter description" style="font-style:italic"/> 
-                            <br/>
-                            <b-button style="color: white" @click="onUpload">Create</b-button>
-                        </form>
-                    </div>
+    <div>
+    <!-- <Navbar/> -->
+    <b-modal id="modalNewPost" :hide-footer="true" :hide-header="true">
+        <div class = "d-block text-center" style="margin-bottom:20px;">
+            <h1 class = "title" style="color:#4d4d4d ">New post</h1>
+        </div>
+        <div class="text-center">
+            <div>
+                <b-form-input type="text" @keyup="search" id="search-input" style="margin:5px;border-radius:20px;" placeholder="search locations" v-model="query"></b-form-input>
+                <div v-if="results.length > 0" id="results">
+                    <b-list-group style="max-width:300px;">
+                        <b-list-group-item v-for="r in results" :key="r.place_id" class="d-flex align-items-center">
+                            <p @click="select(r)" ><b>{{r.display_name}}</b></p>
+                        </b-list-group-item>
+                    </b-list-group>
                 </div>
             </div>
+            <div style="font-style:italic" required class="app">
+                <input type="file" @change="onFileSelected" multiple>
+                <img style="margin:10px" class="image" v-for="u in url" :key="u.blob" :src="u" />
+            </div>
         </div>
+        <b-form-textarea class="textarea" v-model="enterDescription" type="text" placeholder="enter description" style="font-style:italic"/>
+        <div style="display:flex;justify-content:center;">
+            <b-button class="mt-2" style="color: white;border-radius:10px; width:100px;" @click="onUpload">Create</b-button>
+        </div>
+    </b-modal>
     </div>
 </template>
 
