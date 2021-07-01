@@ -18,11 +18,20 @@
             <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged" to="/followRequest" class="nav-link">Follow Request</router-link>
+                        <router-link v-if="isUserLogged" to="/followRequest" class="nav-link">
+                            <b-icon icon="person-plus"></b-icon>
+                            Follow Request
+                        </router-link>
                     </li>
                     <li class="nav-item">
-                        <router-link v-if="isUserLogged && newNotification" to="/notifications" style="color:red;" class="nav-link">Notifications</router-link>
-                        <router-link v-if="isUserLogged && !newNotification" to="/notifications" class="nav-link">Notifications</router-link>
+                        <router-link v-if="isUserLogged && newNotification" to="/notifications" style="color:red;" class="nav-link">
+                            <b-icon icon="bell-fill"></b-icon>
+                            Notifications
+                        </router-link>
+                        <router-link v-if="isUserLogged && !newNotification" to="/notifications" class="nav-link">
+                            <b-icon icon="bell"></b-icon>
+                            Notifications
+                        </router-link>
                     </li>
                     <li v-if="!isUserLogged" class="nav-item">
                         <router-link to="/loginPage" v-if="!isUserLogged">
@@ -31,53 +40,53 @@
                     </li>
                     <li v-else class="nav-item">
                         <div>
-                            <b-dropdown variant="primary">
-                            <template #button-content>
-                                <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Settings
-                            </template>
-                            <router-link to="/profile" style="text-decoration:none;">
-                                <b-dropdown-item-button>
-                                    <b-icon icon="person-circle" aria-hidden="true"></b-icon>
-                                    {{userFullname}} <span class="sr-only">(Click to unlock)</span>
-                                </b-dropdown-item-button>
-                            </router-link>
-                            <b-dropdown-divider></b-dropdown-divider>
-                            <b-dropdown-group header="Choose options" class="small">
-                                <router-link to="/collections" style="text-decoration:none;">
-                                    <b-dropdown-item-button >
-                                        <b-icon icon="collection" aria-hidden="true"></b-icon>
-                                        Collections <span class="sr-only">(Not selected)</span>
-                                    </b-dropdown-item-button>
-                                </router-link>
-                                <router-link to="/allStories" style="text-decoration:none;">
+                            <b-dropdown variant="primary" right>
+                                <template #button-content>
+                                    <b-icon icon="gear-fill" aria-hidden="true"></b-icon> Settings
+                                </template>
+                                <router-link to="/profile" style="text-decoration:none;">
                                     <b-dropdown-item-button>
-                                    <b-icon icon="camera" aria-hidden="true"></b-icon>
-                                    Stories <span class="sr-only">(Selected)</span>
+                                        <b-icon icon="person-circle" aria-hidden="true"></b-icon>
+                                        {{userFullname}} <span class="sr-only">(Click to unlock)</span>
                                     </b-dropdown-item-button>
                                 </router-link>
-                                <router-link to="/LikedAndDisliked" style="text-decoration:none;" >
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <b-dropdown-group header="Choose options" class="small">
+                                    <router-link to="/collections" style="text-decoration:none;">
+                                        <b-dropdown-item-button >
+                                            <b-icon icon="collection" aria-hidden="true"></b-icon>
+                                            Collections <span class="sr-only">(Not selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                    <router-link to="/allStories" style="text-decoration:none;">
+                                        <b-dropdown-item-button>
+                                        <b-icon icon="camera" aria-hidden="true"></b-icon>
+                                        Stories <span class="sr-only">(Selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                    <router-link to="/LikedAndDisliked" style="text-decoration:none;" >
+                                        <b-dropdown-item-button>
+                                        <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon>
+                                        Posts <span class="sr-only">(Not selected)</span>
+                                        </b-dropdown-item-button>
+                                    </router-link>
+                                </b-dropdown-group>
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <router-link to="/allUsers" style="text-decoration:none;">
                                     <b-dropdown-item-button>
-                                    <b-icon icon="hand-thumbs-up" aria-hidden="true"></b-icon>
-                                    Posts <span class="sr-only">(Not selected)</span>
+                                        <b-icon icon="people" aria-hidden="true"></b-icon>
+                                        Users status
                                     </b-dropdown-item-button>
                                 </router-link>
-                            </b-dropdown-group>
-                            <b-dropdown-divider></b-dropdown-divider>
-                            <router-link to="/allUsers" style="text-decoration:none;">
-                                <b-dropdown-item-button>
-                                    <b-icon icon="people" aria-hidden="true"></b-icon>
-                                    Users status
-                                </b-dropdown-item-button>
-                            </router-link>
 
-                            <!-- <b-dropdown-item-button>Some other action</b-dropdown-item-button> -->
-                            <b-dropdown-divider></b-dropdown-divider>
-                            <router-link to="/" style="text-decoration:none;">
-                                <b-dropdown-item-button variant="danger" v-on:click="logout">
-                                    <b-icon icon="arrow-left-circle" aria-hidden="true"></b-icon>
-                                    Logout
-                                </b-dropdown-item-button>
-                            </router-link>
+                                <!-- <b-dropdown-item-button>Some other action</b-dropdown-item-button> -->
+                                <b-dropdown-divider></b-dropdown-divider>
+                                <router-link to="/" style="text-decoration:none;">
+                                    <b-dropdown-item-button variant="danger" v-on:click="logout">
+                                        <b-icon icon="arrow-left-circle" aria-hidden="true"></b-icon>
+                                        Logout
+                                    </b-dropdown-item-button>
+                                </router-link>
                             </b-dropdown>
                         </div>
                     </li>
