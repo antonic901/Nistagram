@@ -1,0 +1,56 @@
+version: "3.8"
+
+services:
+ 
+  user-service:
+    image: user-service
+    container_name: user-service
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    networks:
+      - demo
+    ports:
+      - "8081:8081"
+  post-service:
+    image: post-service
+    container_name: post-service
+    build:
+      context: ./post-service
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    networks:
+      - demo
+    ports:
+      - "8082:8082"
+  story-service:
+    image: story-service
+    container_name: story-service
+    build:
+      context: ./story-service
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    networks:
+      - demo
+    ports:
+      - "8083:8083"
+  admin-service:
+    image: admin-service
+    container_name: admin-service
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    tty: true
+    restart: on-failure
+    networks:
+      - demo
+    ports:
+      - "8084:8084"
+networks:
+  demo:
+    name: demo
+    driver: bridge
