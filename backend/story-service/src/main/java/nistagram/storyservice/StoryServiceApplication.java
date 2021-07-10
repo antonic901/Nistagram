@@ -21,7 +21,7 @@ public class StoryServiceApplication {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**").allowedOrigins("http://localhost:8080");
-                registry.addMapping("/**").allowedOrigins("http://192.168.0.15:8080");
+//                registry.addMapping("/**").allowedOrigins("http://192.168.0.15:8080");
             }
         };
     }
