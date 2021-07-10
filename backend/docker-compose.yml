@@ -1,6 +1,15 @@
 version: "3.8"
 
 services:
+  eureka-serviceregistry:
+    image: eureka-serviceregistry
+    container_name: eureka-serviceregistry
+    build: ./eureka
+    tty: true
+    networks:
+      - demo
+    ports:
+      - "8761:8761"
  
   user-service:
     image: user-service
@@ -14,6 +23,11 @@ services:
       - demo
     ports:
       - "8081:8081"
+    environment:
+      - REGISTRY_HOST=eureka
+    depends_on:
+      - eureka
+      
   post-service:
     image: post-service
     container_name: post-service
@@ -26,6 +40,11 @@ services:
       - demo
     ports:
       - "8082:8082"
+    environment:
+      - REGISTRY_HOST=eureka
+    depends_on:
+      - eureka
+      
   story-service:
     image: story-service
     container_name: story-service
@@ -38,6 +57,11 @@ services:
       - demo
     ports:
       - "8083:8083"
+    environment:
+      - REGISTRY_HOST=eureka
+    depends_on:
+      - eureka
+      
   admin-service:
     image: admin-service
     container_name: admin-service
@@ -49,7 +73,28 @@ services:
     networks:
       - demo
     ports:
-      - "8084:8084"
+      - "8084:8084"
+    environment:
+      - REGISTRY_HOST=eureka
+    depends_on:
+      - eureka
+  zuul:
+    image: zuul
+    container_name: zuul
+    build: ./zuul
+    environment:
+      - REGISTRY_HOST=eureka
+    tty: true
+    networks:
+      - demo
+    ports:
+      - "8085:8085"
+    depends_on:
+      - eureka-serviceregistry
+      - user-microservice
+      - post-microservice
+      - story-microservice
+      - admin-microservice
 networks:
   demo:
     name: demo
