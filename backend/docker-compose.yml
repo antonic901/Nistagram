@@ -22,7 +22,7 @@ services:
     networks:
       - demo
     ports:
-      - "8082:8082"
+      - "8081:8081"
     environment:
       - REGISTRY_HOST=eureka
     depends_on:
@@ -39,7 +39,7 @@ services:
     networks:
       - demo
     ports:
-      - "8083:8083"
+      - "8082:8082"
     environment:
       - REGISTRY_HOST=eureka
     depends_on:
@@ -56,7 +56,7 @@ services:
     networks:
       - demo
     ports:
-      - "8084:8084"
+      - "8083:8083"
     environment:
       - REGISTRY_HOST=eureka
     depends_on:
@@ -73,11 +73,12 @@ services:
     networks:
       - demo
     ports:
-      - "8085:8085"
+      - "8084:8084"
     environment:
       - REGISTRY_HOST=eureka
     depends_on:
-      - eureka-serviceregistry
+      - eureka-serviceregistry
+
   zuul:
     image: zuul
     container_name: zuul

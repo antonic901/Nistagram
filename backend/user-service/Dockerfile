@@ -7,5 +7,5 @@ RUN mvn package -DskipTests
 FROM openjdk:8-jdk-alpine AS appRuntime
 WORKDIR /app
 COPY --from=appBuild /usr/src/user-service/target/user-service-0.0.1-SNAPSHOT.jar ./
-EXPOSE 8082
+EXPOSE 8081
 CMD java -jar user-service-0.0.1-SNAPSHOT.jar
