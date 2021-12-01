@@ -79,7 +79,7 @@ export default {
         buttonClickReject(verificationRequest) {
             var proceed = {
                 id: verificationRequest.id,
-                approved: true
+                approved: false
             }
             axios.post(this.$store.getters.getAdminAPI + "/api/verificationrequest/proceed-verification", proceed)
                 .then(r => {
